@@ -1,0 +1,2 @@
+# cruzcal
+Class Scheduling Tool
