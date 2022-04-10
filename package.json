@@ -20,5 +20,8 @@
   "bugs": {
     "url": "https://github.com/tanmaymittal/cruzcal/issues"
   },
-  "homepage": "https://github.com/tanmaymittal/cruzcal#readme"
+  "homepage": "https://github.com/tanmaymittal/cruzcal#readme",
+  "dependencies": {
+    "axios": "^0.26.1"
+  }
 }
