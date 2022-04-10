@@ -1,12 +1,25 @@
 /* eslint-disable @next/next/no-img-element */
 import styled from 'styled-components';
 
+import {CourseList, CourseInfo, Day} from '../app/course-list/course-list';
+
 const StyledPage = styled.div`
   .page {
   }
 `;
 
 export function Index() {
+
+  const mockCourses: CourseInfo[] = [
+    {
+      name: "My Course",
+      classNumber: "44788",
+      description: "A rather profound class",
+      section: "01",
+      days: [Day.Monday, Day.Wednesday, Day.Friday],
+    }
+  ];
+
   /*
    * Replace the elements below with your own.
    *
@@ -14,6 +27,8 @@ export function Index() {
    */
   return (
     <StyledPage>
+
+      <CourseList courses={mockCourses} />
 
       <div className="flex justify-center items-center">
         <h3 className="font-bold text-5xl mb-2">CruzCal</h3>
