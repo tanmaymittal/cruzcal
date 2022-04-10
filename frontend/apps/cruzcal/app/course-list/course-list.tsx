@@ -1,3 +1,5 @@
+import React, { FC } from "react";
+
 export enum Day {
   Monday = "Mon",
   Tuesday = "Tue",
@@ -21,31 +23,39 @@ export interface CourseListProps {
   courses: CourseInfo[];
 }
 
+const CITitle: FC<{}> = (props) => {
+  return (
+    <h3 className="font-bold">
+      {props.children}
+    </h3>
+  );
+};
+
 export function CourseView(props: CourseInfo) {
   return (
   <div className="course-view">
     <div>
-      <p>Name:</p>
+      <CITitle>Name:</CITitle>
       <p>{props.name}</p>
     </div>
 
     <div>
-      <p>ClassNo:</p>
+      <CITitle>ClassNo:</CITitle>
       <p>{props.classNumber}</p>
     </div>
 
     <div>
-      <p>Description:</p>
+      <CITitle>Description:</CITitle>
       <p>{props.description}</p>
     </div>
 
     <div>
-      <p>Section:</p>
+      <CITitle>Section:</CITitle>
       <p>{props.section}</p>
     </div>
 
     <div>
-      <p>Days:</p>
+      <CITitle>Days:</CITitle>
       <p>{props.days}</p>
     </div>
   </div>
@@ -55,7 +65,7 @@ export function CourseView(props: CourseInfo) {
 export function CourseList(props: CourseListProps) {
   const allCourses = props.courses.map((course) => {
     return (
-      <CourseView {...course} />
+      <CourseView key={course.classNumber} {...course} />
     )
   });
 
