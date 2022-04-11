@@ -1,0 +1,262 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "description": "CruzCal lets users select their Class and produce calendar files based on the class events they can import to their preferred calendar.",
+    "version": "0.1.0",
+    "title": "CruzCal"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3010/"
+    }
+  ],
+  "paths": {
+    "/terms": {
+      "get": {
+        "description": "Return information for all available terms",
+        "responses": {
+          "201": {
+            "description": "Successfully returned all available terms.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TermInfo"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/schedule": {
+      "post": {
+        "description": "Generate location and schedule information for given courses",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully returned location and schedule information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ScheduleResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid course request format"
+          },
+          "404": {
+            "description": "At least one request course does not exist"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "CourseIdentifier": {
+        "additionalProperties": false,
+        "required": [
+          "courseID" 
+        ],
+        "properties": {
+          "courseID": {
+            "type": "string"
+          }
+        }
+      },
+      "Date": {
+        "type": "string",
+        "format": "date"
+      },
+      "Time": {
+        "type": "string",
+        "pattern": "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+      },
+      "TermCode": {
+        "type": "number",
+        "example": 2222
+      },
+      "TermInfo": {
+        "additionalProperties": false,
+        "required": [
+          "code",
+          "name",
+          "date"
+        ],
+        "properties": {
+          "code": {
+            "$ref": "#/components/schemas/TermCode"
+          },
+          "name": {
+            "type": "string"
+          },
+          "date": {
+            "additionalProperties": false,
+            "required": [
+              "start",
+              "end"
+            ],
+            "properties": {
+              "start": {
+                "$ref": "#/components/schemas/Date"
+              },
+              "end": {
+                "$ref": "#/components/schemas/Date"
+              }
+            }
+          }
+        }
+      },
+      "Weekday": {
+        "type": "string",
+        "enum": [
+          "Monday",
+          "Tuesday",
+          "Wednesday",
+          "Thursday",
+          "Friday",
+          "Saturday",
+          "Sunday"
+        ]
+      },
+      "WeeklyMeeting": {
+        "additionalProperties": false,
+        "required": [
+          "day",
+          "start",
+          "end"
+        ],
+        "properties": {
+          "day": {
+            "$ref": "#/components/schemas/Weekday"
+          },
+          "start": {
+            "$ref": "#/components/schemas/Time"
+          },
+          "end": {
+            "$ref": "#/components/schemas/Time"
+          }
+        }
+      },
+      "LectureInfo": {
+        "additionalProperties": false,
+        "required": [
+          "location",
+          "times"
+        ],
+        "properties": {
+          "location": {
+            "type": "string"
+          },
+          "times": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/WeeklyMeeting"
+            }
+          }
+        }
+      },
+      "CourseInfo": {
+        "additionalProperties": false,
+        "required": [
+          "courseName",
+          "lectures",
+          "professor"
+        ],
+        "properties": {
+          "courseName": {
+            "type": "string"
+          },
+          "professor": {
+            "type": "string"
+          },
+          "lectures": {
+            "$ref": "#/components/schemas/LectureInfo"
+          }
+        }
+      },
+      "ScheduleRequest": {
+        "additionalProperties": false,
+        "required": [
+          "termCode",
+          "courses"
+        ],
+        "properties": {
+          "termCode": {
+            "$ref": "#/components/schemas/TermCode"
+          },
+          "courses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseIdentifier"
+            }
+          }
+        }
+      },
+      "ScheduleResponse": {
+        "additionalProperties": false,
+        "required": [
+          "term",
+          "courses"
+        ],
+        "properties": {
+          "term": {
+            "$ref": "#/components/schemas/TermInfo"
+          },
+          "courses": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/CourseInfo"
+            }
+          }
+        }
+      },
+      "Error": {
+        "properties": {
+          "code": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "message": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "code",
+          "message"
+        ]
+      }
+    }
+  }
+}
