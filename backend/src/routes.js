@@ -1,4 +1,8 @@
 
+exports.getTerms = async (req, res) => {
+
+};
+
 exports.genSchedule = async (req, res) => {
 
 };

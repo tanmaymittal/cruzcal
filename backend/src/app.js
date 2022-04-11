@@ -22,6 +22,7 @@ app.use(
 
 // Routes
 
+app.get('/terms', routes.getTerms);
 app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
 
