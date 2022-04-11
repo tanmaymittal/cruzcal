@@ -1,0 +1,7 @@
+{
+  "version": 2,
+  "projects": {
+    "cruzcal": "apps/cruzcal",
+    "cruzcal-e2e": "apps/cruzcal-e2e"
+  }
+}
