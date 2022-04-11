@@ -8,17 +8,16 @@
     "eslint-config-google": "*",
     "jest": "*",
     "nodemon": "*",
-    "supertest": "*"
+    "supertest": "*",
+    "http": "*"
   },
   "dependencies": {
-    "bcrypt": "*",
+    "axios": "*",
     "cors": "*",
     "dotenv": "*",
     "express": "*",
     "express-openapi-validator": "*",
     "express-session": "*",
-    "js-yaml": "*",
-    "jsonwebtoken": "*",
     "pg": "*",
     "swagger-ui-express": "*"
   },
