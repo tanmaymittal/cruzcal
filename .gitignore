@@ -5,8 +5,9 @@ dist
 /tmp
 /out-tsc
 
-# Development environment variables
+# Project ignore
 .env
+coverage/
 
 # dependencies
 node_modules
