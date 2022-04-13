@@ -6,10 +6,10 @@
   "devDependencies": {
     "eslint": "*",
     "eslint-config-google": "*",
+    "http": "*",
     "jest": "*",
     "nodemon": "*",
-    "supertest": "*",
-    "http": "*"
+    "supertest": "*"
   },
   "dependencies": {
     "axios": "*",
@@ -19,12 +19,15 @@
     "express-openapi-validator": "*",
     "express-session": "*",
     "pg": "*",
+    "sequelize": "*",
     "swagger-ui-express": "*"
   },
   "scripts": {
     "start": "nodemon src/server.js",
     "test": "jest --runInBand --coverage --verbose --forceExit",
-    "lint": "./node_modules/.bin/eslint . --ext .js"
+    "lint": "./node_modules/.bin/eslint . --ext .js",
+    "create-db": "createdb -U postgres cruzcal-dev",
+    "drop-db": "dropdb -U postgres cruzcal-dev"
   },
   "jest": {
     "collectCoverageFrom": [
