@@ -19,36 +19,8 @@ exports.getTerms = async (req, res) => {
 
 exports.genSchedule = async (req, res) => {
   const { termCode, courses } = req.body;
-  const formattedCourseData = formatCourseData(termCode, courses);
-
-  res.send({
-    code: 200,
-    message: 'ok',
-    term: {
-      code: 12345,
-      name: 'Summer Quarter',
-      date: {
-        start: '4/15/22',
-        end: '6/15/22',
-      },
-    },
-    courses: [
-      {
-        courseName: 'Computational Models',
-        professor: 'Professor Leonard',
-        lectures: {
-          location: 'Media Theatre 1',
-          times: [
-            {
-              day: 'Monday',
-              start: '09:50',
-              end: '10:55',
-            },
-          ],
-        },
-      },
-    ],
-  });
+  const formattedCourseData = await formatCourseDataAsync(termCode, courses);
+  res.send(formattedCourseData);
 };
 
 exports.genCalendar = async (req, res) => {};
@@ -79,35 +51,33 @@ const processIdentifier = (identifier) => {
 };
 
 const processCourse = (course) => {
+  const courseName = course.n;
+  // Get the first professor for the course
+  const professor = course.ins.d[0];
+  const loct = course.loct[0];
+  const location = loct.loc;
+  const start = loct.t.time.start;
+  const end = loct.t.time.end;
+
+  const times = loct.t.day.map((c) => {
+    return {
+      day: c,
+      start,
+      end,
+    };
+  });
+  const lectures = {
+    location,
+    times,
+  };
   return {
-    courseName: course.n,
-  }
+    courseName,
+    professor,
+    lectures,
+  };
 };
 
-// [
-//   {
-//     c: '10',
-//     l: null,
-//     n: 'Math Methods I',
-//     s: '01',
-//     cap: null,
-//     ins: { d: [Array], f: 'Abram', l: 'Rodgers' },
-//     num: 50716,
-//     loct: [ [Object] ]
-//   },
-//   {
-//     c: '30',
-//     l: null,
-//     n: 'SOE Calculus III',
-//     s: '01',
-//     cap: null,
-//     ins: { d: [Array], f: 'David', l: 'Lee' },
-//     num: 52295,
-//     loct: [ [Object] ]
-//   }
-// ]
-
-const formatCourseData = async (termCode, courses) => {
+const formatCourseDataAsync = async (termCode, courseIdentifiers) => {
   const termDataRes = await axios.get(slugSurvivalUrls.ALL_TERMS_INFO);
   const termData = termDataRes.data;
   const foundTerm = termData.find((t) => t.code === String(termCode));
@@ -117,7 +87,7 @@ const formatCourseData = async (termCode, courses) => {
     date: foundTerm.date,
   };
 
-  const coursesSet = new Set(courses);
+  const coursesSet = new Set(courseIdentifiers);
   const courseDataRes = await axios.get(
     slugSurvivalUrls.SUBJECTS_BY_TERM.replace(':term', String(termCode))
   );
@@ -129,5 +99,11 @@ const formatCourseData = async (termCode, courses) => {
     );
     foundCourses = foundCourses.concat(coursesToAdd);
   }
-  console.log(foundCourses);
+  const courses = foundCourses.map((c) => processCourse(c));
+  return {
+    code: 200,
+    message: 'ok',
+    term,
+    courses,
+  };
 };
