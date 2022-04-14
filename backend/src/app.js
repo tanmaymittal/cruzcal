@@ -26,8 +26,8 @@ app.use(
 
 // Routes
 
-// app.get('/terms', routes.getTerms);
-// app.post('/schedule', routes.genSchedule);
-// app.post('/calendar', routes.genCalendar);
+app.get('/terms', routes.getTerms);
+app.post('/schedule', routes.genSchedule);
+app.post('/calendar', routes.genCalendar);
 
 module.exports = app;
