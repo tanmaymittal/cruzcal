@@ -19,8 +19,8 @@ exports.getTerms = async (req, res) => {
 
 exports.genSchedule = async (req, res) => {
   const { termCode, courses } = req.body;
-  const formattedCourseData = await formatCourseDataAsync(termCode, courses);
-  res.send(formattedCourseData);
+  const formattedCourses = await formatCourseDataAsync(termCode, courses);
+  res.send(formattedCourses);
 };
 
 exports.genCalendar = async (req, res) => {};
@@ -77,16 +77,18 @@ const processCourse = (course) => {
   };
 };
 
-const formatCourseDataAsync = async (termCode, courseIdentifiers) => {
+const formatTermDataAsync = async (termCode) => {
   const termDataRes = await axios.get(slugSurvivalUrls.ALL_TERMS_INFO);
   const termData = termDataRes.data;
   const foundTerm = termData.find((t) => t.code === String(termCode));
-  const term = {
+  return {
     code: termCode,
     name: foundTerm.name,
     date: foundTerm.date,
   };
+};
 
+const formatFoundCourseDataAsync = async (courseIdentifiers, termCode) => {
   const coursesSet = new Set(courseIdentifiers);
   const courseDataRes = await axios.get(
     slugSurvivalUrls.SUBJECTS_BY_TERM.replace(':term', String(termCode))
@@ -100,10 +102,20 @@ const formatCourseDataAsync = async (termCode, courseIdentifiers) => {
     foundCourses = foundCourses.concat(coursesToAdd);
   }
   const courses = foundCourses.map((c) => processCourse(c));
-  return {
-    code: 200,
-    message: 'ok',
-    term,
-    courses,
-  };
+  return courses;
+};
+
+const formatCourseDataAsync = async (termCode, courseIdentifiers) => {
+  const term = await formatTermDataAsync(termCode);
+  const courses = await formatFoundCourseDataAsync(courseIdentifiers, termCode);
+  if (courses.length > 0) {
+    return {
+      code: 200,
+      message: 'ok',
+      term,
+      courses,
+    };
+  } else {
+    throw Error('No courses found for provided course identifiers');
+  }
 };
