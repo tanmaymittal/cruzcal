@@ -23,7 +23,7 @@ export interface CourseListProps {
   courses: CourseInfo[];
 }
 
-const CITitle: FC<{}> = (props) => {
+const CITitle: FC = (props) => {
   return (
     <h3 className="font-bold">
       {props.children}
@@ -34,6 +34,7 @@ const CITitle: FC<{}> = (props) => {
 export function CourseView(props: CourseInfo) {
   return (
   <div className="course-view">
+    <h1>Welcome to CourseList!</h1>
     <div>
       <CITitle>Name:</CITitle>
       <p>{props.name}</p>
@@ -63,15 +64,16 @@ export function CourseView(props: CourseInfo) {
 }
 
 export function CourseList(props: CourseListProps) {
-  const allCourses = props.courses.map((course) => {
-    return (
-      <CourseView key={course.classNumber} {...course} />
-    )
-  });
+  // const allCourses = props.courses.map((course) => {
+  //   return (
+  //     <CourseView key={course.classNumber} {...course} />
+  //   )
+  // });
 
   return (
     <div className="flex">
-      {allCourses}
+      <p>some courses here</p>
+      {/* {allCourses} */}
     </div>
   );
 }

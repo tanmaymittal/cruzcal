@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+REPO_DIR=$(dirname $(dirname $(realpath $0)))
+
+npx nx g @nrwl/react:component ${1} --project=cruzcal --directory=$REPO_DIR
