@@ -1,4 +1,4 @@
-const db = require('../../db');
+const { db } = require('../test-db');
 
 const CourseInfo = db.models.CourseInfo;
 
