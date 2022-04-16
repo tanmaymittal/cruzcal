@@ -27,10 +27,11 @@ exports.genCalendar = async (req, res) => {};
 
 // Helpers
 const getIdentifierType = (identifier) => {
-  // Regex for subject and number, e.g. cse130 or cse 130
-  const subjectAndNumReg = /[a-z]{2,}[ ]?\d{1,}/;
+  identifier = identifier.toLowerCase();
+  // Regex for subject and number, e.g. cse130, cse 130, cse 115a
+  const subjectAndNumReg = /[a-z]{2,}[\s-]*?\d{1,3}[\s-]*?\w{1}?/;
   // Regex for course number, e.g. 70071
-  const courseNumReg = /^\d+$/;
+  const courseNumReg = /\d{5}/;
   if (subjectAndNumReg.test(identifier)) {
     return 'subjectAndNum';
   } else if (courseNumReg.test(identifier)) {
@@ -89,7 +90,8 @@ const formatTermDataAsync = async (termCode) => {
 };
 
 const formatFoundCourseDataAsync = async (courseIdentifiers, termCode) => {
-  const coursesSet = new Set(courseIdentifiers);
+  const courseStrings = courseIdentifiers.map((c) => c.courseID)
+  const coursesSet = new Set(courseStrings);
   const courseDataRes = await axios.get(
     slugSurvivalUrls.SUBJECTS_BY_TERM.replace(':term', String(termCode))
   );
