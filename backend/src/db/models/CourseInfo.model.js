@@ -1,7 +1,11 @@
-const {DataTypes} = require('sequelize');
+const {DataTypes, Sequelize} = require('sequelize');
 
 // Backlog, unravel term into another table to take advantage of primary key
 
+/**
+ * 
+ * @param {Sequelize} sequelize 
+ */
 module.exports = function(sequelize) {
   sequelize.define('CourseInfo', {
     CourseName: {
@@ -10,7 +14,7 @@ module.exports = function(sequelize) {
     },
     CourseRefNum: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING(5),
     },
     Subject: {
       allowNull: false,
