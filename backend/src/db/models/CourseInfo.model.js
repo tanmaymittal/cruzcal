@@ -1,32 +1,40 @@
-const {DataTypes} = require('sequelize');
+const { DataTypes, Sequelize } = require('sequelize');
 
 // Backlog, unravel term into another table to take advantage of primary key
 
-module.exports = function(sequelize) {
+/**
+ *
+ * @param {Sequelize} sequelize
+ */
+module.exports = function (sequelize) {
   sequelize.define('CourseInfo', {
-    CourseName: {
+    name: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
-    CourseRefNum: {
+    refnum: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.INTEGER,
     },
-    Subject: {
+    sub: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
-    SubjectCourseNum: {
+    subcourse: {
       allowNull: false,
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
     },
-    Lectures: {
+    professor: {
       allowNull: false,
-      type: DataTypes.JSONB
+      type: DataTypes.STRING,
     },
-    Term: {
+    lectures: {
       allowNull: false,
-      type: DataTypes.JSONB
+      type: DataTypes.JSONB,
     },
-  })
+    termcode: {
+      allowNull: false,
+      type: DataTypes.INTEGER,
+    },
+  });
 };

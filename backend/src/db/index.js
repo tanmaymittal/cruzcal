@@ -15,7 +15,8 @@ const sequelize = new Sequelize(
 );
 
 const modelDefiners = [
-	require('./models/CourseInfo.model')
+	require('./models/CourseInfo.model'),
+	require('./models/Term.model')
 ];
 
 for (const modelDefiner of modelDefiners) {
