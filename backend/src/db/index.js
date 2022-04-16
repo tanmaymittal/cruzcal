@@ -24,4 +24,7 @@ for (const modelDefiner of modelDefiners) {
 
 setup(sequelize);
 
-module.exports = sequelize;
+module.exports = {
+  db: sequelize,
+  ...require('./db')(sequelize)
+};
