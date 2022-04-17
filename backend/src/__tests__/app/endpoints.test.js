@@ -1,17 +1,20 @@
 const supertest = require('supertest');
 const http = require('http');
 const app = require('../../app');
+const {db} = require('../test-db');
 
 let server, request;
 
-beforeAll(() => {
+beforeAll(async () => {
   server = http.createServer(app);
   server.listen();
   request = supertest(server);
+  await db.sync({ force: true });
 });
 
-afterAll(() => {
+afterAll(async () => {
   server.close();
+  db.close();
 });
 
 test('Invalid endpoint', async () => {
