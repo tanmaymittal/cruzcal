@@ -1,5 +1,5 @@
 {
-  "npmScope": "frontend",
+  "npmScope": ".",
   "affected": {
     "defaultBase": "main"
   },
@@ -37,20 +37,13 @@
   },
   "generators": {
     "@nrwl/react": {
-      "component": {
-        "style": "styled-components",
-        "export": false
-      },
-      "library": {
-        "style": "styled-components"
-      },
       "application": {
         "babel": true
       }
     },
     "@nrwl/next": {
       "application": {
-        "style": "styled-components",
+        "style": "css",
         "linter": "eslint"
       }
     }
