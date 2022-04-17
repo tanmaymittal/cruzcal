@@ -1,7 +1,5 @@
-const { db, addTerm, getTermByCode } = require('../test-db');
+const { db, addTerm, getTermByCode, getAllTerms } = require('../test-db');
 const { terms } = require('../common');
-
-const { Term } = db.models;
 
 beforeAll(async () => {
   // Reset database
@@ -19,6 +17,11 @@ test('Load Term', async () => {
     const row = await addTerm(term);
     expect(row).toMatchObject(term);
   }
+});
+
+test('Select * Terms', async () => {
+  const rows = await getAllTerms();
+  expect(rows).toHaveLength(terms.length);
 });
 
 test('Select Term by Primary Key', async () => {

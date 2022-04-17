@@ -1,8 +1,12 @@
 const { ValidationError, DatabaseError } = require('sequelize');
-const { db, getCourseByID, addTerm, addCourse } = require('../test-db');
+const {
+  db,
+  getAllCourses,
+  getCourseByID,
+  addTerm,
+  addCourse,
+} = require('../test-db');
 const { terms, records } = require('../common');
-
-const { CourseInfo } = db.models;
 
 beforeAll(async () => {
   // Reset database
@@ -40,9 +44,8 @@ test('Insertion validation error (missing refnum)', async () => {
 });
 
 test('Select *', async () => {
-  const courses = await CourseInfo.findAll();
+  const courses = await getAllCourses();
   expect(courses).toHaveLength(records.length);
-  expect(courses[0]).toMatchObject(records[0]);
 });
 
 test('Select by CRN and term', async () => {

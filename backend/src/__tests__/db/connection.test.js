@@ -1,6 +1,4 @@
-const { db } = require('../test-db');
-
-const CourseInfo = db.models.CourseInfo;
+const { db, getAllCourses } = require('../test-db');
 
 beforeAll(async () => {
   // Reset database
@@ -12,7 +10,9 @@ afterAll(async () => {
 });
 
 test('Check DB connection', async () => {
+  const { CourseInfo } = db.models;
   expect(CourseInfo.name).toBe('CourseInfo');
-  const courses = await CourseInfo.findAll();
+
+  const courses = await getAllCourses();
   expect(courses).toStrictEqual([]);
 });

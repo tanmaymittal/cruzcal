@@ -18,8 +18,9 @@ const getCourseByID = async (db, termCode, courseID) => {
 module.exports = (db) => ({
   addTerm: async (term) => await db.models.Term.create(term),
   addCourse: async (course) => await db.models.CourseInfo.create(course),
-  getTermByCode: async (code) => await db.models.Term.findByPk(code),
+  getAllCourses: async () => await db.models.CourseInfo.findAll(),
   getAllTerms: async () => await db.models.Term.findAll(),
+  getTermByCode: async (code) => await db.models.Term.findByPk(code),
   /**
    * @param {number} termCode - 4-digit UCSC term code
    * @param {String|number} courseID - 5-digit UCSC CRN (future versions will accept multiple formats)
