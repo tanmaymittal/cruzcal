@@ -25,3 +25,8 @@ test('Select Term by Primary Key', async () => {
   const term = await getTermByCode(terms[0].code);
   expect(term).toMatchObject(terms[0]);
 });
+
+test('Select non-existent term', async () => {
+  const term = await getTermByCode(0);
+  expect(term).toBeNull();
+});
