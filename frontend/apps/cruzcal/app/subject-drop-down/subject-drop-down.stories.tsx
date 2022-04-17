@@ -19,5 +19,5 @@ const Template: Story<SubjectDropDownProps> = (args) => (
 
 export const Primary = Template.bind({});
 Primary.args = {
-  subjects: ["apple", "banana", "orange"]
+  subjects: ["Computer Science & Engineering", "Education", "Mathematics"]
 };
