@@ -1,8 +1,6 @@
 const { Sequelize } = require('sequelize');
 const { setup } = require('./setup');
 
-// Designed based on https://github.com/sequelize/express-example/blob/master/express-main-example/
-
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,
   process.env.POSTGRES_USER,
