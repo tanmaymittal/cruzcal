@@ -6,7 +6,7 @@ const { DataTypes, Sequelize } = require('sequelize');
  *
  * @param {Sequelize} sequelize
  */
-module.exports = function (sequelize) {\
+module.exports = function (sequelize) {
   sequelize.define('CourseInfo', {
     name: {
       allowNull: false,
