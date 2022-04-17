@@ -1,4 +1,12 @@
-#
+# Frontend
+
+## Creating a new component
+
+```bash
+# Create a component and the associated storybook skeleton
+yarn component MyNewComponent
+yarn gen-stories
+```
 
 This project was generated using [Nx](https://nx.dev).
 
