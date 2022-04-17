@@ -16,11 +16,11 @@ module.exports = function (sequelize) {
       allowNull: false,
       type: DataTypes.INTEGER,
     },
-    sub: {
+    subject: {
       allowNull: false,
       type: DataTypes.STRING,
     },
-    subcourse: {
+    coursenum: {
       allowNull: false,
       type: DataTypes.STRING,
     },
@@ -31,10 +31,6 @@ module.exports = function (sequelize) {
     lectures: {
       allowNull: false,
       type: DataTypes.JSONB,
-    },
-    termcode: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
     },
   });
 };

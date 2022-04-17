@@ -27,5 +27,5 @@ setup(sequelize);
 
 module.exports = {
   db: sequelize,
-  ...require('./db')(sequelize),
+  ...require('./api')(sequelize),
 };

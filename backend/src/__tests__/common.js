@@ -53,8 +53,8 @@ exports.records = [
   {
     name: 'Intro Software Eng',
     refnum: 50444,
-    sub: 'CSE',
-    subcourse: '115A',
+    subject: 'CSE',
+    coursenum: '115A',
     professor: 'Jullig,R.K.',
     lectures: {
       location: 'J Baskin Engr 152',
@@ -81,8 +81,8 @@ exports.records = [
   {
     name: 'Math Methods I',
     refnum: 44770,
-    sub: 'AM',
-    subcourse: '10',
+    subject: 'AM',
+    coursenum: '10',
     professor: 'Jonsson,V.',
     lectures: {
       location: 'Humn Lecture Hall',
