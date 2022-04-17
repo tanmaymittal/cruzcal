@@ -4,6 +4,11 @@ import { SubjectDropDown, SubjectDropDownProps } from './subject-drop-down';
 export default {
   component: SubjectDropDown,
   title: 'SubjectDropDown',
+  argTypes: {
+    subjects: {
+      control: 'object',
+    }
+  }
 } as Meta;
 
 const Template: Story<SubjectDropDownProps> = (args) => (
@@ -13,4 +18,6 @@ const Template: Story<SubjectDropDownProps> = (args) => (
 );
 
 export const Primary = Template.bind({});
-Primary.args = {};
+Primary.args = {
+  subjects: ["apple", "banana", "orange"]
+};
