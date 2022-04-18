@@ -1,5 +1,5 @@
 {
-  "npmScope": "cruzcal",
+  "npmScope": ".",
   "affected": {
     "defaultBase": "main"
   },
@@ -15,9 +15,15 @@
   },
   "tasksRunnerOptions": {
     "default": {
-      "runner": "@nrwl/workspace/tasks-runners/default",
+      "runner": "nx/tasks-runners/default",
       "options": {
-        "cacheableOperations": ["build", "lint", "test", "e2e"]
+        "cacheableOperations": [
+          "build",
+          "lint",
+          "test",
+          "e2e",
+          "build-storybook"
+        ]
       }
     }
   },
@@ -33,11 +39,15 @@
     "@nrwl/react": {
       "application": {
         "babel": true
+      },
+      "component": {
+        "style": "css",
+        "export": true
       }
     },
     "@nrwl/next": {
       "application": {
-        "style": "styled-components",
+        "style": "css",
         "linter": "eslint"
       }
     }

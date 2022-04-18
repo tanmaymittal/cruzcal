@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+npx nx g @nrwl/react:component ${1} --project=cruzcal
