@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const getTerms = async () => {
+export const getTerms = async () => {
     try {
         return await axios.get('https://andromeda.miragespace.net/slugsurvival/data/fetch/terms.json')
     } catch (err) {
@@ -8,7 +8,7 @@ const getTerms = async () => {
     }
 }
 
-const getClasses = async (term_code) => {
+export const getClasses = async (term_code) => {
     try {
         const url = `https://andromeda.miragespace.net/slugsurvival/data/fetch/terms/${term_code}.json`
         return await axios.get(url)
@@ -16,3 +16,13 @@ const getClasses = async (term_code) => {
         console.error(err)
     }
 }
+
+// const classes_spring = 
+getClasses(2222)
+.then(val => console.log(val.data));
+// console.log(classes_spring)
+
+
+// Make a function that returns all the classes in the specfied 
+// format 
+//
