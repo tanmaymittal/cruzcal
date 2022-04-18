@@ -8,7 +8,7 @@ export interface DropDownProps {
   items: string[];
 };
 
-export const DropDown: FC<DropDownProps> = (props) => {
+export const DropDown: FC<DropDownProps> = ({name, items}) => {
   const createMenuItem = (item) => {
     return (
       <Menu.Item>
@@ -25,14 +25,14 @@ export const DropDown: FC<DropDownProps> = (props) => {
     )
   };
 
-  const menuItems = props.items.map(createMenuItem);
+  const menuItems = items.map(createMenuItem);
 
   return (
     <div className="w-56 text-right fixed top-16">
       <Menu as="div" className="relative inline-block text-left">
         <div>
           <Menu.Button className="inline-flex justify-center w-full px-4 py-2 text-sm font-medium text-black bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75">
-            {props.name}
+            {name}
             <ChevronDownIcon
               className="w-5 h-5 ml-2 -mr-1 text-violet-200 hover:text-violet-100"
               aria-hidden="true"
