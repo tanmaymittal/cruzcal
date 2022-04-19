@@ -85,10 +85,9 @@
   "components": {
     "schemas": {
       "CourseIdentifier": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "courseID" 
-        ],
+        "required": ["courseID"],
         "properties": {
           "courseID": {
             "type": "string"
@@ -108,12 +107,9 @@
         "example": 2222
       },
       "TermInfo": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "code",
-          "name",
-          "date"
-        ],
+        "required": ["code", "name", "date"],
         "properties": {
           "code": {
             "$ref": "#/components/schemas/TermCode"
@@ -122,11 +118,9 @@
             "type": "string"
           },
           "date": {
+            "type": "object",
             "additionalProperties": false,
-            "required": [
-              "start",
-              "end"
-            ],
+            "required": ["start", "end"],
             "properties": {
               "start": {
                 "$ref": "#/components/schemas/Date"
@@ -151,12 +145,9 @@
         ]
       },
       "WeeklyMeeting": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "day",
-          "start",
-          "end"
-        ],
+        "required": ["day", "start", "end"],
         "properties": {
           "day": {
             "$ref": "#/components/schemas/Weekday"
@@ -170,11 +161,9 @@
         }
       },
       "LectureInfo": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "location",
-          "times"
-        ],
+        "required": ["location", "times"],
         "properties": {
           "location": {
             "type": "string"
@@ -188,12 +177,9 @@
         }
       },
       "CourseInfo": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "courseName",
-          "lectures",
-          "professor"
-        ],
+        "required": ["courseName", "lectures", "professor"],
         "properties": {
           "courseName": {
             "type": "string"
@@ -207,11 +193,9 @@
         }
       },
       "ScheduleRequest": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "termCode",
-          "courses"
-        ],
+        "required": ["termCode", "courses"],
         "properties": {
           "termCode": {
             "$ref": "#/components/schemas/TermCode"
@@ -225,11 +209,9 @@
         }
       },
       "ScheduleResponse": {
+        "type": "object",
         "additionalProperties": false,
-        "required": [
-          "term",
-          "courses"
-        ],
+        "required": ["term", "courses"],
         "properties": {
           "term": {
             "$ref": "#/components/schemas/TermInfo"
@@ -252,10 +234,7 @@
             "type": "string"
           }
         },
-        "required": [
-          "code",
-          "message"
-        ]
+        "required": ["code", "message"]
       }
     }
   }

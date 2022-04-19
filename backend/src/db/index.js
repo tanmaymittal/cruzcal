@@ -1,7 +1,5 @@
-const {Sequelize} = require('sequelize');
-const {setup} = require('./setup');
-
-// Designed based on https://github.com/sequelize/express-example/blob/master/express-main-example/
+const { Sequelize } = require('sequelize');
+const { setup } = require('./setup');
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,
@@ -10,21 +8,22 @@ const sequelize = new Sequelize(
   {
     host: 'localhost',
     dialect: 'postgres',
-    logging: false
+    logging: false,
   }
 );
 
 const modelDefiners = [
-	require('./models/CourseInfo.model')
+  require('./models/CourseInfo.model'),
+  require('./models/Term.model'),
 ];
 
 for (const modelDefiner of modelDefiners) {
-	modelDefiner(sequelize);
+  modelDefiner(sequelize);
 }
 
 setup(sequelize);
 
 module.exports = {
   db: sequelize,
-  ...require('./db')(sequelize)
+  ...require('./api')(sequelize),
 };
