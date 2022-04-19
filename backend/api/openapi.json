@@ -85,6 +85,7 @@
   "components": {
     "schemas": {
       "CourseIdentifier": {
+        "type": "object",
         "additionalProperties": false,
         "required": [
           "courseID" 
