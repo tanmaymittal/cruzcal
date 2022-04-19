@@ -6,7 +6,7 @@ const {
   addTerm,
   addCourse,
 } = require('../test-db');
-const { terms, records } = require('../common');
+const { terms, courses } = require('../common');
 
 beforeAll(async () => {
   // Reset database
@@ -24,34 +24,35 @@ afterAll(async () => {
 
 // Run before any reads to load courses
 test('Load CourseInfo', async () => {
-  for (const record of records) {
-    const row = await addCourse(record);
-    expect(row).toMatchObject(record);
+  for (const course of courses) {
+    const row = await addCourse(course);
+    expect(row).toMatchObject(course);
   }
 });
 
+// Assumption: negative termcode is invalid
 test('Insertion invalid termcode fk', async () => {
-  const invalidRecord = { ...records[0] };
+  const invalidRecord = { ...courses[0] };
   invalidRecord.termcode = -1;
   await expect(addCourse(invalidRecord)).rejects.toThrow(DatabaseError);
 });
 
 test('Insertion validation error (missing refnum)', async () => {
-  const invalidRecord = { ...records[0] };
+  const invalidRecord = { ...courses[0] };
   delete invalidRecord.refnum;
 
   await expect(addCourse(invalidRecord)).rejects.toThrow(ValidationError);
 });
 
 test('Select *', async () => {
-  const courses = await getAllCourses();
-  expect(courses).toHaveLength(records.length);
+  const allCourses = await getAllCourses();
+  expect(allCourses).toHaveLength(courses.length);
 });
 
 test('Select by CRN and term', async () => {
-  const record = records[0];
-  const course = await getCourseByID(record.termcode, record.refnum);
-  expect(course).toMatchObject(record);
+  const firstCourse = courses[0];
+  const course = await getCourseByID(firstCourse.termcode, firstCourse.refnum);
+  expect(course).toMatchObject(firstCourse);
 });
 
 test('Select invalid CRN and term', async () => {

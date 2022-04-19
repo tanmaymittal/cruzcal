@@ -49,7 +49,7 @@ exports.terms = [
   },
 ];
 
-exports.records = [
+exports.courses = [
   {
     name: 'Intro Software Eng',
     refnum: 50444,
