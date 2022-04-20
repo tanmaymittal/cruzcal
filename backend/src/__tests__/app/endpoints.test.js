@@ -1,7 +1,8 @@
 const supertest = require('supertest');
 const http = require('http');
 const app = require('../../app');
-const {db} = require('../test-db');
+const { db } = require('../test-db');
+const { scheduleRequest, scheduleImproperFormatRequest } = require('./mockData');
 
 let server, request;
 
@@ -18,24 +19,28 @@ afterAll(async () => {
 });
 
 test('Invalid endpoint', async () => {
-  await request.get('/hello/world').expect(res => {
+  await request.get('/hello/world').expect((res) => {
     expect(res.status).not.toBe(200);
-  })
+  });
 });
 
-// test('Check /terms', async () => {
-//   await request.get('/terms').expect(200);
-// });
+describe('GET /terms', () => {
+  test('responds with a 200 status code', async () => {
+    await request.get('/terms').expect(200);
+  });
+  test('responds with JSON', async () => {
+    await request.get('/terms').expect('Content-Type', /json/);
+  });
+});
 
-// test('Check /schedule', async () => {
-//   await request.post('/schedule')
-//     .set('Content-type', 'application/json')
-//     .send({
-//       "termCode": 2222,
-//       "courses": [{
-//         "courseID": "50444"
-//       }]
-//     }).expect(200);
-// });
-
-
+describe('POST /schedule', () => {
+  test('responds with a 200 status code', async () => {
+    await request.post('/schedule').send(scheduleRequest).expect(200);
+  });
+  test('responds with JSON of courses', async () => {
+    await request.post('/schedule').send(scheduleRequest).expect(200);
+  });
+  test('responds with 400 error for incorrectly formatted request', async () => {
+    await request.post('/schedule').send(scheduleImproperFormatRequest).expect(400);
+  });
+});

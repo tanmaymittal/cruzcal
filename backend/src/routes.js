@@ -19,8 +19,13 @@ exports.getTerms = async (req, res) => {
 
 exports.genSchedule = async (req, res) => {
   const { termCode, courses } = req.body;
-  const formattedCourses = await formatCourseDataAsync(termCode, courses);
-  res.send(formattedCourses);
+  try {
+    const formattedCourses = await formatCourseDataAsync(termCode, courses);
+    res.send(formattedCourses);
+
+  } catch (err) {
+    res.sendStatus(404);
+  }
 };
 
 exports.genCalendar = async (req, res) => {};
