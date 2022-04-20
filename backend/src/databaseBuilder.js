@@ -20,20 +20,9 @@ const getClasses = async (term_code) => {
   // within this funcition return arrays
 };
 
-// const classes_spring =
-// getClasses(2222)
-// .then(val => console.log(val.data));
-// console.log(classes_spring)
-
-
 // Make a function that returns all the classes in the specfied
 // format
-//
 const databaseBuilder = (classJson) => {
-  // gets a full json and parses it
-  // makes arrays out of those
-  // [ string, number, string, string, json, json ]
-  //
   /*
     Structure of incoming json
     {
@@ -53,18 +42,14 @@ const databaseBuilder = (classJson) => {
         ]
     }
     */
-  //    console.log(classJson)
   // eslint-disable-next-line guard-for-in
-
+  const result = []
   for (const key in classJson) {
-    // console.log(key);
-    // console.log(classJson[key]);
-    // console.log(typeof classJson[key]);
     // so key is my department name 
     const arr = classJson[key].map (function (child) {
-        // console.log(typeof child)
-        //  child is a json object of type 
-        /*
+      // console.log(typeof child)
+      //  child is a json object of type 
+      /*
             {
                 c: '3',
                 l: null,
@@ -76,50 +61,26 @@ const databaseBuilder = (classJson) => {
                 loct: [Array]
             }
         */
-    //    console.log(`${child.n} ${child.c}`)
-       // design a json object 
-       var jsonObj = {
-           "location" : child.loct
-       }
-       const classInfoArray = [child.n, child.num, key, child.c, jsonObj]
-       console.log(classInfoArray)
-        // return
+      var jsonObj = {
+        "location" : child.loct
+      }
+      const classInfoArray = [child.n, child.num, key, child.c, jsonObj]
+      result.push(classInfoArray)
     })
-    // break;
-    // for (const childKey in key) {
-        // console.log(childKey);
-    //   console.log(classJson.jsonData[key][childKey]);
-    //   for (const childValue in classJson.jsonData[key][childKey]) {
-    //     console.log(classJson.jsonData[key][childKey][childValue]);
-    //   }
-    // }
   }
-//    const emptyDatabase = classJson.data.map(function (department) {
-//     // parse every department
-//     const emptyDepartment = department['data'].map(function (class_info) {
-//         // now design the array
-//         console.log(`${class_info.n} ${class_info.c}`);
-//     });
-//    });
+  return result
 };
-
-// const classes_spring =
-// getClasses(2222)
-//   .then((val) => databaseBuilder(val.data));
-// console.log(classes_spring)
-
-
 
 // so make a function that first gets all the terms using the term api
 // then calls databaseBuilder and get classes. It also adds the data 
 // from the term api to the current class
 function makeDB () {
-    const terms =  getTerms().then((val) => {
-        return val.data
-    });
-    terms.then((val) => {
-        // returns an array of the type 
-        /*
+  const terms =  getTerms().then((val) => {
+    return val.data
+  });
+  terms.then((val) => {
+    // returns an array of the type 
+    /*
         [
             {
                 code: '2224',
@@ -133,18 +94,40 @@ function makeDB () {
             },
         ]
         */
-       // now loop over this object
-       for (const key in val) {
-        //    console.log(val[key])
-        // run the database function over code of this code
-        // console.log(val[key]['code'])
-        const dataOfKey = getClasses(val[key]['code']).then((val) => {
-            return databaseBuilder(val.data)
-        });
-        console.log(dataOfKey)
-        break;
-       }
-    })
+    // now loop over this object
+    for (const key in val) {
+      //    console.log(val[key])
+      // run the database function over code of this code
+      // console.log(val[key]['code'])
+      const dataOfKey = getClasses(val[key]['code']).then((val) => {
+        return databaseBuilder(val.data)
+      });
+      dataOfKey.then((data) => {
+        //   console.log(data)
+          // data is an array of arrays of the type 
+        //   [
+            // [ 'Math Methods I', 70071, 'AM', '10', { location: [Array] } ],
+            // [ 'Math Methods II', 70312, 'AM', '20', { location: [Array] } ]
+        //   ]
+          // loop over this array and add the object for the term 
+          // of type
+        //   {
+        //     "code": 2222,
+        //     "name": "string",
+        //     "date": 
+        //     {
+        //         "start": "2022-04-12",
+        //         "end": "2022-04-12"
+        //     }
+        //   }
+          for (const obj in data) {
+              data[obj].push(val[key])
+          }
+            console.log(data)
+      })
+    //   console.log(dataOfKey)
+    }
+  })
 }
 
 makeDB()
