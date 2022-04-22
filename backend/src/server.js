@@ -10,8 +10,8 @@ db.sync({ force: true })
       console.log('API Testing UI: http://localhost:3010/api-docs/');
     });
   })
-  .catch(() => {
-    console.error("Couldn't start database");
+  .catch((err) => {
+    console.error("Couldn't start database: " + err);
   });
 
 

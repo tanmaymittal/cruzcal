@@ -6,6 +6,9 @@ all: compose
 compose:
 	nerdctl compose build
 
+pg:
+	nerdctl run -it -p 5432:5432  --env-file=.env postgres
+
 frontend:
 	pushd frontend
 	./scripts/docker

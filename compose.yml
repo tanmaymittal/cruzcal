@@ -31,7 +31,7 @@ services:
       - "db"
 
   db:
-    image: postgres
+    image: postgres:14.2-alpine3.15
     restart: always
     ports:
       - "5432:5432"
