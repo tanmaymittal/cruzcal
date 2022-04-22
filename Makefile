@@ -7,7 +7,7 @@ compose:
 	nerdctl compose build
 
 pg:
-	nerdctl run -it -p 5432:5432  --env-file=.env postgres
+	nerdctl run -it -p 5432:5432  --env-file=.env postgres:14.2-alpine3.15
 
 frontend:
 	pushd frontend
