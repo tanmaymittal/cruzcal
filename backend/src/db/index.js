@@ -1,18 +1,16 @@
-const { Sequelize } = require('sequelize');
-const { setup } = require('./setup');
+const {Sequelize} = require('sequelize');
+const {setup} = require('./setup');
 
 const sequelize = new Sequelize(
-  "cruzcal-test",
-  "postgres",
-  "Hexor147997",
+  process.env.POSTGRES_DB,
+  process.env.POSTGRES_USER,
+  process.env.POSTGRES_PASSWORD,
   {
     host: 'localhost',
     dialect: 'postgres',
     logging: false,
-  }
+  },
 );
-
-console.log(process.env.POSTGRES_DB);
 
 const modelDefiners = [
   require('./models/CourseInfo.model'),
