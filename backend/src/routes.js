@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { getAllTerms } = require('./db')
 
 const slugSurvivalUrls = {
   AVAILABLE_TERMS: `https://andromeda.miragespace.net/slugsurvival/tracking/available`,
@@ -8,13 +9,7 @@ const slugSurvivalUrls = {
 };
 
 exports.getTerms = async (req, res) => {
-  const termsRes = await axios.get(slugSurvivalUrls.ALL_TERMS_INFO);
-  const terms = termsRes.data;
-  const formattedTerms = terms.map((term) => {
-    return { code: term.code, name: term.name };
-  });
-
-  res.send(formattedTerms);
+  res.json(await getAllTerms);
 };
 
 exports.genSchedule = async (req, res) => {

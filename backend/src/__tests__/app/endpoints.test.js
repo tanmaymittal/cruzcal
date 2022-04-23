@@ -3,6 +3,7 @@ const http = require('http');
 const app = require('../../app');
 const { db } = require('../test-db');
 const { scheduleRequest, scheduleImproperFormatRequest } = require('./mockData');
+const { courses, terms } = require('../common');
 
 let server, request;
 
@@ -10,7 +11,15 @@ beforeAll(async () => {
   server = http.createServer(app);
   server.listen();
   request = supertest(server);
+
   await db.sync({ force: true });
+
+  // for (const term of terms) {
+  //   await addTerm(term);
+  // }
+  // for (const course of courses) {
+  //   await addCourse(course);
+  // }
 });
 
 afterAll(async () => {
