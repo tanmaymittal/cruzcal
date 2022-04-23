@@ -96,3 +96,18 @@ Nx Cloud pairs with Nx in order to enable you to build and test code more rapidl
 Teams using Nx gain the advantage of building full-stack applications with their preferred framework alongside Nx’s advanced code generation and project dependency graph, plus a unified experience for both frontend and backend developers.
 
 Visit [Nx Cloud](https://nx.app/) to learn more.
+
+## Storybook
+
+Storybook is an open source tool for building UI components and pages in isolation. It streamlines UI development, testing, and documentation. Storybook provides a sandbox to build UIs in isolation so you can develop hard-to-reach states and edge cases.
+
+Run `yarn gen-stories` to create any new story for a newly created component.
+Run `yarn sb` to launch Storybook.
+
+Visit [Storybook](https://storybook.js.org/) to learn more.
+
+## Headless UI
+Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS.
+We are using headless UI when building some of our comonenents such as the drop-down button.
+
+Visit [headless UI](https://headlessui.dev/)
