@@ -47,10 +47,13 @@ describe('GET /terms', () => {
 
 describe('POST /schedule', () => {
   test('responds with a 200 status code', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(200);
+    await request.post('/schedule').send(scheduleRequest).expect(201);
   });
   test('responds with JSON of courses', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(200);
+    await request
+      .post('/schedule')
+      .send(scheduleRequest)
+      .expect('Content-Type', /json/);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
