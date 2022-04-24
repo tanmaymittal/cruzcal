@@ -1,4 +1,4 @@
-const { DataTypes, Sequelize } = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 // Backlog, unravel term into another table to take advantage of primary key
 
@@ -6,15 +6,15 @@ const { DataTypes, Sequelize } = require('sequelize');
  *
  * @param {Sequelize} sequelize
  */
-module.exports = function (sequelize) {
+module.exports = function(sequelize) {
   sequelize.define('CourseInfo', {
+    refnum: {
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+    },
     name: {
       allowNull: false,
       type: DataTypes.STRING,
-    },
-    refnum: {
-      allowNull: false,
-      type: DataTypes.INTEGER,
     },
     subject: {
       allowNull: false,
@@ -31,6 +31,15 @@ module.exports = function (sequelize) {
     lectures: {
       allowNull: false,
       type: DataTypes.JSONB,
+    },
+    termcode: {
+      primaryKey: true,
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'Terms',
+        key: 'code',
+      },
+      onDelete: 'CASCADE',
     },
   });
 };

@@ -20,7 +20,7 @@ app.use(
   OpenApiValidator.middleware({
     apiSpec: api,
     validateRequests: true,
-    validateResponses: true
+    validateResponses: true,
   }),
 );
 

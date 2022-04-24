@@ -3,7 +3,7 @@ require('dotenv').config();
 const app = require('./app.js');
 const {db} = require('./db');
 
-db.sync({ force: true })
+db.sync({force: false})
   .then(() => {
     app.listen(3010, () => {
       console.log(`Server Running: http://localhost:3010`);
@@ -11,7 +11,7 @@ db.sync({ force: true })
     });
   })
   .catch(() => {
-    console.error("Couldn't start database");
+    console.error(`Couldn't start database`);
   });
 
 

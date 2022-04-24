@@ -1,9 +1,9 @@
-const { db, addTerm, getTermByCode, getAllTerms } = require('../test-db');
-const { terms } = require('../common');
+const {db, addTerm, getTermByCode, getAllTerms} = require('../test-db');
+const {terms} = require('../common');
 
 beforeAll(async () => {
   // Reset database
-  await db.sync({ force: true });
+  await db.sync({force: true});
   // console.log(CourseInfo.getAttributes());
 });
 

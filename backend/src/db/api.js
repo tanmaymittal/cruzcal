@@ -1,4 +1,4 @@
-const {Op, Model} = require('sequelize');
+// const {Op, Model} = require('sequelize');
 
 const getCourseByID = async (db, termCode, courseID) => {
   const {CourseInfo} = db.models;
@@ -41,7 +41,8 @@ module.exports = (db) => ({
   getTermByCode: async (code) => await db.models.Term.findByPk(code),
   /**
    * @param {number} code - 4-digit UCSC term code
-   * @param {String|number} courseID - 5-digit UCSC CRN (future versions will accept multiple formats)
+   * @param {String|number} courseID
+   * - 5-digit UCSC CRN (future versions will accept multiple formats)
    * @return {Promise<Model|null>} Specified course or null if it doesn't exist.
    */
   getCourseByID: async (code, courseID) => getCourseByID(db, code, courseID),
