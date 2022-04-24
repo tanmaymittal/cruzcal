@@ -1,4 +1,4 @@
-const { ValidationError, DatabaseError } = require('sequelize');
+const {DatabaseError} = require('sequelize');
 const {
   db,
   getAllCourses,
@@ -6,11 +6,11 @@ const {
   addTerm,
   addCourse,
 } = require('../test-db');
-const { terms, courses } = require('../common');
+const {terms, courses} = require('../common');
 
 beforeAll(async () => {
   // Reset database
-  await db.sync({ force: true });
+  await db.sync({force: true});
   // console.log(CourseInfo.getAttributes());
 
   for (const term of terms) {
@@ -32,16 +32,16 @@ test('Load CourseInfo', async () => {
 
 // Assumption: negative termcode is invalid
 test('Insertion invalid termcode fk', async () => {
-  const invalidRecord = { ...courses[0] };
+  const invalidRecord = {...courses[0]};
   invalidRecord.termcode = -1;
   await expect(addCourse(invalidRecord)).rejects.toThrow(DatabaseError);
 });
 
 test('Insertion validation error (missing refnum)', async () => {
-  const invalidRecord = { ...courses[0] };
+  const invalidRecord = {...courses[0]};
   delete invalidRecord.refnum;
 
-  await expect(addCourse(invalidRecord)).rejects.toThrow(ValidationError);
+  await expect(addCourse(invalidRecord)).rejects.toThrow(DatabaseError);
 });
 
 test('Select *', async () => {

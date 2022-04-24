@@ -1,5 +1,5 @@
-const { Sequelize } = require('sequelize');
-const { setup } = require('./setup');
+const {Sequelize} = require('sequelize');
+const {setup} = require('./setup');
 
 const sequelize = new Sequelize(
   process.env.POSTGRES_DB,
@@ -9,7 +9,7 @@ const sequelize = new Sequelize(
     host: 'localhost',
     dialect: 'postgres',
     logging: false,
-  }
+  },
 );
 
 const modelDefiners = [

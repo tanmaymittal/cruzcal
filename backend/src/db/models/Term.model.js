@@ -1,10 +1,10 @@
-const { DataTypes, Sequelize } = require('sequelize');
+const {DataTypes} = require('sequelize');
 
 /**
  *
  * @param {Sequelize} sequelize
  */
-module.exports = function (sequelize) {
+module.exports = function(sequelize) {
   sequelize.define('Term', {
     code: {
       primaryKey: true,
