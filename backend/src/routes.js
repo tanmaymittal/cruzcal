@@ -1,7 +1,7 @@
 const {getAllTerms, getTermByCode, getCourseByID} = require('./db');
 
 exports.getTerms = async (req, res) => {
-  res.json(await getAllTerms);
+  res.json(await getAllTerms());
 };
 
 exports.genSchedule = async (req, res) => {
@@ -41,7 +41,7 @@ const formatTerm = (termObj) => {
     name: termObj.name,
     date: {
       start: termObj.start,
-      end: termObj.end
+      end: termObj.end,
     },
   };
   return termInfo;
