@@ -1,16 +1,28 @@
 const supertest = require('supertest');
 const http = require('http');
+const {db, addTerm, addCourse} = require('../test-db');
 const app = require('../../app');
-const { db } = require('../test-db');
-const { scheduleRequest, scheduleImproperFormatRequest } = require('./mockData');
+const {
+  scheduleRequest,
+  scheduleImproperFormatRequest,
+} = require('./mockData');
+const {courses, terms} = require('../common');
 
-let server, request;
+let server; let request;
 
 beforeAll(async () => {
   server = http.createServer(app);
   server.listen();
   request = supertest(server);
-  await db.sync({ force: true });
+
+  await db.sync({force: true});
+
+  for (const term of terms) {
+    await addTerm(term);
+  }
+  for (const course of courses) {
+    await addCourse(course);
+  }
 });
 
 afterAll(async () => {
@@ -35,12 +47,18 @@ describe('GET /terms', () => {
 
 describe('POST /schedule', () => {
   test('responds with a 200 status code', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(200);
+    await request.post('/schedule').send(scheduleRequest).expect(201);
   });
   test('responds with JSON of courses', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(200);
+    await request
+      .post('/schedule')
+      .send(scheduleRequest)
+      .expect('Content-Type', /json/);
   });
-  test('responds with 400 error for incorrectly formatted request', async () => {
-    await request.post('/schedule').send(scheduleImproperFormatRequest).expect(400);
+  test('responds with 400 error for incorrect request', async () => {
+    await request
+      .post('/schedule')
+      .send(scheduleImproperFormatRequest)
+      .expect(400);
   });
 });

@@ -130,4 +130,4 @@ function makeDB () {
   })
 }
 
-makeDB()
+makeDB();
