@@ -6,7 +6,7 @@ import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
 const StyledPage = styled.div`
   .page {
@@ -70,7 +70,7 @@ export function Index() {
           {/* Calendar View */}
           <div className="basis-3/5 border-solid border-2 border-white text-white">
             {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
-            <h2 className="text-5xl mb-5">April 2022</h2>
+            <h2 className="text-3xl mb-5">April 2022</h2>
           </div>
           {/* Add Classes */}
           <div className="basis-2/5">
@@ -82,13 +82,11 @@ export function Index() {
                 <SelectList listName="Course #" listOptions={courseNumbers} />
               </div>
               {/* TODO: Delete button to remove a row */}
-              {/* <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button> */}
+              <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button>
             </div>
             <div className="flex justify-center">
               {/* TODO: Add button component to add another row of dropdowns */}
-              <div className="gradient-wrapper">
-                <button className="rounded-full px-6 py-0.5">Add</button>
-              </div>
+              <button className="text-4xl text-white"><FontAwesomeIcon icon={faPlusSquare} /></button>
             </div>
           </div>
         </div>
