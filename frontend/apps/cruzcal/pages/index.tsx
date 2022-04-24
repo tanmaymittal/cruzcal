@@ -5,6 +5,8 @@ import styled from 'styled-components';
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 
 const StyledPage = styled.div`
   .page {
@@ -31,10 +33,6 @@ export function Index() {
       term: "Spring 2022"
     }
   ];
-
-  // const subjects = [
-  //   "Computer Science & Engineering", "Education", "Mathematics"
-  // ];
 
   const subjects: Subject[] = [
     { name: "Computer Science & Engineering" },
@@ -76,10 +74,15 @@ export function Index() {
           </div>
           {/* Add Classes */}
           <div className="basis-2/5">
-            <div className="flex flex-wrap justify-center gap-x-3 mb-5">
-              <SelectList listName="Subject" listOptions={subjects} />
-              <SelectList listName="Course #" listOptions={courseNumbers} />
-              <button>Trash</button>
+            <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
+              <div className="basis-3/4">
+                <SelectList listName="Subject" listOptions={subjects} />
+              </div>
+              <div className="basis-1/4">
+                <SelectList listName="Course #" listOptions={courseNumbers} />
+              </div>
+              {/* TODO: Delete button to remove a row */}
+              {/* <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button> */}
             </div>
             <div className="flex justify-center">
               {/* TODO: Add button component to add another row of dropdowns */}
