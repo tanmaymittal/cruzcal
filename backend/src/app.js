@@ -29,15 +29,15 @@ app.use(
 app.get('/terms', routes.getTerms);
 app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
-app.get('/file', routes.getFile);
 
 // Error handler
 app.use((err, req, res, next) => {
-  res.status(err.status || 500).send({
-    status: err.status,
+  const error = {
+    status: err.status || 500,
     message: err.message,
     errors: err.errors,
-  });
+  };
+  res.status(error.status).send(error);
 });
 
 module.exports = app;
