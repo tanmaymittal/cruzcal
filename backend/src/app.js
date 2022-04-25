@@ -14,20 +14,26 @@ app.use(express.urlencoded({extended: false}));
 
 // Setup API validation
 
-const api = require('../api/openapi.json');
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api));
-app.use(
-  OpenApiValidator.middleware({
-    apiSpec: api,
-    validateRequests: true,
-    validateResponses: true,
-  }),
-);
+// const api = require('../api/openapi.json');
+// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api));
+// app.use(
+//   OpenApiValidator.middleware({
+//     apiSpec: api,
+//     validateRequests: false,
+//     validateResponses: false,
+//   }),
+// );
 
 // Routes
 
 app.get('/terms', routes.getTerms);
 app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
+app.get('/file', routes.getFile);
+
+app.use((err, req, res, next) => {
+  console.error(err.stack);
+  res.status(500).send(err.message);
+});
 
 module.exports = app;

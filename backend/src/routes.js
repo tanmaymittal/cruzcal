@@ -1,4 +1,5 @@
 const {getAllTerms, getTermByCode, getCourseByID} = require('./db');
+const fs = require('fs');
 
 exports.getTerms = async (req, res) => {
   res.json(await getAllTerms);
@@ -25,6 +26,20 @@ exports.genSchedule = async (req, res) => {
 
 exports.genCalendar = async (req, res) => {};
 
+exports.getFile = async (req, res) => {
+  const filename = 'file.txt';
+  const data = await getAllTerms();
+  fs.writeFileSync(filename, JSON.stringify(data, null, 2));
+  res.download(filename, (reserr) => {
+    if (reserr) console.error(reserr);
+    else {
+      fs.unlink(filename, (err) => {
+        if (err) console.error(err);
+      });
+    }
+  });
+};
+
 // Helpers
 const formatCourse = (courseObj) => {
   const courseInfo = {
@@ -41,7 +56,7 @@ const formatTerm = (termObj) => {
     name: termObj.name,
     date: {
       start: termObj.start,
-      end: termObj.end
+      end: termObj.end,
     },
   };
   return termInfo;
