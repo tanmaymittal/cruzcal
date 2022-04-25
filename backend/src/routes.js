@@ -2,7 +2,7 @@ const {getAllTerms, getTermByCode, getCourseByID} = require('./db');
 const fs = require('fs');
 
 exports.getTerms = async (req, res) => {
-  res.json(await getAllTerms);
+  res.json(await getAllTerms());
 };
 
 exports.genSchedule = async (req, res) => {
