@@ -14,15 +14,15 @@ app.use(express.urlencoded({extended: false}));
 
 // Setup API validation
 
-// const api = require('../api/openapi.json');
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api));
-// app.use(
-//   OpenApiValidator.middleware({
-//     apiSpec: api,
-//     validateRequests: false,
-//     validateResponses: false,
-//   }),
-// );
+const api = require('../api/openapi.json');
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api));
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: api,
+    validateRequests: true,
+    validateResponses: true,
+  }),
+);
 
 // Routes
 
@@ -31,9 +31,13 @@ app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
 app.get('/file', routes.getFile);
 
+// Error handler
 app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send(err.message);
+  res.status(err.status || 500).send({
+    status: err.status,
+    message: err.message,
+    errors: err.errors,
+  });
 });
 
 module.exports = app;
