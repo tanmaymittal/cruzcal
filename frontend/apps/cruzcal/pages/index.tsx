@@ -4,6 +4,9 @@ import styled from 'styled-components';
 
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import DropDown from '../app/drop-down/drop-down';
+import { Subject, SelectList } from '../app/select-list/select-list';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
 const StyledPage = styled.div`
   .page {
@@ -29,35 +32,31 @@ export function Index() {
       courseNumber: 1,
       term: "Spring 2022"
     }
-    // {
-    //   subject: "CSE",
-    //   classNumber: "12341",
-    //   courseNumber: 130,
-    //   term: "Spring 2022"      
-    //   // name: "My Course",
-    //   // description: "A rather profound class",
-    //   // section: "01",
-    //   // days: [Day.Monday, Day.Wednesday, Day.Friday],
-    // },
   ];
 
-  const subjects = [
-    "Computer Science & Engineering", "Education", "Mathematics"
-  ];
+  const subjects: Subject[] = [
+    { name: "Computer Science & Engineering" },
+    { name: "Education" },
+    { name: "Mathematics" },
+  ]
 
-  const courseNumbers = [
-    "1", "101", "111", "115A", "115D", "130", "183"
-  ];
+  const courseNumbers: Subject[] = [
+    { name: "1" },
+    { name: "101" },
+    { name: "111" },
+    { name: "115A" },
+    { name: "115D" },
+    { name: "130" },
+    { name: "183" },
+  ]
 
   /*
    * Note: The corresponding styles are in the ./index.styled-components file.
    */
   return (
     <StyledPage>
-      {/* <div className="">
-        Header
-      </div> */}
       <div className="container mx-auto">
+        {/* TODO: Header Components */}
         <div className="mb-10 text-white">
           <div className="flex justify-center items-center">
             <h1 className="text-7xl mb-2">CruzCal</h1>
@@ -66,24 +65,28 @@ export function Index() {
             <p className="text-xl mb-2">All your classes. One calendar file.</p>
           </div>
         </div>
-        <div className="grid grid-cols-1 sm:grid-cols-2">
-          <div className="text-white">
-            <h2 className="text-5xl mb-5">Course List</h2>
-              <CourseList courses={mockCourses} />
+        {/* Index Body */}
+        <div className="flex flex-col md:flex-row gap-x-14">
+          {/* Calendar View */}
+          <div className="basis-3/5 border-solid border-2 border-white text-white">
+            {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
+            <h2 className="text-3xl mb-5">April 2022</h2>
           </div>
-          <div>
-            <div className="flex flex-wrap space-x-4 mb-5">
-              <DropDown name="Subject" items={subjects} />
-              <DropDown name="Course Number" items={courseNumbers} />
+          {/* Add Classes */}
+          <div className="basis-2/5">
+            <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
+              <div className="basis-3/4">
+                <SelectList listName="Subject" listOptions={subjects} />
+              </div>
+              <div className="basis-1/4">
+                <SelectList listName="Course #" listOptions={courseNumbers} />
+              </div>
+              {/* TODO: Delete button to remove a row */}
+              <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button>
             </div>
-            <div className="flex space-x-4">
-              {/* TODO: Create button components */}
-              <div className="gradient-wrapper">
-                <button className="rounded-full px-6 py-0.5">Reset</button>
-              </div>
-              <div className="gradient-wrapper">
-                <button className="rounded-full px-6 py-0.5">Add</button>
-              </div>
+            <div className="flex justify-center">
+              {/* TODO: Add button component to add another row of dropdowns */}
+              <button className="text-4xl text-white"><FontAwesomeIcon icon={faPlusSquare} /></button>
             </div>
           </div>
         </div>
