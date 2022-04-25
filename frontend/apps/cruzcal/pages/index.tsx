@@ -34,6 +34,12 @@ export function Index() {
     }
   ];
 
+  const terms: Subject[] = [
+    {name: "2022 Spring"},
+    {name: "2022 Winter"},
+    {name: "2022 Fall"},
+  ]
+
   const subjects: Subject[] = [
     { name: "Computer Science & Engineering" },
     { name: "Education" },
@@ -65,6 +71,7 @@ export function Index() {
             <p className="text-xl mb-2">All your classes. One calendar file.</p>
           </div>
         </div>
+
         {/* Index Body */}
         <div className="flex flex-col md:flex-row gap-x-14">
           {/* Calendar View */}
@@ -72,9 +79,15 @@ export function Index() {
             {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
             <h2 className="text-3xl mb-5">April 2022</h2>
           </div>
+
           {/* Add Classes */}
           <div className="basis-2/5">
             <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
+
+              <div className="basis-3/4">
+                <SelectList listName="Term" listOptions={terms} />
+              </div>
+
               <div className="basis-3/4">
                 <SelectList listName="Subject" listOptions={subjects} />
               </div>
@@ -90,6 +103,9 @@ export function Index() {
             </div>
           </div>
         </div>
+        <p className="text-center text-gray-500 text-xs">
+            &copy;2022 CruzCal. All rights reserved.
+        </p>
         <div className="">
           Footer
         </div>
