@@ -1,17 +1,18 @@
 /* eslint-disable @next/next/no-img-element */
 import Script from 'next/script';
 import styled from 'styled-components';
+import { useAtom, atom } from 'jotai';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+
+import termsAtom from '../atoms/terms/terms';
+import selectedTermAtom from '../atoms/selected-term/selected-term';
+import coursesAtom from '../atoms/courses/courses';
 
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
-const StyledPage = styled.div`
-  .page {
-  }
-`;
 
 export function Index() {
 
@@ -34,11 +35,31 @@ export function Index() {
     }
   ];
 
-  const terms: Subject[] = [
-    {name: "2022 Spring"},
-    {name: "2022 Winter"},
-    {name: "2022 Fall"},
-  ]
+  const termsSubjectAtom = atom(
+    (get) => get(termsAtom).map((titem) => ({
+      name: titem.name
+    }))
+  );
+
+  // TODO: use as refered for Jotai atomWithQuary
+  // const termsTestData = require("./mockData.json").map((term) => ({
+  //   code: parseInt(term.code),
+  //   name: term.name,
+  //   start: new Date(term.date.start),
+  //   end: new Date(term.date.end),
+  // }));
+
+  const [terms] = useAtom(termsSubjectAtom);
+  const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom);
+  const [courses] = useAtom(coursesAtom);
+
+
+  // const terms: Subject[] = [
+
+  //   {name: "2022 Spring"},
+  //   {name: "2022 Winter"},
+  //   {name: "2022 Fall"},
+  // ]
 
   const subjects: Subject[] = [
     { name: "Computer Science & Engineering" },
@@ -60,7 +81,7 @@ export function Index() {
    * Note: The corresponding styles are in the ./index.styled-components file.
    */
   return (
-    <StyledPage>
+    <>
       <div className="container mx-auto">
         {/* TODO: Header Components */}
         <div className="mb-10 text-white">
@@ -85,7 +106,8 @@ export function Index() {
             <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
 
               <div className="basis-3/4">
-                <SelectList listName="Term" listOptions={terms} />
+                {/* TODO: create an `onChange` handler */}
+                <SelectList listName="Term" listOptions={terms}  />
               </div>
 
               <div className="basis-3/4">
@@ -111,7 +133,7 @@ export function Index() {
         </div>
       </div>
 
-    </StyledPage>
+    </>
   );
 }
 
