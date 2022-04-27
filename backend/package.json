@@ -17,7 +17,9 @@
     "dotenv": "*",
     "express": "*",
     "express-openapi-validator": "*",
-    "express-session": "*",
+    "express-session": "^1.17.2",
+    "passport": "^0.5.2",
+    "passport-google-oidc": "^0.1.0",
     "pg": "*",
     "sequelize": "*",
     "swagger-ui-express": "*"
