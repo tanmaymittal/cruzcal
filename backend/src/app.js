@@ -27,7 +27,19 @@ app.use(
 // Routes
 
 app.get('/terms', routes.getTerms);
+app.get('/subjects', routes.getSubjects); // e.g. /subjects?term=2222
+app.get('/courses', routes.getCourses); // e.g. /courses?term=2222&subject=CSE
 app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
+
+app.use((err, req, res, next) => {
+  const error = {
+    // For unexpected errors with no status during dev
+    status: err.status || 500,
+    message: err.message,
+    errors: err.errors,
+  };
+  res.status(error.status).send(error);
+});
 
 module.exports = app;
