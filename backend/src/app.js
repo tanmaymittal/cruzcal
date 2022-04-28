@@ -51,16 +51,16 @@ passport.deserializeUser(function(user, done) {
 
 // Routes
 
-app.get('/auth/google', passport.authenticate(auth.googleStrategy));
-app.get('/auth/google/redirect',
+app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
+app.get('/api/auth/google/redirect',
   passport.authenticate(auth.googleStrategy, {
-    failureRedirect: '/',
-    failureMessage: true,
+    failureRedirect: '/api/auth/google',
   }),
-  (req, res) => res.redirect('/profile'));
-app.post('/logout', auth.logOut);
-app.get('/terms', routes.getTerms);
-app.post('/schedule', routes.genSchedule);
-app.post('/calendar', routes.genCalendar);
+  (req, res) => res.redirect('/'),
+);
+app.post('/api/logout', auth.logOut);
+app.get('/api/terms', routes.getTerms);
+app.post('/api/schedule', routes.genSchedule);
+app.post('/api/calendar', routes.genCalendar);
 
 module.exports = app;

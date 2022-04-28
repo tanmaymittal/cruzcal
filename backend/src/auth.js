@@ -5,7 +5,7 @@ exports.googleStrategy = new GoogleStrategy(
   {
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: '/auth/google/redirect',
+    callbackURL: '/api/auth/google/redirect',
     scope: [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile',
@@ -23,6 +23,12 @@ exports.googleStrategy = new GoogleStrategy(
     } else cb(null, profile);
   });
 
+exports.check = async (req, res, next) => {
+  if (req.isAuthenticated()) {
+    return next();
+  }
+  res.redirect('/api/auth/google');
+};
 
 exports.logOut = async (req, res) => {
   req.logout();
