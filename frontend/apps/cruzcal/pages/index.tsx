@@ -35,7 +35,7 @@ export function Index() {
     }
   ];
 
-  const termsSubjectAtom = atom(
+  const termNamesAtom = atom(
     (get) => get(termsAtom).map((titem) => ({
       name: titem.name
     }))
@@ -49,7 +49,7 @@ export function Index() {
   //   end: new Date(term.date.end),
   // }));
 
-  const [terms] = useAtom(termsSubjectAtom);
+  const [terms] = useAtom(termNamesAtom);
   const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom);
   const [courses] = useAtom(coursesAtom);
 
@@ -76,6 +76,16 @@ export function Index() {
     { name: "130" },
     { name: "183" },
   ]
+
+  /**
+   * TODO: Define `TermInfo`: this would be the data asccociated with
+   * TODO: whichever term the user has selected (a transpose of the data)
+  */
+  // const TermButton = ({terms}: {terms: TermInfo[]}) => {
+  //   return (
+  //     <SelectList listName="Term" listOptions={terms}  />
+  //   );
+  // };
 
   /*
    * Note: The corresponding styles are in the ./index.styled-components file.
@@ -105,17 +115,26 @@ export function Index() {
           <div className="basis-2/5">
             <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
 
-              <div className="basis-3/4">
-                {/* TODO: create an `onChange` handler */}
-                <SelectList listName="Term" listOptions={terms}  />
-              </div>
+              {/* TODO: Create a CourseSelection Component */}
+              {/* <CourseSelection> */}
+                <div className="basis-3/4">
+                  {/*
+                    * TODO: Move the TermButton into a seperate component,
+                    * below is an example of how we can accomplish this
+                    */}
+                  <SelectList listName="Term" listOptions={terms}  />
+                  {/* <TermButton terms={terms}/> */}
+                </div>
 
-              <div className="basis-3/4">
-                <SelectList listName="Subject" listOptions={subjects} />
-              </div>
-              <div className="basis-1/4">
-                <SelectList listName="Course #" listOptions={courseNumbers} />
-              </div>
+                <div className="basis-3/4">
+                  <SelectList listName="Subject" listOptions={subjects} />
+                </div>
+                <div className="basis-1/4">
+                  <SelectList listName="Course #" listOptions={courseNumbers} />
+                </div>
+                {/* TODO: Create a CourseSelection Component */}
+              {/* </CourseSelection> */}
+
               {/* TODO: Delete button to remove a row */}
               <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button>
             </div>
@@ -132,6 +151,37 @@ export function Index() {
           Footer
         </div>
       </div>
+
+
+{/*
+    Below is an example of how we can section off the components for the main page.
+    Building things into components will help us intuitively build out each component,
+    cstarting with simple ones then cobminign them to make more complex components).
+
+      <Layout>
+        <CourseSelection>
+          <TermSelectListBox />  // <-- these components with the `/` are smaller, simpler components which reside in CourseSelection
+          <SubjectSelectListBox />
+          <CourseNoSelectListBox />
+        </CourseSelection>
+
+        <CourseList>
+          <AddCourseButton />
+          <RemoveCourseButton />
+          <ClearCoursesButton />
+          <DownloadButton />
+          <GoogleICSButton />
+        <CourseList/>
+
+        <CalendarView>
+          <CalendarComponentA>
+          <CalendarComponentB>
+          <CalendarComponentC>
+        <CalendarView/>
+
+      </Layout> */}
+
+
 
     </>
   );
