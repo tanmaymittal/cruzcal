@@ -1,5 +1,6 @@
 const fs = require('fs');
 const {v4: uuid} = require('uuid');
+const {generateIcsData} = require('./calendar');
 const path = require('path');
 
 const {
@@ -37,27 +38,24 @@ exports.getTerms = async (req, res) => {
 
 exports.genSchedule = async (req, res) => {
   const {termCode, courses} = req.body;
+  const {
+    formattedTerm,
+    formattedCourses,
+  } = await formatTermAndCourses(termCode, courses);
   const term = await getTermByCode(termCode);
+
   if (term == null) {
     return res.sendStatus(404);
   }
-  const formattedTerm = formatTerm(term);
-  const foundCourses = [];
-  for (const course of courses) {
-    const found = await getCourseByID(termCode, course.courseID);
-    if (found == null) {
-      return res.sendStatus(404);
-    }
-    const formattedCourse = formatCourse(found);
-    foundCourses.push(formattedCourse);
-  }
-  res.status(201).json({term: formattedTerm, courses: foundCourses});
+
+  res.status(201).json({term: formattedTerm, courses: formattedCourses});
 };
 
 // data is either a string or a binary buffer
 const createAndSendFile = async (res, filename, data) => {
+  console.log('data', data);
   return new Promise((resolve, reject) => {
-    const tmpfile = path.join('/tmp', `cc-${uuid()}`);
+    const tmpfile = path.join(__dirname, `/tmp`, `cc-${uuid()}`);
     // Create temporary file
     fs.writeFile(tmpfile, data, (writeError) => {
       if (writeError) {
@@ -82,9 +80,14 @@ const createAndSendFile = async (res, filename, data) => {
 // Media type reference: https://www.iana.org/assignments/media-types/text/calendar
 exports.genCalendar = async (req, res, next) => {
   try {
+    const {termCode, courses} = req.body;
+    const {
+      formattedTerm,
+      formattedCourses,
+    } = await formatTermAndCourses(termCode, courses);
     const downloadName = 'calendar.txt';
-    const data = JSON.stringify(await getAllTerms(), null, 2);
-    await createAndSendFile(res, downloadName, data);
+    const icsData = generateIcsData(formattedTerm, formattedCourses);
+    await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
     next(error);
   }
@@ -110,4 +113,22 @@ const formatTerm = (termObj) => {
     },
   };
   return termInfo;
+};
+
+const formatTermAndCourses = async (termCode, courses) => {
+  const term = await getTermByCode(termCode);
+  if (term == null) {
+    return res.sendStatus(404);
+  }
+  const formattedTerm = formatTerm(term);
+  const formattedCourses = [];
+  for (const course of courses) {
+    const found = await getCourseByID(termCode, course.courseID);
+    if (found == null) {
+      return res.sendStatus(404);
+    }
+    const formattedCourse = formatCourse(found);
+    formattedCourses.push(formattedCourse);
+  }
+  return {formattedTerm, formattedCourses};
 };
