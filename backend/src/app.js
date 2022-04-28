@@ -30,4 +30,14 @@ app.get('/terms', routes.getTerms);
 app.post('/schedule', routes.genSchedule);
 app.post('/calendar', routes.genCalendar);
 
+// Error handler
+app.use((err, req, res, next) => {
+  const error = {
+    status: err.status || 500,
+    message: err.message,
+    errors: err.errors,
+  };
+  res.status(error.status).send(error);
+});
+
 module.exports = app;

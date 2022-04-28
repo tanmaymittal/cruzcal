@@ -80,6 +80,49 @@
           }
         }
       }
+    },
+    "/calendar": {
+      "post": {
+        "description": "Generate calendar file (.ics) for given courses",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScheduleRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Successfully returned location and schedule information.",
+            "content": {
+              "text/calendar": {
+                "schema": {
+                  "$ref": "#/components/schemas/BinaryFile"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid course request format"
+          },
+          "404": {
+            "description": "At least one request course does not exist"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -92,6 +135,9 @@
           "courseID": {
             "type": "string"
           }
+        },
+        "example": {
+          "courseID": "50444"
         }
       },
       "Date": {
@@ -224,9 +270,13 @@
           }
         }
       },
+      "BinaryFile": {
+        "type": "string",
+        "format": "binary"
+      },
       "Error": {
         "properties": {
-          "code": {
+          "status": {
             "type": "integer",
             "format": "int32"
           },
@@ -234,7 +284,7 @@
             "type": "string"
           }
         },
-        "required": ["code", "message"]
+        "required": ["status", "message"]
       }
     }
   }
