@@ -56,7 +56,7 @@ exports.courses = [
     subject: 'CSE',
     coursenum: '115A',
     professor: 'Jullig,R.K.',
-    lectures: {
+    lectures: [{
       location: 'J Baskin Engr 152',
       times: [
         {
@@ -75,7 +75,7 @@ exports.courses = [
           end: '09:05',
         },
       ],
-    },
+    }],
     termcode: 2222,
   },
   {
@@ -84,7 +84,7 @@ exports.courses = [
     subject: 'AM',
     coursenum: '10',
     professor: 'Jonsson,V.',
-    lectures: {
+    lectures: [{
       location: 'Humn Lecture Hall',
       times: [
         {
@@ -98,7 +98,7 @@ exports.courses = [
           end: '13:15',
         },
       ],
-    },
+    }],
     termcode: 2220,
   },
 ];

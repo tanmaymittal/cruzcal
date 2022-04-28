@@ -15,15 +15,114 @@
       "get": {
         "description": "Return information for all available terms",
         "responses": {
-          "201": {
+          "200": {
             "description": "Successfully returned all available terms.",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/TermInfo"
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TermInfo"
+                  }
                 }
               }
             }
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subjects": {
+      "get": {
+        "description": "Get available subjects",
+        "parameters": [
+          {
+            "description": "Optional query parameter to filter by a term",
+            "in": "query",
+            "name": "term",
+            "schema": {
+              "$ref": "#/components/schemas/TermCode"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned subjects",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Subject"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No subjects found"
+          },
+          "default": {
+            "description": "Unexpected error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/courses": {
+      "get": {
+        "description": "Get available courses",
+        "parameters": [
+          {
+            "description": "Required query parameter to filter by a term",
+            "required": true,
+            "in": "query",
+            "name": "term",
+            "schema": {
+              "$ref": "#/components/schemas/TermCode"
+            }
+          },
+          {
+            "description": "Required query parameter to filter by a subject",
+            "required": true,
+            "in": "query",
+            "name": "subject",
+            "schema": {
+              "$ref": "#/components/schemas/Subject"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully returned courses",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CourseInfo"
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "No courses found"
           },
           "default": {
             "description": "Unexpected error",
@@ -152,6 +251,10 @@
         "type": "number",
         "example": 2222
       },
+      "Subject": {
+        "type": "string",
+        "example": "CSE"
+      },
       "TermInfo": {
         "type": "object",
         "additionalProperties": false,
@@ -225,16 +328,19 @@
       "CourseInfo": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["courseName", "lectures", "professor"],
+        "required": ["name", "lectures", "professor"],
         "properties": {
-          "courseName": {
+          "name": {
             "type": "string"
           },
           "professor": {
             "type": "string"
           },
           "lectures": {
-            "$ref": "#/components/schemas/LectureInfo"
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LectureInfo"
+            }
           }
         }
       },

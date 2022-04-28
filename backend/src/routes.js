@@ -1,10 +1,38 @@
-const {getAllTerms, getTermByCode, getCourseByID} = require('./db');
 const fs = require('fs');
 const {v4: uuid} = require('uuid');
 const path = require('path');
 
+const {
+  getAllTerms,
+  getTermByCode,
+  getCourseByID,
+  getUniqueSubjects,
+  getAllCourses,
+} = require('./db');
+
+exports.getSubjects = async (req, res) => {
+  const {term: termcode} = req.query;
+  const conditions = termcode ? {termcode} : {};
+
+  const rows = await getUniqueSubjects(conditions);
+
+  if (rows.length === 0) res.sendStatus(404);
+  else res.json(rows.map(({subject}) => subject));
+};
+
+exports.getCourses = async (req, res) => {
+  const {term: termcode, subject} = req.query;
+  const conditions = {termcode, subject};
+
+  const rows = await getAllCourses(conditions);
+
+  if (rows.length === 0) res.sendStatus(404);
+  else res.json(rows.map(formatCourse));
+};
+
 exports.getTerms = async (req, res) => {
-  res.json(await getAllTerms());
+  const terms = (await getAllTerms()).map(formatTerm);
+  res.json(terms);
 };
 
 exports.genSchedule = async (req, res) => {
@@ -17,10 +45,10 @@ exports.genSchedule = async (req, res) => {
   const foundCourses = [];
   for (const course of courses) {
     const found = await getCourseByID(termCode, course.courseID);
-    const formattedCourse = formatCourse(found);
     if (found == null) {
       return res.sendStatus(404);
     }
+    const formattedCourse = formatCourse(found);
     foundCourses.push(formattedCourse);
   }
   res.status(201).json({term: formattedTerm, courses: foundCourses});
@@ -65,7 +93,7 @@ exports.genCalendar = async (req, res, next) => {
 // Helpers
 const formatCourse = (courseObj) => {
   const courseInfo = {
-    courseName: courseObj.name,
+    name: courseObj.name,
     professor: courseObj.professor,
     lectures: courseObj.lectures,
   };
@@ -82,30 +110,4 @@ const formatTerm = (termObj) => {
     },
   };
   return termInfo;
-};
-
-const getIdentifierType = (identifier) => {
-  identifier = identifier.toLowerCase();
-  // Regex for subject and number, e.g. cse130, cse 130, cse 115a
-  const subjectAndNumReg = /[a-z]{2,}[\s-]*?\d{1,3}[\s-]*?\w{1}?/;
-  // Regex for course number, e.g. 70071
-  const courseNumReg = /\d{5}/;
-  if (subjectAndNumReg.test(identifier)) {
-    return 'subjectAndNum';
-  } else if (courseNumReg.test(identifier)) {
-    return 'courseNum';
-  }
-  return 'courseName';
-};
-
-// eslint-disable-next-line no-unused-vars
-const processIdentifier = (identifier) => {
-  const identifierType = getIdentifierType(identifier);
-  if (identifierType === 'subjectAndNum') {
-    identifier = identifier.replace(/ /g, '');
-  }
-  return {
-    identifier,
-    identifierType,
-  };
 };

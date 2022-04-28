@@ -41,19 +41,114 @@ describe('GET /terms', () => {
     await request.get('/terms').expect(200);
   });
   test('responds with JSON', async () => {
-    await request.get('/terms').expect('Content-Type', /json/);
+    await request
+      .get('/terms')
+      .expect('Content-Type', /json/)
+      .expect((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+        for (const term of res.body) {
+          expect(term).toHaveProperty('code');
+          expect(term).toHaveProperty('name');
+          expect(term).toHaveProperty('date');
+          expect(term.date).toHaveProperty('start');
+          expect(term.date).toHaveProperty('end');
+        }
+      }); ;
+  });
+});
+
+describe('GET /subjects', () => {
+  test('success with no parameters', async () => {
+    await request.get('/subjects').expect(200);
+  });
+  test('failure with invalid term', async () => {
+    await request.get('/subjects?term=-1').expect(404);
+  });
+  test('success with term', async () => {
+    await request
+      .get('/subjects?term=2222')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+        for (const term of res.body) {
+          expect(typeof term).toBe('string');
+        }
+      });
+  });
+});
+
+describe('GET /courses', () => {
+  test('error with no parameters', async () => {
+    await request.get('/courses').expect((res) => {
+      expect(res.status).toBe(400);
+    });
+  });
+  test('error with term parameter only', async () => {
+    await request.get('/courses?term=2222').expect((res) => {
+      expect(res.status).toBe(400);
+    });
+  });
+  test('error with subject parameter only', async () => {
+    await request.get('/courses?subject=CSE').expect((res) => {
+      expect(res.status).toBe(400);
+    });
+  });
+  test('error with invalid term arg', async () => {
+    await request.get('/courses?term=-1&subject=CSE').expect((res) => {
+      expect(res.status).toBe(404);
+    });
+  });
+  test('error with invalid subject arg', async () => {
+    await request.get('/courses?term=2222&subject=helloworld').expect((res) => {
+      expect(res.status).toBe(404);
+    });
+  });
+  test('responds with JSON', async () => {
+    await request
+      .get('/courses?term=2222&subject=CSE')
+      .expect(200)
+      .expect('Content-Type', /json/)
+      .expect((res) => {
+        expect(res.body).toBeInstanceOf(Array);
+        for (const course of res.body) {
+          expect(course).toHaveProperty('name');
+          expect(course).toHaveProperty('professor');
+          expect(course).toHaveProperty('lectures');
+        }
+      });
   });
 });
 
 describe('POST /schedule', () => {
-  test('responds with a 200 status code', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(201);
+  test('responds with a 201 status code', async () => {
+    await request
+      .post('/schedule')
+      .send(scheduleRequest)
+      .expect(201);
   });
   test('responds with JSON of courses', async () => {
     await request
       .post('/schedule')
       .send(scheduleRequest)
       .expect('Content-Type', /json/);
+  });
+  test('responds with 404 error for invalid term', async () => {
+    const badSchedReq = {...scheduleRequest, termCode: -1};
+    await request
+      .post('/schedule')
+      .send(badSchedReq)
+      .expect(404);
+  });
+  test('responds with 404 error for invalid term', async () => {
+    const badSchedReq = {
+      ...scheduleRequest,
+      courses: [{courseID: 'hello,world!'}],
+    };
+    await request
+      .post('/schedule')
+      .send(badSchedReq)
+      .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
