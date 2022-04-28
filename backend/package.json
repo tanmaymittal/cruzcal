@@ -4,7 +4,6 @@
   "description": "CruzCal lets users select their Class and produce calendar files based on the class events they can import to their preferred calendar.",
   "author": "CruzCal Developers",
   "devDependencies": {
-    "@types/temp": "^0.9.1",
     "eslint": "*",
     "eslint-config-google": "*",
     "http": "*",
