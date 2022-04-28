@@ -27,9 +27,7 @@ exports.getCourses = async (req, res) => {
 };
 
 exports.getTerms = async (req, res) => {
-  const terms = (await getAllTerms()).map(({code, name, start, end}) => (
-    {code, name, date: {start, end}}
-  ));
+  const terms = (await getAllTerms()).map(formatTerm);
   res.json(terms);
 };
 
