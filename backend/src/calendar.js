@@ -1,36 +1,5 @@
 const ics = require('ics');
 
-// const event = {
-//   start: [2018, 5, 30, 6, 30],
-//   duration: {hours: 6, minutes: 30},
-//   title: 'Bolder Boulder',
-//   description: 'Annual 10-kilometer run in Boulder, Colorado',
-//   location: 'Folsom Field, University of Colorado (finish line)',
-//   url: 'http://www.bolderboulder.com/',
-//   geo: {lat: 40.0095, lon: 105.2669},
-//   categories: ['10k races', 'Memorial Day Weekend', 'Boulder CO'],
-//   status: 'CONFIRMED',
-//   busyStatus: 'BUSY',
-//   organizer: {
-//     name: 'Admin', email: 'Race@BolderBOULDER.com',
-//   },
-//   attendees: [
-//     {
-//       name: 'Adam Gibbons',
-//       email: 'adam@example.com',
-//       rsvp: true,
-//       partstat: 'ACCEPTED',
-//       role: 'REQ-PARTICIPANT',
-//     },
-//     {
-//       name: 'Brittany Seaton',
-//       email: 'brittany@example2.org',
-//       dir: 'https://linkedin.com/in/brittanyseaton',
-//       role: 'OPT-PARTICIPANT',
-//     },
-//   ],
-// };
-
 const generateIcsData = (termData, courseData) => {
   const {
     error,
@@ -46,53 +15,12 @@ const generateIcsData = (termData, courseData) => {
 };
 
 // Helpers
-// {
-//     "term": {
-//         "code": 2222,
-//         "name": "2022 Spring Quarter",
-//         "date": {
-//             "start": "2022-03-28",
-//             "end": "2022-06-03"
-//         }
-//     },
-//     "courses": [
-//         {
-//             "name": "Universe Formation",
-//             "professor": "Foley,R.J.",
-//             "lectures": [
-//                 {
-//                     "times": [
-//                         {
-//                             "day": "Monday",
-//                             "end": "17:05",
-//                             "start": "16:00"
-//                         },
-//                         {
-//                             "day": "Wednesday",
-//                             "end": "17:05",
-//                             "start": "16:00"
-//                         },
-//                         {
-//                             "day": "Friday",
-//                             "end": "17:05",
-//                             "start": "16:00"
-//                         }
-//                     ],
-//                     "location": "Thim Lecture 003"
-//                 }
-//             ]
-//         }
-//     ]
-// }
 const coursesToEvents = (termData, courseData) => {
   const termDates = termData.date;
   const courseEvents = courseData.map((c) => {
     const times = c.lectures[0].times;
-    const start = times[0].start;
-    const end = times[0].end;
-
-    const formattedStartTime = formatTime(start);
-    const formattedEndTime = formatTime(end);
+    const formattedStartTime = formatTime(times[0].start);
+    const formattedEndTime = formatTime(times[0].end);
     const formattedStartDate = formatDate(termDates.start, 'number');
     const formattedEndDate = formatDate(termDates.end, 'string');
     const initialDate = getInitialDate(formattedStartDate, times);
@@ -108,6 +36,7 @@ const coursesToEvents = (termData, courseData) => {
         formattedEndTime.hour,
         formattedEndTime.minute,
       ],
+      location: c.lectures[0].location ? c.lectures[0].location : '',
       // eslint-disable-next-line max-len
       recurrenceRule: createRecurrenceRule(times, formattedEndDate),
     };
@@ -174,7 +103,7 @@ const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   console.log('closestIdx', closestIdx);
   console.log('termStartDateIdx', termStartDateIdx);
   if (!closestIdx) {
-    return (6-termStartDateIdx) + courseDaysIdx[0];
+    return (6 - termStartDateIdx) + courseDaysIdx[0];
   }
   return closestIdx - termStartDateIdx;
 };
@@ -188,8 +117,9 @@ const createRecurrenceRule = (times, date) => {
 
 module.exports = {
   /**
-   * @param {object} term - term to add as a JSON object
-   * @return {Promise<Model>} newly created row
+   * @param {object} term - term object
+   * @param {object[]} courses - array of course objects
+   * @return {string} - newly created ics file
    */
   generateIcsData,
 };
