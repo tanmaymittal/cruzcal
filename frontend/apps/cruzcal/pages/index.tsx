@@ -156,7 +156,9 @@ export function Index() {
 {/*
     Below is an example of how we can section off the components for the main page.
     Building things into components will help us intuitively build out each component,
-    cstarting with simple ones then cobminign them to make more complex components).
+    starting with simple ones then cobminign them to make more complex components).
+
+    //TODO: Please give me your input on how we want these components organized.
 
       <Layout>
         <CourseSelection>
@@ -180,7 +182,6 @@ export function Index() {
         <CalendarView/>
 
       </Layout> */}
-
 
 
     </>
