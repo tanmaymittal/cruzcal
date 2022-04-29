@@ -1,14 +1,17 @@
 /* eslint-disable @next/next/no-img-element */
+/* Borrowed libraries */
 import Script from 'next/script';
 import styled from 'styled-components';
 import { useAtom, atom } from 'jotai';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 
+/* Atoms */
 import termsAtom from '../atoms/terms/terms';
 import selectedTermAtom from '../atoms/selected-term/selected-term';
 import coursesAtom from '../atoms/courses/courses';
 
+/* Components */
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
@@ -35,13 +38,27 @@ export function Index() {
     }
   ];
 
+  /**
+   * Represents the list of all of the Term Names
+   * It's an atom that subscribes to the Term atom (which pulls all of the data that we don't necessarily need)
+   *
+   *  An atom called 'termNamesAtom' that fetches all of the terms from our backend/API
+   * e.g., 2022 Spring Quarter, 2022 Summer Quarter, etc.
+  */
   const termNamesAtom = atom(
     (get) => get(termsAtom).map((titem) => ({
       name: titem.name
     }))
   );
 
-  // TODO: use as refered for Jotai atomWithQuary
+  // Below is the mocked data for Term Names - no longer needed
+  // const terms: Subject[] = [
+  //   {name: "2022 Spring"},
+  //   {name: "2022 Winter"},
+  //   {name: "2022 Fall"},
+  // ]
+
+  // TODO: use as refered for Jotai atomWithQuary (work in-progress)
   // const termsTestData = require("./mockData.json").map((term) => ({
   //   code: parseInt(term.code),
   //   name: term.name,
@@ -54,12 +71,7 @@ export function Index() {
   const [courses] = useAtom(coursesAtom);
 
 
-  // const terms: Subject[] = [
 
-  //   {name: "2022 Spring"},
-  //   {name: "2022 Winter"},
-  //   {name: "2022 Fall"},
-  // ]
 
   const subjects: Subject[] = [
     { name: "Computer Science & Engineering" },
@@ -117,6 +129,7 @@ export function Index() {
 
               {/* TODO: Create a CourseSelection Component */}
               {/* <CourseSelection> */}
+
                 <div className="basis-3/4">
                   {/*
                     * TODO: Move the TermButton into a seperate component,
@@ -132,10 +145,10 @@ export function Index() {
                 <div className="basis-1/4">
                   <SelectList listName="Course #" listOptions={courseNumbers} />
                 </div>
+
                 {/* TODO: Create a CourseSelection Component */}
               {/* </CourseSelection> */}
 
-              {/* TODO: Delete button to remove a row */}
               <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button>
             </div>
             <div className="flex justify-center">
