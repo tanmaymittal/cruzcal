@@ -70,9 +70,6 @@ export function Index() {
   const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom);
   const [courses] = useAtom(coursesAtom);
 
-
-
-
   const subjects: Subject[] = [
     { name: "Computer Science & Engineering" },
     { name: "Education" },
