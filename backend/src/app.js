@@ -39,15 +39,15 @@ passport.deserializeUser(function(user, done) {
 
 // Setup API validation
 
-// const api = require('../api/openapi.json');
-// app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(api));
-// app.use(
-//   OpenApiValidator.middleware({
-//     apiSpec: api,
-//     validateRequests: true,
-//     validateResponses: true,
-//   }),
-// );
+const api = require('../api/openapi.json');
+app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api));
+app.use(
+  OpenApiValidator.middleware({
+    apiSpec: api,
+    validateRequests: true,
+    validateResponses: true,
+  }),
+);
 
 // Routes
 

@@ -31,33 +31,33 @@ afterAll(async () => {
 });
 
 test('Invalid endpoint', async () => {
-  await request.get('/hello/world').expect((res) => {
+  await request.get('/api/hello/world').expect((res) => {
     expect(res.status).not.toBe(200);
   });
 });
 
 describe('GET /terms', () => {
   test('responds with a 200 status code', async () => {
-    await request.get('/terms').expect(200);
+    await request.get('/api/terms').expect(200);
   });
   test('responds with JSON', async () => {
-    await request.get('/terms').expect('Content-Type', /json/);
+    await request.get('/api/terms').expect('Content-Type', /json/);
   });
 });
 
 describe('POST /schedule', () => {
   test('responds with a 200 status code', async () => {
-    await request.post('/schedule').send(scheduleRequest).expect(201);
+    await request.post('/api/schedule').send(scheduleRequest).expect(201);
   });
   test('responds with JSON of courses', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(scheduleRequest)
       .expect('Content-Type', /json/);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(scheduleImproperFormatRequest)
       .expect(400);
   });
