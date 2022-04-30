@@ -1,5 +1,15 @@
+const withPlugins = require('next-compose-plugins');
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const withNx = require('@nrwl/next/plugins/with-nx');
+const withTM = require('next-transpile-modules')([
+  "@fullcalendar/common",
+  "@babel/preset-react",
+  "@fullcalendar/common",
+  "@fullcalendar/daygrid",
+  "@fullcalendar/interaction",
+  "@fullcalendar/react",
+  "@fullcalendar/timegrid",
+])
 
 /**
  * @type {import('@nrwl/next/plugins/with-nx').WithNxOptions}
@@ -12,4 +22,7 @@ const nextConfig = {
   },
 };
 
-module.exports = withNx(nextConfig);
+// module.exports = withNx(nextConfig);
+module.exports = withPlugins([
+  [withTM],
+], nextConfig);
