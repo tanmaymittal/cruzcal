@@ -3,7 +3,6 @@ import Script from 'next/script';
 import styled from 'styled-components';
 
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
-import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
