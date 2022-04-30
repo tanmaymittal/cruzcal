@@ -24,5 +24,4 @@ const nextConfig = {
 
 module.exports = withPlugins([
   [withTM],
-  [withNx],
 ], nextConfig);
