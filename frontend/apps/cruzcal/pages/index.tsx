@@ -7,6 +7,7 @@ import DropDown from '../app/drop-down/drop-down';
 import { Subject, SelectList } from '../app/select-list/select-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import CalendarView from '../app/calendar-view/calendar-view';
 
 const StyledPage = styled.div`
   .page {
@@ -70,7 +71,8 @@ export function Index() {
           {/* Calendar View */}
           <div className="basis-3/5 border-solid border-2 border-white text-white">
             {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
-            <h2 className="text-3xl mb-5">April 2022</h2>
+            {/* <h2 className="text-3xl mb-5">April 2022</h2> */}
+            <CalendarView />
           </div>
           {/* Add Classes */}
           <div className="basis-2/5">
