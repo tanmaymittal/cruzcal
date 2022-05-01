@@ -3,6 +3,7 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid';
+import momentPlugin from '@fullcalendar/moment'
 
 
 /* eslint-disable-next-line */
@@ -11,12 +12,13 @@ export interface CalendarViewProps {}
 export function CalendarView(props: CalendarViewProps) {
   return (
     <FullCalendar
-      plugins={[timeGridPlugin]}
+      plugins={[momentPlugin, timeGridPlugin]}
       initialView="timeGridWeek"
       headerToolbar={false}
       weekends={false}
       contentHeight="auto"
       allDaySlot={false}
+      dayHeaderFormat = "dddd, MMMM D, YYYY"
       // Times are in 24 hour format
       slotMinTime="08:00"
       slotMaxTime="22:00"
