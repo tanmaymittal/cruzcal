@@ -110,4 +110,9 @@ Visit [Storybook](https://storybook.js.org/) to learn more.
 Completely unstyled, fully accessible UI components, designed to integrate beautifully with Tailwind CSS.
 We are using headless UI when building some of our comonenents such as the drop-down button.
 
-Visit [headless UI](https://headlessui.dev/)
+Visit [headless UI](https://headlessui.dev/) to learn more.
+
+## Jotai
+Jotai takes a bottom-up approach to React state management with an atomic model inspired by Recoil. One can build state by combining atoms and renders are optimized based on atom dependency. This solves the extra re-render issue of React context and eliminates the need for the memoization technique
+
+Visit [Jotai](https://jotai.org/docs/integrations/query) to learn more.

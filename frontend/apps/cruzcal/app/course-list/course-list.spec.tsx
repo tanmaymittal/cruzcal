@@ -4,7 +4,7 @@ import CourseList from './course-list';
 
 describe('CourseList', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<CourseList />);
+    const { baseElement } = render(<CourseList courses={[]} />);
     expect(baseElement).toBeTruthy();
   });
 });

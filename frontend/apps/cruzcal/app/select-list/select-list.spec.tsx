@@ -4,7 +4,7 @@ import SelectList from './select-list';
 
 describe('SelectList', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<SelectList />);
+    const { baseElement } = render(<SelectList listName="SelectList" listOptions={[]} />);
     expect(baseElement).toBeTruthy();
   });
 });
