@@ -14,8 +14,6 @@ import coursesAtom from '../atoms/courses/courses';
 /* Components */
 import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import { Subject, SelectList } from '../app/select-list/select-list';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
 import CalendarView from '../app/calendar-view/calendar-view';
 
 
