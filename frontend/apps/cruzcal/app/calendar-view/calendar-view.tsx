@@ -10,15 +10,17 @@ import momentPlugin from '@fullcalendar/moment'
 export interface CalendarViewProps {}
 
 export function CalendarView(props: CalendarViewProps) {
+  const header = {start: '', center: 'title', end: ''}
   return (
     <FullCalendar
       plugins={[momentPlugin, timeGridPlugin]}
       initialView="timeGridWeek"
-      headerToolbar={false}
+      headerToolbar={header}
+      titleFormat="MMMM"
       weekends={false}
       contentHeight="auto"
       allDaySlot={false}
-      dayHeaderFormat = "dddd, MMMM D, YYYY"
+      dayHeaderFormat = "dd"
       // Times are in 24 hour format
       slotMinTime="08:00"
       slotMaxTime="22:00"
