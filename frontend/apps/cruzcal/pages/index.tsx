@@ -201,9 +201,6 @@ export function Index() {
         <p className="text-center text-gray-500 text-xs">
             &copy;2022 CruzCal. All rights reserved.
         </p>
-        <div className="">
-          Footer
-        </div>
       </div>
 
 
