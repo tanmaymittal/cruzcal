@@ -16,6 +16,47 @@ import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
 import { Subject, SelectList } from '../app/select-list/select-list';
 import CalendarView from '../app/calendar-view/calendar-view';
 
+// Event Object
+// {
+//   id: "cse120",
+//   daysOfWeek: ['1', '3', '5'],
+//   title: 'CSE 120',
+//   startTime: '13:30',
+//   endTime: '15:15',
+// },
+export interface ClassInfo {
+  id: string;
+  daysOfWeek: string[];
+  title: string;
+  startTime: string;
+  endTime: string;
+}
+
+export interface Class {
+  name: string;
+}
+
+const initialClass: ClassInfo = {id: "cse120", daysOfWeek: ["1", "3", "5"], title: "CSE 120", startTime: "13:30", endTime: "15:15"}
+
+const classesAtom= atom(initialClass)
+
+export const classes = atom(classesAtom); 
+
+export function CounterButton() {
+  const [count, setCount] = useAtom(classesAtom);
+  const handleClick = () => {
+    // setCount(number => number + 1); // Increment number
+  };
+  return (
+    // <div>
+    //   {count}
+    //   <button onClick={handleClick}>Increment</button>
+    // </div>
+    <div>
+      {count.daysOfWeek}
+    </div>
+  );
+}
 
 export function Index() {
 
@@ -87,7 +128,7 @@ export function Index() {
   ]
 
   /**
-   * TODO: Define `TermInfo`: this would be the data asccociated with
+   * TODO: Define `TermInfo`: this would be the data associated with
    * TODO: whichever term the user has selected (a transpose of the data)
   */
   // const TermButton = ({terms}: {terms: TermInfo[]}) => {
@@ -116,12 +157,11 @@ export function Index() {
         <div className="flex flex-col md:flex-row gap-x-14">
           {/* Calendar View */}
           <div className="basis-3/5 border-solid border-2 border-white text-white">
-            {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
-            {/* <h2 className="text-3xl mb-5">April 2022</h2> */}
             <CalendarView />
           </div>
 
           {/* Add Classes */}
+          {/* TODO: Make SelectLists a constant width so UI doesn't move when items are selected */}
           <div className="basis-2/5">
             <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
 
@@ -143,6 +183,9 @@ export function Index() {
                 <div className="basis-1/4">
                   <SelectList listName="Course #" listOptions={courseNumbers} />
                 </div>
+                <div className="text-white">
+                  <CounterButton />
+                </div>
 
                 {/* TODO: Create a CourseSelection Component */}
               {/* </CourseSelection> */}
@@ -158,9 +201,6 @@ export function Index() {
         <p className="text-center text-gray-500 text-xs">
             &copy;2022 CruzCal. All rights reserved.
         </p>
-        <div className="">
-          Footer
-        </div>
       </div>
 
 
