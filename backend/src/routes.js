@@ -41,21 +41,15 @@ exports.genSchedule = async (req, res) => {
   const {
     formattedTerm,
     formattedCourses,
-  } = await formatTermAndCourses(termCode, courses);
-  const term = await getTermByCode(termCode);
-
-  if (term == null) {
-    return res.sendStatus(404);
-  }
+  } = await formatTermAndCourses(res, termCode, courses);
 
   res.status(201).json({term: formattedTerm, courses: formattedCourses});
 };
 
 // data is either a string or a binary buffer
 const createAndSendFile = async (res, filename, data) => {
-  console.log('data', data);
   return new Promise((resolve, reject) => {
-    const tmpfile = path.join(__dirname, `/tmp`, `cc-${uuid()}`);
+    const tmpfile = path.join(__dirname, `/tmp`, `cc-${uuid()}.ics`);
     // Create temporary file
     fs.writeFile(tmpfile, data, (writeError) => {
       if (writeError) {
@@ -84,8 +78,8 @@ exports.genCalendar = async (req, res, next) => {
     const {
       formattedTerm,
       formattedCourses,
-    } = await formatTermAndCourses(termCode, courses);
-    const downloadName = 'calendar.txt';
+    } = await formatTermAndCourses(res, termCode, courses);
+    const downloadName = 'calendar.ics';
     const icsData = generateIcsData(formattedTerm, formattedCourses);
     await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
@@ -115,7 +109,7 @@ const formatTerm = (termObj) => {
   return termInfo;
 };
 
-const formatTermAndCourses = async (termCode, courses) => {
+const formatTermAndCourses = async (res, termCode, courses) => {
   const term = await getTermByCode(termCode);
   if (term == null) {
     return res.sendStatus(404);

@@ -23,7 +23,7 @@ const coursesToEvents = (termData, courseData) => {
     const formattedEndTime = formatTime(times[0].end);
     const formattedStartDate = formatDate(termDates.start, 'number');
     const formattedEndDate = formatDate(termDates.end, 'string');
-    const initialDate = getInitialDate(formattedStartDate, times);
+    const initialDate = getInitialDate(times, formattedStartDate);
     return {
       title: c.name,
       start: [
@@ -37,7 +37,6 @@ const coursesToEvents = (termData, courseData) => {
         formattedEndTime.minute,
       ],
       location: c.lectures[0].location ? c.lectures[0].location : '',
-      // eslint-disable-next-line max-len
       recurrenceRule: createRecurrenceRule(times, formattedEndDate),
     };
   });
@@ -65,7 +64,7 @@ const formatDate = (date, formatType) => {
   };
 };
 
-const getInitialDate = (formattedStartDate, courseTimes) => {
+const getInitialDate = (courseTimes, formattedStartDate) => {
   const days = [
     'Sunday',
     'Monday',
@@ -82,7 +81,6 @@ const getInitialDate = (formattedStartDate, courseTimes) => {
     formattedStartDate.month - 1,
     formattedStartDate.day,
   );
-  console.log('termStartDate', termStartDate);
   const initialDate = new Date();
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
@@ -98,10 +96,8 @@ const getInitialDate = (formattedStartDate, courseTimes) => {
 };
 
 const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
-  // find the day closest to termStartDateIdx that is greater than or equal to
+  // find the day closest to termStartDateIdx that is >= to it
   const closestIdx = courseDaysIdx.filter((idx) => idx >= termStartDateIdx)[0];
-  console.log('closestIdx', closestIdx);
-  console.log('termStartDateIdx', termStartDateIdx);
   if (!closestIdx) {
     return (6 - termStartDateIdx) + courseDaysIdx[0];
   }
