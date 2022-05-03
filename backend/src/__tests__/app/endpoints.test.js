@@ -181,20 +181,20 @@ describe('POST /calendar', () => {
       });
   });
   test('responds with 404 error for invalid term', async () => {
-    const badSchedReq = {...calendarRequest, termCode: -1};
+    const badCalReq = {...calendarRequest, termCode: -1};
     await request
       .post('/schedule')
-      .send(badSchedReq)
+      .send(badCalReq)
       .expect(404);
   });
   test('responds with 404 error for invalid courseID', async () => {
-    const badSchedReq = {
+    const badCalReq = {
       ...calendarRequest,
       courses: [{courseID: 'hello,world!'}],
     };
     await request
       .post('/schedule')
-      .send(badSchedReq)
+      .send(badCalReq)
       .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
