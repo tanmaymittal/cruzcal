@@ -12,10 +12,10 @@ const CourseSelectionList = () => {
   const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection} });
 
   // Print out current state of selected classes
-  const courseList = useAtomValue(courseSelectionsAtom);
-  useEffect(() => {
-    console.log(JSON.stringify(courseList, null, 2));
-  }, [courseList]);
+  // const courseList = useAtomValue(courseSelectionsAtom);
+  // useEffect(() => {
+  //   console.log(JSON.stringify(courseList, null, 2));
+  // }, [courseList]);
 
   return (
     <div className="basis-2/5">

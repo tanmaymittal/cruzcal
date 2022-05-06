@@ -46,6 +46,6 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
   },
 }))
 
-export const coursesAtom = atom((get) => get(coursesQueryAtom));
+export const coursesAtom = atom<CourseInfo[]>((get) => get(coursesQueryAtom));
 
 export default coursesAtom;

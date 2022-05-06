@@ -1,20 +1,23 @@
 import selectedTermAtom from '../../atoms/selected-term'
-import termsAtom from '../../atoms/terms'
-import React, { Suspense } from 'react'
-import SelectList, { DefaultSelectList } from '../select-list/select-list'
+import termsAtom, { TermInfo } from '../../atoms/terms'
+import SelectList from '../select-list/select-list'
+import { useAtomValue } from 'jotai'
+import { useUpdateAtom, } from 'jotai/utils'
 
 const TermFilter = ({term, onSelect}) => {
+  const list = useAtomValue<TermInfo[]>(termsAtom);
+  const selectItem = useUpdateAtom(selectedTermAtom);
   return (
-    <Suspense fallback={<DefaultSelectList/>}>
-      <SelectList
-        selected={term}
-        setSelected={onSelect}
-        listName="Term"
-        listAtom={termsAtom}
-        selectedAtom={selectedTermAtom}
-      />
-    </Suspense>
-  )
+    <SelectList
+      listName="Course"
+      options={list}
+      selected={term}
+      setSelected={(item: TermInfo) => {
+        selectItem(item);
+        onSelect(item);
+      }}
+    />
+  );
 }
 
 export default TermFilter

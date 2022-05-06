@@ -1,20 +1,23 @@
-import subjectsAtom from '../../atoms/subjects'
-import SelectList, { DefaultSelectList } from '../select-list/select-list'
-import { Suspense } from 'react'
+import subjectsAtom, { SubjectInfo } from '../../atoms/subjects'
+import SelectList from '../select-list/select-list'
 import selectedSubjectAtom from '../../atoms/selected-subject'
+import { useAtomValue } from 'jotai'
+import { useUpdateAtom } from 'jotai/utils'
 
 const SubjectFilter = ({subject, onSelect}) => {
+  const list = useAtomValue<SubjectInfo[]>(subjectsAtom);
+  const selectItem = useUpdateAtom(selectedSubjectAtom);
   return (
-    <Suspense fallback={<DefaultSelectList/>}>
-      <SelectList
-        selected={subject}
-        setSelected={onSelect}
-        listName="Subject"
-        listAtom={subjectsAtom}
-        selectedAtom={selectedSubjectAtom}
-      />
-    </Suspense>
-  )
+    <SelectList
+      listName="Course"
+      options={list}
+      selected={subject}
+      setSelected={(item: SubjectInfo) => {
+        selectItem(item);
+        onSelect(item);
+      }}
+    />
+  );
 }
 
 export default SubjectFilter
