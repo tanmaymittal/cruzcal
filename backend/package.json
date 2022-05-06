@@ -18,6 +18,7 @@
     "express": "*",
     "express-openapi-validator": "*",
     "express-session": "*",
+    "ics": "^2.35.0",
     "pg": "*",
     "sequelize": "*",
     "swagger-ui-express": "*",
