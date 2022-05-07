@@ -5,17 +5,18 @@ import { useAtomValue } from 'jotai';
 import { CourseInfo } from '../../atoms/courses';
 import { useUpdateAtom } from 'jotai/utils';
 
-const CourseFilter = ({course, onSelect}) => {
+const CourseFilter = ({RWCourseSelection}) => {
+  const [courseSelection, setCourseSelection] = RWCourseSelection;
   const list = useAtomValue<CourseInfo[]>(coursesAtom);
-  const selectItem = useUpdateAtom(selectedCourseAtom);
+  const selectCourse = useUpdateAtom(selectedCourseAtom);
   return (
     <SelectList
       listName="Course"
       options={list}
-      selected={course}
-      setSelected={(item: CourseInfo) => {
-        selectItem(item);
-        onSelect(item);
+      selected={courseSelection.course}
+      setSelected={(course: CourseInfo) => {
+        selectCourse(course);
+        setCourseSelection((prev) => ({...prev, course}));
       }}
     />
   );

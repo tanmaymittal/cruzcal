@@ -4,17 +4,18 @@ import selectedSubjectAtom from '../../atoms/selected-subject'
 import { useAtomValue } from 'jotai'
 import { useUpdateAtom } from 'jotai/utils'
 
-const SubjectFilter = ({subject, onSelect}) => {
+const SubjectFilter = ({RWCourseSelection}) => {
+  const [courseSelection, setCourseSelection] = RWCourseSelection;
   const list = useAtomValue<SubjectInfo[]>(subjectsAtom);
-  const selectItem = useUpdateAtom(selectedSubjectAtom);
+  const selectSubject = useUpdateAtom(selectedSubjectAtom);
   return (
     <SelectList
-      listName="Course"
+      listName="Subject"
       options={list}
-      selected={subject}
-      setSelected={(item: SubjectInfo) => {
-        selectItem(item);
-        onSelect(item);
+      selected={courseSelection.subject}
+      setSelected={(subject: SubjectInfo) => {
+        selectSubject(subject);
+        setCourseSelection((prev) => ({...prev, subject, course: null}));
       }}
     />
   );
