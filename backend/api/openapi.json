@@ -194,7 +194,7 @@
           }
         },
         "responses": {
-          "201": {
+          "200": {
             "description": "Successfully returned location and schedule information.",
             "content": {
               "text/calendar": {

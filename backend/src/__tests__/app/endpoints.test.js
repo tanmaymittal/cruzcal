@@ -5,6 +5,9 @@ const app = require('../../app');
 const {
   scheduleRequest,
   scheduleImproperFormatRequest,
+  calendarRequest,
+  calendarImproperRequest,
+  calendarIcsString,
 } = require('./mockData');
 const {courses, terms} = require('../common');
 
@@ -140,7 +143,7 @@ describe('POST /schedule', () => {
       .send(badSchedReq)
       .expect(404);
   });
-  test('responds with 404 error for invalid term', async () => {
+  test('responds with 404 error for invalid courseID', async () => {
     const badSchedReq = {
       ...scheduleRequest,
       courses: [{courseID: 'hello,world!'}],
@@ -154,6 +157,50 @@ describe('POST /schedule', () => {
     await request
       .post('/schedule')
       .send(scheduleImproperFormatRequest)
+      .expect(400);
+  });
+});
+
+describe('POST /calendar', () => {
+  test('responds with a 200 status code', async () => {
+    await request
+      .post('/calendar')
+      .send(calendarRequest)
+      .expect(200);
+  });
+  test('responds with text/calendar data', async () => {
+    const beginEventMatch = /BEGIN:VEVENT/g;
+    const numOfEvents = calendarIcsString.match(beginEventMatch);
+
+    await request
+      .post('/calendar')
+      .send(calendarRequest)
+      .expect('Content-Type', 'text/calendar; charset=UTF-8')
+      .expect((res) => {
+        expect(res.text.match(beginEventMatch)).toStrictEqual(numOfEvents);
+      });
+  });
+  test('responds with 404 error for invalid term', async () => {
+    const badCalReq = {...calendarRequest, termCode: -1};
+    await request
+      .post('/schedule')
+      .send(badCalReq)
+      .expect(404);
+  });
+  test('responds with 404 error for invalid courseID', async () => {
+    const badCalReq = {
+      ...calendarRequest,
+      courses: [{courseID: 'hello,world!'}],
+    };
+    await request
+      .post('/schedule')
+      .send(badCalReq)
+      .expect(404);
+  });
+  test('responds with 400 error for incorrect request', async () => {
+    await request
+      .post('/schedule')
+      .send(calendarImproperRequest)
       .expect(400);
   });
 });

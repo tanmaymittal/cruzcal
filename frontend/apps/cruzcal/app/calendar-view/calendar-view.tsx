@@ -3,20 +3,24 @@ import React from 'react';
 import FullCalendar from '@fullcalendar/react'; // must go before plugins
 import interactionPlugin from "@fullcalendar/interaction";
 import timeGridPlugin from '@fullcalendar/timegrid';
+import momentPlugin from '@fullcalendar/moment'
 
 
 /* eslint-disable-next-line */
 export interface CalendarViewProps {}
 
 export function CalendarView(props: CalendarViewProps) {
+  const header = {start: '', center: 'title', end: ''}
   return (
     <FullCalendar
-      plugins={[timeGridPlugin]}
+      plugins={[momentPlugin, timeGridPlugin]}
       initialView="timeGridWeek"
-      headerToolbar={false}
+      headerToolbar={header}
+      titleFormat="MMMM"
       weekends={false}
       contentHeight="auto"
       allDaySlot={false}
+      dayHeaderFormat = "dd"
       // Times are in 24 hour format
       slotMinTime="08:00"
       slotMaxTime="22:00"
