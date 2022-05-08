@@ -14,6 +14,7 @@
   "dependencies": {
     "axios": "*",
     "cors": "*",
+    "js-yaml": "*",
     "dotenv": "*",
     "express": "*",
     "express-openapi-validator": "*",

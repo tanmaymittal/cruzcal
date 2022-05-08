@@ -1,92 +1,117 @@
 /* eslint-disable @next/next/no-img-element */
-import Script from 'next/script';
-import styled from 'styled-components';
-
-import { CourseList, CourseInfo, Day } from '../app/course-list/course-list';
-import DropDown from '../app/drop-down/drop-down';
-import { Subject, SelectList } from '../app/select-list/select-list';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt, faPlusSquare } from '@fortawesome/free-solid-svg-icons'
+import { faUser, faSignIn, faSignOut } from '@fortawesome/free-solid-svg-icons'
+import {atomWithStorage} from 'jotai/utils'
+import { Dispatch, useState, useEffect, Suspense } from 'react';
+import { useAtom } from 'jotai';
+import { atomWithQuery } from 'jotai/query';
+import ClientOnly from '../app/client-only/ClientOnly';
 
-const StyledPage = styled.div`
-  .page {
+export interface User {
+  displayName: string,
+  email: string
+};
+
+const userAtom = atomWithStorage('user', null as User);
+// const fetchUserAtom = atomWithQuery()
+
+async function authenticate() {
+  location.href = '/api/auth/google';
+}
+
+async function fetchUser(setUser: Dispatch<User>) {
+  try {
+    const res = await fetch('http://localhost:4200/api/user');
+    if (res.status !== 200) throw res;
+    const user = await res.json();
+    setUser(user);
+  } catch (error) {
+    setUser(null);
   }
-`;
+}
+
+async function logout(setUser: Dispatch<User>) {
+  try {
+    const res = await fetch('http://localhost:4200/api/logout', {
+      method: 'post'
+    });
+    if (res.status !== 200) throw res;
+    const {path} = await res.json();
+    console.log(path);
+    setUser(null);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+const Title = ({className, children}) => {
+  return (
+    <div className={className}>
+      {children}
+    </div>
+  );
+};
+
+const User = ({className}) => {
+  const [user, setUser]: [User, Dispatch<User>] = useAtom(userAtom);
+
+  useEffect(() => {
+    fetchUser(setUser);
+  }, []);
+
+  if (user === null)
+    return (
+      <button className='flex gap-3 align-middle' onClick={authenticate}>
+        <div className={className}>Log in</div>
+        <div>
+          <FontAwesomeIcon icon={faSignIn} />
+        </div>
+      </button>
+    );
+
+  const {displayName} = user;
+
+  return (
+    <div className='flex gap-5 align-middle'>
+      <div className={className}>
+        Hi, {displayName}
+      </div>
+      <div>|</div>
+      <button className='flex gap-3 align-middle' onClick={() => logout(setUser)}>
+        <div className={className}>Log out</div>
+        <div>
+          <FontAwesomeIcon icon={faSignOut} />
+        </div>
+      </button>
+    </div>
+  )
+}
 
 export function Index() {
-
-  const mockCourses: CourseInfo[] = [
-    {
-      subject: "CSE",
-      classNumber: "44788",
-      courseNumber: 115,
-      term: "Spring 2022"
-      // name: "My Course",
-      // description: "A rather profound class",
-      // section: "01",
-      // days: [Day.Monday, Day.Wednesday, Day.Friday],
-    },
-    {
-      subject: "CHEM",
-      classNumber: "12345",
-      courseNumber: 1,
-      term: "Spring 2022"
-    }
-  ];
-
-  const subjects: Subject[] = [
-    { name: "Computer Science & Engineering" },
-    { name: "Education" },
-    { name: "Mathematics" },
-  ]
-
-  const courseNumbers: Subject[] = [
-    { name: "1" },
-    { name: "101" },
-    { name: "111" },
-    { name: "115A" },
-    { name: "115D" },
-    { name: "130" },
-    { name: "183" },
-  ]
-
   /*
    * Note: The corresponding styles are in the ./index.styled-components file.
    */
   return (
-    <StyledPage>
-      <div className="container mx-auto">
+    <div className="w-screen p-2">
+      <div className="p-2">
         {/* TODO: Header Components */}
         <div className="mb-10 text-white">
-          <div className="flex justify-center items-center">
-            <h1 className="text-7xl mb-2">CruzCal</h1>
-          </div>
+          <Title className="flex flex-row justify-between">
+            <h1 className="basis-6/10 text-6xl mb-2">CruzCal</h1>
+            <ClientOnly className="basis-4/10 text-3xl">
+              <User className=""/>
+            </ClientOnly>
+          </Title>
           <div className="flex justify-center items-center">
             <p className="text-xl mb-2">All your classes. One calendar file.</p>
           </div>
         </div>
-        {/* Index Body */}
         <div className="flex flex-col md:flex-row gap-x-14">
-          {/* Calendar View */}
           <div className="basis-3/5 border-solid border-2 border-white text-white">
-            {/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */}
             <h2 className="text-3xl mb-5">April 2022</h2>
           </div>
-          {/* Add Classes */}
           <div className="basis-2/5">
-            <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
-              <div className="basis-3/4">
-                <SelectList listName="Subject" listOptions={subjects} />
-              </div>
-              <div className="basis-1/4">
-                <SelectList listName="Course #" listOptions={courseNumbers} />
-              </div>
-              {/* TODO: Delete button to remove a row */}
-              <button className='text-white'><FontAwesomeIcon icon={faTrashAlt} /></button>
-            </div>
             <div className="flex justify-center">
-              {/* TODO: Add button component to add another row of dropdowns */}
-              <button className="text-4xl text-white"><FontAwesomeIcon icon={faPlusSquare} /></button>
             </div>
           </div>
         </div>
@@ -95,7 +120,7 @@ export function Index() {
         </div>
       </div>
 
-    </StyledPage>
+    </div>
   );
 }
 

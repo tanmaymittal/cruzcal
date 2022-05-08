@@ -110,13 +110,9 @@
     }
   },
   "components": {
-    "security": [
-      {
-        "oauthToken": []
-      }
-    ],
     "securitySchemes": {
       "googleOAuth": {
+        "description": "hi",
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
