@@ -1,7 +1,7 @@
 import { atom, PrimitiveAtom, useAtomValue } from 'jotai';
 import { courseSelectionsAtom, CourseSelector } from './course-selector';
 
-function stringToTime(time: string) {
+function timeStringToNum(time: string) {
   // "times":
   //   {
   //     "day": "Monday",
@@ -18,10 +18,8 @@ function stringToTime(time: string) {
 
 export const warningsAtom = atom(
   (get) => {
-    console.log("go here warnings:"); // TODO: del me
     const courseSelectionAtom = get(courseSelectionsAtom);
     const totalCourseSelections = courseSelectionAtom.length;
-
     const listOfErrors: Set<CourseSelector> = new Set;
 
     // if 1 class or less, no warnings
@@ -31,48 +29,78 @@ export const warningsAtom = atom(
       return Array.from(listOfErrors);
     }
 
+    let conflict = false;
+    let count = 0;
+
     const cur = courseSelectionAtom[totalCourseSelections-1]; // most current/recent entry
 
     for (let i = 0; i < totalCourseSelections-1; i++) {
+      // console.log("FOR loop: got here 4."); // TODO: del me
+
       const prev = courseSelectionAtom[i]; // a previous entry
 
-      for (let curLecture of cur.course.lectures) {
-        for (let prevLecture of prev.course.lectures) {
-        // for (let ltime of lecture.times) {
-          if (curLecture.times[0] == prevLecture.times[0]) { // `0` represents Weekday
-            // check the time boundaries
-            // if prev.end <= cur.start || cur.end <= prev.start
-            // then no conflicts, continue
+      if (cur.course != null) {
+        // console.log("FOR loop: got here 5."); // TODO: del me
 
-            // alternatively:
-            // if (!(prev.end <= cur.start || cur.end <= prev.start)) {}
-            // then there IS a confliect, add to list of errors
-            // listOfErrors.add(cur);
-            // console.log("Printing warnings:"); // TODO: del me
-            // console.log(listOfErrors); // TODO: del me
-            // return Array.from(listOfErrors);
+        for (let curLecture of cur.course.lectures) {
+          // console.log("FOR loop: got here 6."); // TODO: del me
+
+          if (prev.course != null) {
+            // console.log("FOR loop: got here 7."); // TODO: del me
+
+            for (let prevLecture of prev.course.lectures) {
+              // console.log("FOR loop: got here 8."); // TODO: del me
+              // console.log(prevLecture); // TODO: del me
+              // console.log(prevLecture.times[0]); // TODO: del me
+              // console.log(prevLecture.times[1]); // TODO: del me
+              // console.log(prevLecture.times[2]); // TODO: del me
+              // console.log(prevLecture.times[3]); // TODO: del me
+
+              // console.log(curLecture); // TODO: del me
+              // console.log(curLecture.times[0]); // TODO: del me
+              // console.log(curLecture.times[1]); // TODO: del me
+              // console.log(curLecture.times[2]); // TODO: del me
+              // console.log(curLecture.times[3]); // TODO: del me
+
+              // for each cur lecture's day+time entry
+              for (let j = 0; j < curLecture.times.length; j++) {
+                // for each prev lecture's day+time entry
+                for (let k = 0; k < prevLecture.times.length; k++) {
+                  //console.log("Cur Lec Day: "+curLecture.times[j].day +" and Pre Lec Day: "+ prevLecture.times[k].day + ".")
+
+                  if (curLecture.times[j].day == prevLecture.times[k].day) { // if the two days of week are the same
+                    // console.log("FOR loop: got here 9."); // TODO: del me
+
+                    // check the time boundaries
+                    // if prev.end <= cur.start || cur.end <= prev.start
+                    // then no conflicts, continue
+
+                    // alternatively:
+                    // if (!(prev.end <= cur.start || cur.end <= prev.start))
+                    if (!(prevLecture.times[k].end <= curLecture.times[j].start || curLecture.times[j].end <= prevLecture.times[k].start)) {
+                      // then there IS a confliect, add to list of errors
+                      listOfErrors.add(cur);
+                      console.log("Scheduling CONFLICT between: " + cur.course.name + " and " + prev.course.name + "."); // TODO: del me
+                      conflict = true; // prevents duplicate conflict
+                      break;
+                    }
+                  }
+
+                }
+
+                // prevents duplicate conflict
+                if (conflict) {
+                  conflict = false;
+                  break;
+                }
+              }
+            }
           }
-
-          console.log("got here 1"); // TODO: del me
-
-          // // Check each _other_ course
-          // for (let j = 0; j < totalCourseSelections; j++) {
-          //   if (i == j) { continue; }
-
-          //   // L1: check if on the same day
-          //     // 1st fcheck: do they have the same start & end times
-
-
-          //   const other = useAtomValue(courseSelectionAtom[j]);
-          //   // this must chech each lecture and time against the cur
-          //   // and add cur to the list of errors if it conflicts
-          //   listOfErrors.add(cur);
-          // }
-
-          // ltime
         }
       }
     }
+
+    console.log("Got here END."); // TODO: del me
 
     console.log("Printing warnings:");
     console.log(listOfErrors);
