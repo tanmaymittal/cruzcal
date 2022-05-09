@@ -26,13 +26,14 @@ const PageFooter = () => {
 };
 
 /* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */
-  // const CalendarView = () => {
-  //   return (
-  //     <div className="basis-3/5 border-solid border-2 border-white text-white">
-  //       <h2 className="text-3xl mb-5">May 2022</h2>
-  //     </div>
-  //   )
-  // };
+  const CalendarViewBody = () => {
+    return (
+      <div className="basis-3/5 border-solid border-2 border-white text-white">
+        {/* <h2 className="text-3xl mb-5">May 2022</h2> */}
+        <CalendarView />
+      </div>
+    )
+  };
 
 export function Index() {
   /*
@@ -44,13 +45,13 @@ export function Index() {
 
         {/* Index Body */}
         <div className="flex flex-col md:flex-row gap-x-14">
-          <CalendarView />
+          <CalendarViewBody />
 
           {/* Add Classes */}
           <CourseSelectionList /> 
           
-          <PageFooter />
         </div>
+        <PageFooter />
       
       </div>
   );
