@@ -19,7 +19,8 @@
       "executor": "@nrwl/next:server",
       "options": {
         "buildTarget": "cruzcal:build",
-        "dev": true
+        "dev": true,
+        "proxyConfig": "apps/cruzcal/proxy.conf.json"
       },
       "configurations": {
         "production": {

@@ -1,19 +1,4 @@
-// const {Op, Model} = require('sequelize');
-
-const getCourseByID = async (db, termCode, courseID) => {
-  const {CourseInfo} = db.models;
-
-  let crn = parseInt(courseID);
-  if (isNaN(crn)) crn = -1;
-
-  const results = await CourseInfo.findOne({
-    where: {
-      termcode: termCode,
-      refnum: crn,
-    },
-  });
-  return results;
-};
+const Sequelize = require('sequelize');
 
 module.exports = (db) => ({
   /**
@@ -27,9 +12,12 @@ module.exports = (db) => ({
    */
   addCourse: async (course) => await db.models.CourseInfo.create(course),
   /**
+   * @param {object} conditions
    * @return {Promise<Model[]>} All rows in CourseInfo table
    */
-  getAllCourses: async () => await db.models.CourseInfo.findAll(),
+  getAllCourses: async (conditions) => await db.models.CourseInfo.findAll({
+    where: conditions || {},
+  }),
   /**
    * @return {Promise<Model[]>} All rows in Term table
    */
@@ -40,10 +28,29 @@ module.exports = (db) => ({
    */
   getTermByCode: async (code) => await db.models.Term.findByPk(code),
   /**
-   * @param {number} code - 4-digit UCSC term code
+   * @param {number} termCode - 4-digit UCSC term code
    * @param {String|number} courseID
    * - 5-digit UCSC CRN (future versions will accept multiple formats)
    * @return {Promise<Model|null>} Specified course or null if it doesn't exist.
    */
-  getCourseByID: async (code, courseID) => getCourseByID(db, code, courseID),
+  getCourseByID: async (termCode, courseID) => {
+    const {CourseInfo} = db.models;
+
+    let crn = parseInt(courseID);
+    if (isNaN(crn)) crn = -1;
+
+    const results = await CourseInfo.findOne({
+      where: {
+        termcode: termCode,
+        refnum: crn,
+      },
+    });
+    return results;
+  },
+  getUniqueSubjects: async (conditions) => db.models.CourseInfo.findAll({
+    attributes: [
+      [Sequelize.fn('DISTINCT', Sequelize.col('subject')), 'subject'],
+    ],
+    where: conditions,
+  }),
 });

@@ -1,34 +1,96 @@
-const {getAllTerms, getTermByCode, getCourseByID} = require('./db');
+const fs = require('fs');
+const {v4: uuid} = require('uuid');
+const {generateIcsData} = require('./calendar');
+const path = require('path');
+
+const {
+  getAllTerms,
+  getTermByCode,
+  getCourseByID,
+  getUniqueSubjects,
+  getAllCourses,
+} = require('./db');
+
+exports.getSubjects = async (req, res) => {
+  const {term: termcode} = req.query;
+  const conditions = termcode ? {termcode} : {};
+
+  const rows = await getUniqueSubjects(conditions);
+
+  if (rows.length === 0) res.sendStatus(404);
+  else res.json(rows.map(({subject}) => subject));
+};
+
+exports.getCourses = async (req, res) => {
+  const {term: termcode, subject} = req.query;
+  const conditions = {termcode, subject};
+
+  const rows = await getAllCourses(conditions);
+
+  if (rows.length === 0) res.sendStatus(404);
+  else res.json(rows.map(formatCourse));
+};
 
 exports.getTerms = async (req, res) => {
-  res.json(await getAllTerms());
+  const terms = (await getAllTerms()).map(formatTerm);
+  res.json(terms);
 };
 
 exports.genSchedule = async (req, res) => {
   const {termCode, courses} = req.body;
-  const term = await getTermByCode(termCode);
-  if (term == null) {
-    return res.sendStatus(404);
-  }
-  const formattedTerm = formatTerm(term);
-  const foundCourses = [];
-  for (const course of courses) {
-    const found = await getCourseByID(termCode, course.courseID);
-    if (found == null) {
-      return res.sendStatus(404);
-    }
-    const formattedCourse = formatCourse(found);
-    foundCourses.push(formattedCourse);
-  }
-  res.status(201).json({term: formattedTerm, courses: foundCourses});
+  const {
+    formattedTerm,
+    formattedCourses,
+  } = await formatTermAndCourses(res, termCode, courses);
+
+  res.status(201).json({term: formattedTerm, courses: formattedCourses});
 };
 
-exports.genCalendar = async (req, res) => {};
+// data is either a string or a binary buffer
+const createAndSendFile = async (res, filename, data) => {
+  return new Promise((resolve, reject) => {
+    const tmpfile = path.join(__dirname, `/tmp`, `cc-${uuid()}.ics`);
+    // Create temporary file
+    fs.writeFile(tmpfile, data, (writeError) => {
+      if (writeError) {
+        reject(new Error('could not create temporary file'));
+      }
+      // Send file download to client
+      res.download(tmpfile, filename, (downloadError) => {
+        if (downloadError) {
+          reject(new Error('response download failed'));
+        }
+        // Remove temporary file
+        fs.unlink(tmpfile, (err) => {
+          if (err) reject(new Error('temporary file failed to delete'));
+          else resolve();
+        });
+      });
+    });
+  });
+};
+
+// Returns 'text/calendar' file type
+// Media type reference: https://www.iana.org/assignments/media-types/text/calendar
+exports.genCalendar = async (req, res, next) => {
+  try {
+    const {termCode, courses} = req.body;
+    const {
+      formattedTerm,
+      formattedCourses,
+    } = await formatTermAndCourses(res, termCode, courses);
+    const downloadName = 'calendar.ics';
+    const icsData = generateIcsData(formattedTerm, formattedCourses);
+    await createAndSendFile(res, downloadName, icsData);
+  } catch (error) {
+    next(error);
+  }
+};
 
 // Helpers
 const formatCourse = (courseObj) => {
   const courseInfo = {
-    courseName: courseObj.name,
+    name: courseObj.name,
     professor: courseObj.professor,
     lectures: courseObj.lectures,
   };
@@ -46,28 +108,21 @@ const formatTerm = (termObj) => {
   };
   return termInfo;
 };
-const getIdentifierType = (identifier) => {
-  identifier = identifier.toLowerCase();
-  // Regex for subject and number, e.g. cse130, cse 130, cse 115a
-  const subjectAndNumReg = /[a-z]{2,}[\s-]*?\d{1,3}[\s-]*?\w{1}?/;
-  // Regex for course number, e.g. 70071
-  const courseNumReg = /\d{5}/;
-  if (subjectAndNumReg.test(identifier)) {
-    return 'subjectAndNum';
-  } else if (courseNumReg.test(identifier)) {
-    return 'courseNum';
-  }
-  return 'courseName';
-};
 
-// eslint-disable-next-line no-unused-vars
-const processIdentifier = (identifier) => {
-  const identifierType = getIdentifierType(identifier);
-  if (identifierType === 'subjectAndNum') {
-    identifier = identifier.replace(/ /g, '');
+const formatTermAndCourses = async (res, termCode, courses) => {
+  const term = await getTermByCode(termCode);
+  if (term == null) {
+    return res.sendStatus(404);
   }
-  return {
-    identifier,
-    identifierType,
-  };
+  const formattedTerm = formatTerm(term);
+  const formattedCourses = [];
+  for (const course of courses) {
+    const found = await getCourseByID(termCode, course.courseID);
+    if (found == null) {
+      return res.sendStatus(404);
+    }
+    const formattedCourse = formatCourse(found);
+    formattedCourses.push(formattedCourse);
+  }
+  return {formattedTerm, formattedCourses};
 };

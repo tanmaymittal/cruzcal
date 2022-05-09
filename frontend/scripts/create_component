@@ -1,3 +1,7 @@
 #!/usr/bin/env bash
 
-npx nx g @nrwl/react:component ${1} --project=cruzcal
+if [ $# -gt 1 ] ; then
+  npx nx g @nrwl/react:component ${2} --project=cruzcal --directory=${1}
+else
+  npx nx g @nrwl/react:component ${1} --project=cruzcal
+fi

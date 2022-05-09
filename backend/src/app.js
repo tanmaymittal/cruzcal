@@ -67,7 +67,19 @@ app.get('/api/auth/google/redirect',
 app.get('/api/user', auth.check, auth.getUser);
 app.post('/api/logout', auth.logOut);
 app.get('/api/terms', routes.getTerms);
+app.get('/api/subjects', routes.getSubjects); // e.g. /subjects?term=2222
+app.get('/api/courses', routes.getCourses); // e.g. /courses?term=2222&subject=CSE
 app.post('/api/schedule', routes.genSchedule);
 app.post('/api/calendar', routes.genCalendar);
+
+// Error handler
+app.use((err, req, res, next) => {
+  const error = {
+    status: err.status || 500,
+    message: err.message,
+    errors: err.errors,
+  };
+  res.status(error.status).send(error);
+});
 
 module.exports = app;

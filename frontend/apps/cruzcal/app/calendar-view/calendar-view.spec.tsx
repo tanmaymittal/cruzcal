@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import CourseList from './course-list';
+import CalendarView from './calendar-view';
 
-describe('CourseList', () => {
+describe('CalendarView', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<CourseList />);
+    const { baseElement } = render(<CalendarView />);
     expect(baseElement).toBeTruthy();
   });
 });

@@ -18,12 +18,14 @@
     "dotenv": "*",
     "express": "*",
     "express-openapi-validator": "*",
-    "express-session": "^1.17.2",
+    "express-session": "*",
+    "ics": "^2.35.0",
     "passport": "^0.5.2",
     "passport-google-oidc": "^0.1.0",
     "pg": "*",
     "sequelize": "*",
-    "swagger-ui-express": "*"
+    "swagger-ui-express": "*",
+    "uuid": "^8.3.2"
   },
   "scripts": {
     "start": "nodemon src/server.js",

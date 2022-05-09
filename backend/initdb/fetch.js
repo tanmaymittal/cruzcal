@@ -1,4 +1,5 @@
 const axios = require('axios');
+const fs = require('fs');
 
 const PAST_TERM_LIMIT = 5;
 
@@ -70,12 +71,12 @@ const getCourses = async (termCode) => {
           coursenum: course.c,
           professor: course.ins.d[0],
           lectures: course.loct.map(({t, loc}) => {
-            const location = loc === '' ? null : loc;
+            const location = loc;
             const times = t?.day ? t.day.map((day) => ({
               day,
               start: t.time.start,
               end: t.time.end,
-            })) : null;
+            })) : [];
             return {location, times};
           }),
           termcode: parseInt(termCode),
@@ -90,7 +91,7 @@ const getCourses = async (termCode) => {
 };
 
 // Fetch the list of tracked terms and courses
-module.exports = async function(db) {
+module.exports = async function(db, reset) {
   const terms = await getTerms(PAST_TERM_LIMIT);
 
   let courses = [];
@@ -101,7 +102,7 @@ module.exports = async function(db) {
   const res = {terms, courses};
   fs.writeFileSync('./static-db.json', JSON.stringify(res, null, 2));
 
-  await db.sync({force: false});
+  await db.sync({force: reset});
   await db.models.Term.bulkCreate(terms, {
     updateOnDuplicate: ['name', 'start', 'end'],
   });
