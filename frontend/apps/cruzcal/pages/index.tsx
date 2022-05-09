@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 
 /* Components */
-import CalendarView from '../app/calendar-view/calendar-view';
+// import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 
 const PageHeader = () => {
