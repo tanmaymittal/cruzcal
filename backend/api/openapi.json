@@ -11,7 +11,34 @@
     }
   ],
   "paths": {
-    "/terms": {
+    "/api/auth/google": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "succesful response"
+          }
+        }
+      }
+    },
+    "/api/auth/google/redirect": {
+      "get": {
+        "responses": {
+          "200": {
+            "description": "succesful response"
+          }
+        }
+      }
+    },
+    "/api/logout": {
+      "post": {
+        "responses": {
+          "200": {
+            "description": "succesful response"
+          }
+        }
+      }
+    },
+    "/api/terms": {
       "get": {
         "description": "Return information for all available terms",
         "responses": {
@@ -137,7 +164,7 @@
         }
       }
     },
-    "/schedule": {
+    "/api/schedule": {
       "post": {
         "description": "Generate location and schedule information for given courses",
         "requestBody": {
@@ -225,6 +252,22 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "googleOAuth": {
+        "description": "hi",
+        "type": "oauth2",
+        "flows": {
+          "authorizationCode": {
+            "authorizationUrl": "/api/auth/google",
+            "scope": {
+              "email": "The email associated with your google account",
+              "profile": "Public profile information for your google account",
+              "calendar": "Read, edit, delete permissions for Google Calendar"
+            }
+          }
+        }
+      }
+    },
     "schemas": {
       "CourseIdentifier": {
         "type": "object",

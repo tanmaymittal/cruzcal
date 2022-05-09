@@ -1,5 +1,6 @@
 const supertest = require('supertest');
 const http = require('http');
+require('../test-db');
 const app = require('../../app');
 
 let server; let request;
@@ -15,7 +16,7 @@ afterAll(() => {
 });
 
 test('Check api docs', async () => {
-  await request.get('/api-docs').expect((res) => {
+  await request.get('/api/docs').expect((res) => {
     expect(res.status).toBeLessThan(400);
   });
 });
