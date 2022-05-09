@@ -7,7 +7,7 @@ db.sync({force: false})
   .then(() => {
     app.listen(3010, () => {
       console.log(`Server Running: http://localhost:3010`);
-      console.log('API Testing UI: http://localhost:3010/api-docs/');
+      console.log('API Testing UI: http://localhost:3010/api/docs/');
     });
   })
   .catch(() => {
