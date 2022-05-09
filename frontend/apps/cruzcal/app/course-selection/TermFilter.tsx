@@ -1,20 +1,27 @@
 import selectedTermAtom from '../../atoms/selected-term'
-import termsAtom from '../../atoms/terms'
-import React, { Suspense } from 'react'
-import SelectList, { DefaultSelectList } from '../select-list/select-list'
+import termsAtom, { TermInfo } from '../../atoms/terms'
+import SelectList from '../select-list/select-list'
+import { useAtomValue } from 'jotai'
+import { useUpdateAtom, } from 'jotai/utils'
+import { useEffect } from 'react'
 
-const TermFilter = ({term, onSelect}) => {
+const TermFilter = ({RWCourseSelection}) => {
+  const [courseSelection, setCourseSelection] = RWCourseSelection;
+
+  const list = useAtomValue<TermInfo[]>(termsAtom);
+  const updateTerm = useUpdateAtom(selectedTermAtom);
+
   return (
-    <Suspense fallback={<DefaultSelectList/>}>
-      <SelectList
-        selected={term}
-        setSelected={onSelect}
-        listName="Term"
-        listAtom={termsAtom}
-        selectedAtom={selectedTermAtom}
-      />
-    </Suspense>
-  )
+    <SelectList
+      listName="Term"
+      options={list}
+      selected={courseSelection.term}
+      setSelected={(term: TermInfo) => {
+        updateTerm(term);
+        setCourseSelection({term, subject: null, course: null});
+      }}
+    />
+  );
 }
 
 export default TermFilter
