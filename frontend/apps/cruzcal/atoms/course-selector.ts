@@ -19,3 +19,4 @@ export const defaultCourseSelection: CourseSelector = {
 export const courseSelectionAtom: PrimitiveAtom<CourseSelector> = atom(defaultCourseSelection);
 export const courseSelectionsAtom: PrimitiveAtom<CourseSelector[]> = atom([{...defaultCourseSelection}]);
 export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
+

@@ -5,30 +5,20 @@ import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
 import { SubjectInfo } from '../../atoms/subjects';
 import { TermInfo } from '../../atoms/terms';
 import { CourseInfo } from '../../atoms/courses';
-import { atom, Atom, PrimitiveAtom, useAtomValue } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
 
 export type Subject = SubjectInfo | TermInfo | CourseInfo;
 
 /* eslint-disable-next-line */
 export interface SelectListProps {
   listName: string,
-  listAtom: Atom<Subject[]>,
+  options: Subject[],
   selected: Subject,
   setSelected: Dispatch<Subject>,
-  selectedAtom: PrimitiveAtom<Subject>
 }
 
-export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listName, listAtom, selectedAtom }) => {
-  const list = useAtomValue<Subject[]>(listAtom);
-  const selectItem = useUpdateAtom(selectedAtom);
-  const onChange = (item) => {
-    selectItem(item);
-    setSelected(item);
-  }
-
+export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listName, options }) => {
   return (
-    <Listbox value={selected} onChange={onChange}>
+    <Listbox value={selected} onChange={setSelected}> {/*  disabled={options.length === 0} */}
       <div className="relative">
         <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm">
           <span className="block truncate">{selected === null ? `Select ${listName}...` : selected.name}</span>
@@ -46,7 +36,7 @@ export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listNam
           leaveTo="opacity-0"
         >
         <Listbox.Options className="absolute w-full py-1 mt-1 overflow-auto text-base bg-white rounded-md shadow-lg max-h-60 ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
-            {list.map((option, optionId) => (
+            {options.map((option, optionId) => (
               <Listbox.Option
                 key={optionId}
                 className={({ active }) =>
@@ -79,13 +69,15 @@ export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listNam
   );
 }
 
-
-const nullAtom = atom(null as Subject);
-const listAtom = atom([]);
-
 export const DefaultSelectList = () => {
-  const subject = {name: 'Loading...'};
-  return <SelectList selected={subject} setSelected={()=>0} listName="Default" listAtom={listAtom} selectedAtom={nullAtom} />;
+  return (
+    <SelectList
+      selected={{name: 'Loading...'}}
+      setSelected={()=>undefined}
+      listName="Default"
+      options={[]}
+    />
+  );
 };
 
 export default SelectList;
