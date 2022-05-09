@@ -13,27 +13,112 @@
   "paths": {
     "/api/auth/google": {
       "get": {
+        "description": "Fill out...",
         "responses": {
-          "200": {
-            "description": "succesful response"
+          "302": {
+            "description": "Redirecting to Google authorization server"
           }
         }
       }
     },
     "/api/auth/google/redirect": {
       "get": {
+        "description": "Fill out...",
+        "parameters": [
+          {
+            "in": "query",
+            "description": "Random state string to protect against attacks such as CSRF.",
+            "required": true,
+            "name": "state",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.",
+            "required": true,
+            "name": "code",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Scopes for authenticated user",
+            "required": true,
+            "allowReserved": true,
+            "name": "scope",
+            "schema": {
+              "type": "array"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Index of which user is selected.",
+            "name": "authuser",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Organization associated with google account.",
+            "name": "hd",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "description": "Indicates if user should be prompted for consent on every access.",
+            "name": "prompt",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "302": {
+            "description": "Successful authorization. Redirecting to landing page"
+          },
+          "default": {
+            "description": "Authorization failed."
+          }
+        }
+      }
+    },
+    "/api/user": {
+      "get": {
+        "description": "Fill out...",
+        "security": [
+          {
+            "GoogleAuth": [
+              "https://www.googleapis.com/auth/userinfo.email",
+              "https://www.googleapis.com/auth/userinfo.profile"
+            ]
+          }
+        ],
         "responses": {
           "200": {
-            "description": "succesful response"
+            "description": "successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
           }
         }
       }
     },
     "/api/logout": {
       "post": {
+        "description": "Fill out...",
         "responses": {
-          "200": {
-            "description": "succesful response"
+          "302": {
+            "description": "Successful logout. Redirecting to landing page."
           }
         }
       }
@@ -68,7 +153,7 @@
         }
       }
     },
-    "/subjects": {
+    "/api/subjects": {
       "get": {
         "description": "Get available subjects",
         "parameters": [
@@ -111,7 +196,7 @@
         }
       }
     },
-    "/courses": {
+    "/api/courses": {
       "get": {
         "description": "Get available courses",
         "parameters": [
@@ -207,7 +292,7 @@
         }
       }
     },
-    "/calendar": {
+    "/api/calendar": {
       "post": {
         "description": "Generate calendar file (.ics) for given courses",
         "requestBody": {
@@ -251,24 +336,43 @@
       }
     }
   },
+  "security": [
+    {
+      "GoogleAuth": []
+    }
+  ],
   "components": {
     "securitySchemes": {
-      "googleOAuth": {
-        "description": "hi",
+      "GoogleAuth": {
         "type": "oauth2",
         "flows": {
           "authorizationCode": {
-            "authorizationUrl": "/api/auth/google",
-            "scope": {
-              "email": "The email associated with your google account",
-              "profile": "Public profile information for your google account",
-              "calendar": "Read, edit, delete permissions for Google Calendar"
+            "authorizationUrl": "https://accounts.google.com/o/oauth2/v2/auth",
+            "tokenUrl": "https://www.googleapis.com/oauth2/v4/token",
+            "scopes": {
+              "https://www.googleapis.com/auth/userinfo.email": "The email associated with your google account",
+              "https://www.googleapis.com/auth/userinfo.profile": "Public profile information for your google account",
+              "https://www.googleapis.com/auth/calendar": "Read, edit, delete permissions for Google Calendar"
             }
           }
         }
       }
     },
     "schemas": {
+      "User": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["displayName", "email"],
+        "properties": {
+          "displayName": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          }
+        }
+      },
       "CourseIdentifier": {
         "type": "object",
         "additionalProperties": false,
