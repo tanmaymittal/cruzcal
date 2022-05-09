@@ -1,5 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import ClientOnly from '../app/client-only/ClientOnly';
+import SubmitGoogle from '../app/submit-google/SubmitGoogle';
 import UserHeader from '../app/user-header/UserHeader';
 
 const Title = ({className, children}) => {
@@ -20,13 +21,12 @@ export function Index() {
         <div className="mb-10 text-white">
           <Title className="flex flex-row justify-between">
             <h1 className="basis-6/10 text-6xl mb-2">CruzCal</h1>
-            <ClientOnly>
-              <UserHeader />
-            </ClientOnly>
+            <UserHeader />
           </Title>
           <div className="flex justify-center items-center">
             <p className="text-xl mb-2">All your classes. One calendar file.</p>
           </div>
+          <SubmitGoogle/>
         </div>
         <div className="flex flex-col md:flex-row gap-x-14">
           <div className="basis-3/5 border-solid border-2 border-white text-white">

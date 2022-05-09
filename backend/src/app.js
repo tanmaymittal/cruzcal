@@ -47,8 +47,8 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api));
 app.use(
   OpenApiValidator.middleware({
     apiSpec: api,
-    validateRequests: false,
-    validateResponses: false,
+    validateRequests: true,
+    validateResponses: true,
   }),
 );
 
@@ -59,10 +59,10 @@ app.get('/api', (req, res) => res.sendStatus(200));
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
 app.get('/api/auth/google/redirect',
   passport.authenticate(auth.googleStrategy, {
-    successRedirect: '/',
     failureRedirect: '/api/auth/google',
+    failureMessage: true,
   }),
-  (req, res) => res.send(req.user),
+  (req, res) => res.redirect('/'), // send(req.user)
 );
 app.get('/api/user', auth.check, auth.getUser);
 app.post('/api/logout', auth.logOut);

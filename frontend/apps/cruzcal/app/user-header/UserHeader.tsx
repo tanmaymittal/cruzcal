@@ -1,8 +1,9 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSignIn, faSignOut } from '@fortawesome/free-solid-svg-icons'
-import { useAtomValue } from 'jotai/utils'
-import { PrimitiveAtom } from 'jotai';
-import { userAtom, UserSession } from './user';
+import { useAtom, PrimitiveAtom } from 'jotai';
+import { userAtom, UserSession } from '../../atoms/user';
+import { useEffect } from 'react';
+import ClientOnly from '../client-only/ClientOnly';
 
 export const LoginButton = () => {
   return (
@@ -17,7 +18,7 @@ export const LoginButton = () => {
   );
 };
 
-export const LogoutButton = () => {
+export const LogoutButton = ({onClick}) => {
   return (
     <form action="/api/logout" method="post">
       <button type="submit" className='flex gap-3 align-middle'>
@@ -30,8 +31,11 @@ export const LogoutButton = () => {
   );
 }
 
-export const UserHeader = () => {
-  const user = useAtomValue(userAtom as PrimitiveAtom<UserSession>);
+const UserHeaderAsync = () => {
+  const [user, setUser] = useAtom(userAtom as PrimitiveAtom<UserSession>);
+
+  // Reset
+  // useEffect(() => setUser(null), []);
   
   if (user === null)
     return <LoginButton />;
@@ -40,9 +44,17 @@ export const UserHeader = () => {
     <div className='flex gap-3 align-middle'>
       <div> Hi, {user.displayName}</div>
       <div>|</div>
-      <LogoutButton/>
+      <LogoutButton onClick={() => setUser()}/>
     </div>
   )
+}
+
+export const UserHeader = () => {
+  return (
+    <ClientOnly>
+      <UserHeaderAsync />
+    </ClientOnly>
+  );
 }
 
 export default UserHeader;

@@ -38,5 +38,4 @@ exports.getUser = async (req, res) => {
 exports.logOut = async (req, res) => {
   req.logout();
   res.redirect('/');
-  // res.json({path: '/'});
 };

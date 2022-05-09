@@ -14,10 +14,10 @@ exports.genSchedule = async (req, res) => {
   const foundCourses = [];
   for (const course of courses) {
     const found = await getCourseByID(termCode, course.courseID);
-    const formattedCourse = formatCourse(found);
     if (found == null) {
       return res.sendStatus(404);
     }
+    const formattedCourse = formatCourse(found);
     foundCourses.push(formattedCourse);
   }
   res.status(201).json({term: formattedTerm, courses: foundCourses});

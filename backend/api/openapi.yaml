@@ -5,28 +5,77 @@ info:
   version: 0.1.0
   title: CruzCal
 servers:
-- url: http://localhost:3010/
+  - url: http://localhost:3010/
 paths:
   "/api/auth/google":
     get:
-      responses:
-        '200':
-          description: successful response
+      description: Fill out...
+      responses: 
+        '302':
+          description: Redirecting to Google authorization server
   "/api/auth/google/redirect":
     get:
+      description: Fill out...
+      parameters:
+        - in: query
+          description: Random state string to protect against attacks such as CSRF.
+          required: true
+          name: state
+          schema:
+            type: string
+        - in: query
+          description: Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.
+          required: true
+          name: code
+          schema:
+            type: string
+        - in: query
+          description: Scopes for authenticated user
+          required: true
+          allowReserved: true
+          name: scope
+          schema:
+            type: array
+        - in: query
+          description: Index of which user is selected.
+          name: authuser
+          schema:
+            type: string
+        - in: query
+          description: Organization associated with google account.
+          name: hd
+          schema:
+            type: string
+        - in: query
+          description: Indicates if user should be prompted for consent on every access.
+          name: prompt
+          schema:
+            type: string
       responses:
-        '200':
-          description: successful response
+        '302':
+          description: Successful authorization. Redirecting to landing page
+        default:
+          description: Authorization failed.
   "/api/user":
     get:
+      description: Fill out...
+      security:
+        - GoogleAuth:
+          - https://www.googleapis.com/auth/userinfo.email
+          - https://www.googleapis.com/auth/userinfo.profile
       responses:
         '200':
           description: successful response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/User"
   "/api/logout":
     post:
+      description: Fill out...
       responses:
-        '200':
-          description: successful response
+        '302':
+          description: Successful logout. Redirecting to landing page.
   "/api/terms":
     get:
       description: Return information for all available terms
@@ -71,11 +120,23 @@ paths:
                 "$ref": "#/components/schemas/Error"
 components:
   schemas:
+    User:
+      type: object
+      additionalProperties: true
+      required:
+        - displayName
+        - email
+      properties:
+        displayName:
+          type: string
+        email:
+          type: string
+          format: email
     CourseIdentifier:
       type: object
       additionalProperties: false
       required:
-      - courseID
+        - courseID
       properties:
         courseID:
           type: string
@@ -92,9 +153,9 @@ components:
       type: object
       additionalProperties: false
       required:
-      - code
-      - name
-      - date
+        - code
+        - name
+        - date
       properties:
         code:
           "$ref": "#/components/schemas/TermCode"
@@ -104,8 +165,8 @@ components:
           type: object
           additionalProperties: false
           required:
-          - start
-          - end
+            - start
+            - end
           properties:
             start:
               "$ref": "#/components/schemas/Date"
@@ -114,20 +175,20 @@ components:
     Weekday:
       type: string
       enum:
-      - Monday
-      - Tuesday
-      - Wednesday
-      - Thursday
-      - Friday
-      - Saturday
-      - Sunday
+        - Monday
+        - Tuesday
+        - Wednesday
+        - Thursday
+        - Friday
+        - Saturday
+        - Sunday
     WeeklyMeeting:
       type: object
       additionalProperties: false
       required:
-      - day
-      - start
-      - end
+        - day
+        - start
+        - end
       properties:
         day:
           "$ref": "#/components/schemas/Weekday"
@@ -139,8 +200,8 @@ components:
       type: object
       additionalProperties: false
       required:
-      - location
-      - times
+        - location
+        - times
       properties:
         location:
           type: string
@@ -152,22 +213,24 @@ components:
       type: object
       additionalProperties: false
       required:
-      - courseName
-      - lectures
-      - professor
+        - courseName
+        - lectures
+        - professor
       properties:
         courseName:
           type: string
         professor:
           type: string
         lectures:
-          "$ref": "#/components/schemas/LectureInfo"
+          type: array
+          items: 
+            "$ref": "#/components/schemas/LectureInfo"
     ScheduleRequest:
       type: object
       additionalProperties: false
       required:
-      - termCode
-      - courses
+        - termCode
+        - courses
       properties:
         termCode:
           "$ref": "#/components/schemas/TermCode"
@@ -179,8 +242,8 @@ components:
       type: object
       additionalProperties: false
       required:
-      - term
-      - courses
+        - term
+        - courses
       properties:
         term:
           "$ref": "#/components/schemas/TermInfo"
@@ -206,9 +269,9 @@ components:
           authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth"
           tokenUrl: "https://www.googleapis.com/oauth2/v4/token"
           scopes:
-            email: The email associated with your google account
-            profile: Public profile information for your google account
-            calendar: Read, edit, delete permissions for Google Calendar
+            https://www.googleapis.com/auth/userinfo.email: The email associated with your google account
+            https://www.googleapis.com/auth/userinfo.profile: Public profile information for your google account
+            https://www.googleapis.com/auth/calendar: Read, edit, delete permissions for Google Calendar
 
 security:
   - GoogleAuth: []
