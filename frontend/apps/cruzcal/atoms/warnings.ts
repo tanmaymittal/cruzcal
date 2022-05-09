@@ -18,6 +18,7 @@ function stringToTime(time: string) {
 
 export const warningsAtom = atom(
   (get) => {
+    console.log("go here warnings:"); // TODO: del me
     const courseSelectionAtom = get(courseSelectionsAtom);
     const totalCourseSelections = courseSelectionAtom.length;
 
