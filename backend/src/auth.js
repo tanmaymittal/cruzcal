@@ -19,6 +19,7 @@ exports.googleStrategy = new GoogleStrategy(
     const ucscEmails = emails.filter((e) => e.value.endsWith('ucsc.edu'));
     const ucscError = ucscEmails.length === 0;
     console.log(`Attends UCSC? ${!ucscError}`);
+    profile.email = profile.emails[0].value;
     // if (ucscError) {
     //   cb('Authentication Error: User does not have a ucsc email');
     // } else cb(null, profile);
@@ -36,5 +37,6 @@ exports.getUser = async (req, res) => {
 
 exports.logOut = async (req, res) => {
   req.logout();
-  res.json({path: '/'});
+  res.redirect('/');
+  // res.json({path: '/'});
 };
