@@ -2,15 +2,17 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import { useAtom } from 'jotai';
+import { useAtomValue } from 'jotai/utils';
 import CourseSelection from './CourseSelection';
+import warningsAtom from 'apps/cruzcal/atoms/warnings';
 
 const CourseSelectionList = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
-  
+
   const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection} });
 
   // Print out current state of selected classes
-  // const courseList = useAtomValue(courseSelectionsAtom);
+  const warnings = useAtomValue(warningsAtom);
   // useEffect(() => {
   //   console.log(JSON.stringify(courseList, null, 2));
   // }, [courseListAtoms]);

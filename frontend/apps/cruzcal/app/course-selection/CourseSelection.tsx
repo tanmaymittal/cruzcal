@@ -11,6 +11,7 @@ import { DefaultSelectList } from '../select-list/select-list'
 import selectedCourseAtom from '../../atoms/selected-course'
 import selectedSubjectAtom from '../../atoms/selected-subject'
 import selectedTermAtom from '../../atoms/selected-term'
+// import warningsAtom from 'apps/cruzcal/atoms/warnings'
 
 const nullAtom = atom(null);
 
