@@ -21,12 +21,14 @@ paths:
           description: Random state string to protect against attacks such as CSRF.
           required: true
           name: state
+          allowReserved: true
           schema:
             type: string
         - in: query
           description: Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.
           required: true
           name: code
+          allowReserved: true
           schema:
             type: string
         - in: query
