@@ -9,43 +9,43 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import CourseFilter from './CourseFilter';
 import SubjectFilter from './SubjectFilter';
 import TermFilter from './TermFilter';
-// import WarningDialog from '../warning-dialog/warning-dialog'; // TODO: place it here?
+import { DefaultSelectList } from '../select-list/select-list';
 
 /* Atoms */
 import { courseSelectionAtomsAtom } from '../../atoms/course-selector';
-import { DefaultSelectList } from '../select-list/select-list';
 import selectedCourseAtom from '../../atoms/selected-course';
 import selectedSubjectAtom from '../../atoms/selected-subject';
 import selectedTermAtom from '../../atoms/selected-term';
-import warningsAtom from '../../atoms/warnings';
+import { CourseSelector } from '../../atoms/course-selector';
 
 const nullAtom = atom(null);
 
-// export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom }) => {
-export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, warningsAtom }) => { // TODO: testing
+export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, warningsAtom }) => {
   const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
   const RWCourseSelection = useAtom(courseAtom);
 
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
-  // const warning = useAtomValue(warningsAtom); // TODO: testing
+  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
+  const curSelection = useAtomValue(courseAtom) as CourseSelector;
 
   const warningWrapper = () =>{
     const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-5"];
     // check if your current course name exists in any of the warnings
-    // check if the warningsAtom has any courses in the listOfErrors set
-    // if so, then add those classes to the warningDialog for the user to view
+    for (let i = 0; i < warnings.length; i++) {
+      if (curSelection.course == null) {
+          continue;
+        }
 
-    // if () {
-    //   // course.name
-    //   return classnames(...baseClasses, "border-2", "border-rose-500");
-    // }
+      if (warnings[i].course.name == curSelection.course.name) {
+        return classnames(...baseClasses, "border-2", "border-rose-500", "rounded-lg");
+      }
+    }
 
     return classnames(...baseClasses);
   }
 
   return (
     <Provider>
-      {/* <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5"> */}
       <div className={warningWrapper()}>
         <div className="basis-3/4">
           <Suspense fallback={<DefaultSelectList/>}>

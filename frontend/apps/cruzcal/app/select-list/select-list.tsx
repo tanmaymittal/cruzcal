@@ -2,6 +2,7 @@ import { Dispatch, FC, Fragment } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
 
+/* Components */
 import { SubjectInfo } from '../../atoms/subjects';;
 import { TermInfo } from '../../atoms/terms';
 import { CourseInfo } from '../../atoms/courses';
