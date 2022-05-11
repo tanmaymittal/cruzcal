@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
-    "start": "NODE_TLS_REJECT_UNAUTHORIZED='0' nx serve",
+    "start": "nx serve",
     "build": "nx build",
     "test": "nx test",
     "component": "./scripts/create_component",
