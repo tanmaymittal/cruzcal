@@ -16,13 +16,18 @@ const nullAtom = atom(null);
 
 export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom }) => {
   const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
+  const removeCourseSelection = () => {
+    if (courseListAtoms.length > 1) {
+      dispatch({ type: "remove", atom: courseAtom });
+    }
+  }
   const RWCourseSelection = useAtom(courseAtom);
 
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
 
   return (
     <Provider>
-      <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5">
+      <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-4 mb-5">
         <div className="basis-3/4">
           <Suspense fallback={<DefaultSelectList/>}>
             <TermFilter RWCourseSelection={RWCourseSelection}/>
@@ -38,7 +43,7 @@ export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom })
             <CourseFilter RWCourseSelection={RWCourseSelection}/>
           </Suspense>
         </div>
-        <TrashButton nextCourse={nextCourse} removeCourseSelection={() => dispatch({ type: "remove", atom: courseAtom })}/>
+        <TrashButton nextCourse={nextCourse} removeCourseSelection={removeCourseSelection}/>
       </div>
     </Provider>
   )

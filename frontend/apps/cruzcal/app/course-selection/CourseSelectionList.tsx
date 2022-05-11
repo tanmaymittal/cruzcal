@@ -3,6 +3,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import { useAtom } from 'jotai';
 import CourseSelection from './CourseSelection';
+import SubmitICS from '../submit-ics/SubmitICS';
+import SubmitGoogle from '../submit-google/SubmitGoogle';
 
 const CourseSelectionList = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
@@ -21,10 +23,16 @@ const CourseSelectionList = () => {
         const nextCourseAtom = courseListAtoms[i+1];
         return <CourseSelection key={`${courseAtom}`} courseAtom={courseAtom} courseListAtoms={courseListAtoms} nextCourseAtom={nextCourseAtom} />;
       })}
-      <div className="flex justify-center">
-        <button className="text-4xl text-white" onClick={addCourse}>
-          <FontAwesomeIcon icon={faPlusSquare} />
-        </button>
+      <div className='flex flex-col gap-y-5 align-middle mb-5'>
+        <div className="flex justify-center">
+          <button className="text-4xl text-white" onClick={addCourse}>
+            <FontAwesomeIcon icon={faPlusSquare} />
+          </button>
+        </div>
+        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
+          <SubmitGoogle />
+          <SubmitICS />
+        </div>
       </div>
     </div>
   )

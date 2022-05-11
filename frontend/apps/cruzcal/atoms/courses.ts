@@ -11,6 +11,7 @@ export type Weekday = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'
 export interface CourseInfo {
   name:	string,
   professor: string,
+  courseID: number,
   lectures: {
     location:	string
     times: {
@@ -38,7 +39,8 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
     try {
       const res = await fetch(url as string);
       if (res.status != 200) throw res;
-      return res.json()
+      return (await res.json())
+        .sort((a: CourseInfo, b: CourseInfo) => a.name.localeCompare(b.name));
     } catch (error) {
       console.log(error);
       return [];

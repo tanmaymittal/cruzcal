@@ -3,6 +3,7 @@
 /* Components */
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
+import SubmitICS from '../app/submit-ics/SubmitICS';
 
 const PageHeader = () => {
   return (
@@ -44,14 +45,14 @@ export function Index() {
       <PageHeader />
 
       {/* Index Body */}
-      <div className="flex flex-col md:flex-row gap-x-14">
+      <div className="flex flex-col md:flex-row gap-x-14 mb-5">
         <CalendarViewBody />
 
         {/* Add Classes */}
         <CourseSelectionList />
 
-        <PageFooter />
       </div>
+      <PageFooter />
     </div>
   );
 }
