@@ -48,7 +48,7 @@ exports.findTerm = async (termCode) => {
     const message = `Term does not exist: ${termCode}`;
     throw new APIError(message, 404, []);
   }
-  return term;
+  return exports.formatTerm(term);
 };
 
 exports.findCourse = async (termCode, courseID) => {
@@ -57,22 +57,14 @@ exports.findCourse = async (termCode, courseID) => {
     const message = `courseID does not exist: ${courseID}`;
     throw new APIError(message, 404, []);
   }
-  course.lectures.forEach((lec) => {
-    if (lec.times.length === 0) {
-      throw new APIError('No meeting times', 400, [{
-        message: 'Course has no meeting times',
-        course,
-      }]);
-    }
-  });
-  return course;
+  return exports.formatCourse(course);
 };
 
 
 exports.generateScheduleURI = (type, term, courses) => {
   const termCodeStr = term.code === null ?
     '' : `termCode=${encodeURIComponent(term.code)}`;
-  const courseIDsStr = courseIDs.reduce(
+  const courseIDsStr = courses.reduce(
     (prev, curr) => `${prev}&courseIDs=${encodeURIComponent(curr.courseID)}`,
     '',
   );

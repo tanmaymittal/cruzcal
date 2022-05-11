@@ -83,12 +83,12 @@ app.get('/api/calendar/ics', routes.genCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {
+  console.log(err);
   const error = {
     status: err.status || 500,
     message: err.message,
     errors: err.errors,
   };
-  console.error(error);
   res.status(error.status).send(error);
 });
 

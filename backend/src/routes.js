@@ -1,5 +1,12 @@
 const {generateIcsData} = require('./calendar');
-const {createAndSendFile, generateScheduleURI} = require('./utils');
+const {
+  createAndSendFile,
+  generateScheduleURI,
+  findTerm,
+  findCourse,
+  formatTerm,
+  formatCourse,
+} = require('./utils');
 
 const {
   getAllTerms,
@@ -40,7 +47,7 @@ exports.genSchedule = async (req, res, next) => {
     const term = await findTerm(termCode);
     const courses = [];
     for (const courseID of courseIDs) {
-      const course = formatCourse(await findCourse(term.code, courseID));
+      const course = await findCourse(term.code, courseID);
       courses.push(course);
     }
     const uri = generateScheduleURI(type, term, courses);
@@ -56,8 +63,16 @@ exports.verifySchedule = async (req, res, next) => {
     const term = await findTerm(termCode);
     const courses = [];
     for (const courseID of courseIDs) {
-      const course = formatCourse(await findCourse(term.code, courseID));
-      courses.push(formatCourse(course));
+      const course = await findCourse(term.code, courseID);
+      course.lectures.forEach((lec) => {
+        if (lec.times.length === 0) {
+          throw new APIError('No meeting times', 400, [{
+            message: 'Course has no meeting times',
+            course,
+          }]);
+        }
+      });
+      courses.push(course);
     }
     req.body = {term, courses};
     next();
@@ -78,27 +93,4 @@ exports.genCalendar = async (req, res, next) => {
     console.log(error);
     next(error);
   }
-};
-
-// Helpers
-const formatCourse = (courseObj) => {
-  const courseInfo = {
-    name: courseObj.name,
-    professor: courseObj.professor,
-    lectures: courseObj.lectures,
-    courseID: courseObj.refnum,
-  };
-  return courseInfo;
-};
-
-const formatTerm = (termObj) => {
-  const termInfo = {
-    code: termObj.code,
-    name: termObj.name,
-    date: {
-      start: termObj.start,
-      end: termObj.end,
-    },
-  };
-  return termInfo;
 };
