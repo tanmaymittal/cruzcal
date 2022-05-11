@@ -1,5 +1,5 @@
 const {generateIcsData} = require('./calendar');
-const {createAndSendFile} = require('./utils');
+const {createAndSendFile, generateScheduleURI} = require('./utils');
 
 const {
   getAllTerms,
@@ -43,14 +43,7 @@ exports.genSchedule = async (req, res, next) => {
       const course = formatCourse(await findCourse(term.code, courseID));
       courses.push(course);
     }
-    const termCodeStr = termCode === null ?
-      '' : `termCode=${encodeURIComponent(termCode)}`;
-    const courseIDsStr = courseIDs.reduce(
-      (prev, curr) => `${prev}&courseIDs=${encodeURIComponent(curr)}`,
-      '',
-    );
-
-    const uri = `/api/calendar/${type}?${termCodeStr}${courseIDsStr}`;
+    const uri = generateScheduleURI(type, term, courses);
     res.status(201).json({term, courses, uri});
   } catch (error) {
     next(error);

@@ -19,10 +19,6 @@ exports.APIError = class APIError extends Error {
   }
 };
 
-exports.findAllTerms = () => {
-  return (await getAllTerms()).map(formatTerm);
-}
-
 // Helpers
 exports.formatCourse = (courseObj) => {
   const courseInfo = {
@@ -47,19 +43,19 @@ exports.formatTerm = (termObj) => {
 };
 
 exports.findTerm = async (termCode) => {
-  const found = await getTermByCode(termCode);
-  if (found == null) {
+  const term = await getTermByCode(termCode);
+  if (term == null) {
     const message = `Term does not exist: ${termCode}`;
-    throw new APIError(message, 404, [message]);
+    throw new APIError(message, 404, []);
   }
   return term;
 };
 
 exports.findCourse = async (termCode, courseID) => {
-  const found = await getCourseByID(termCode, courseID);
-  if (found === null) {
+  const course = await getCourseByID(termCode, courseID);
+  if (course === null) {
     const message = `courseID does not exist: ${courseID}`;
-    throw new APIError(message, 404, [message]);
+    throw new APIError(message, 404, []);
   }
   course.lectures.forEach((lec) => {
     if (lec.times.length === 0) {
@@ -72,6 +68,16 @@ exports.findCourse = async (termCode, courseID) => {
   return course;
 };
 
+
+exports.generateScheduleURI = (type, term, courses) => {
+  const termCodeStr = term.code === null ?
+    '' : `termCode=${encodeURIComponent(term.code)}`;
+  const courseIDsStr = courseIDs.reduce(
+    (prev, curr) => `${prev}&courseIDs=${encodeURIComponent(curr.courseID)}`,
+    '',
+  );
+  return `/api/calendar/${type}?${termCodeStr}${courseIDsStr}`;
+};
 
 // data is either a string or a binary buffer
 exports.createAndSendFile = async (res, filename, data) => {

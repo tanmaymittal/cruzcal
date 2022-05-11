@@ -54,9 +54,6 @@ app.use(
 
 // Routes
 
-// Root message
-// app.get('/api', (req, res) => res.send('Cruzcal API. Docs at /api/docs'));
-
 // Authentication
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
 app.get('/api/auth/google/redirect',
