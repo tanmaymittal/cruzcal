@@ -14,8 +14,8 @@ import selectedTermAtom from '../../atoms/selected-term'
 
 const nullAtom = atom(null);
 
-export const CourseSelection = ({ term, courseListAtoms, courseAtom, nextCourseAtom }) => {
-  const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
+export const CourseSelection = ({ term, courseAtom, nextCourseAtom }) => {
+  const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
   const remove = () => {
     if (courseListAtoms.length > 1) {
       dispatch({ type: "remove", atom: courseAtom });

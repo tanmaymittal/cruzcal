@@ -33,7 +33,7 @@ const CourseSelectionList = () => {
       </div>
       {courseListAtoms.map((courseAtom, i) => {
         const nextCourseAtom = courseListAtoms[i+1];
-        return <CourseSelection term={selectedTerm} key={`${courseAtom}`} courseAtom={courseAtom} courseListAtoms={courseListAtoms} nextCourseAtom={nextCourseAtom} />;
+        return <CourseSelection term={selectedTerm} key={`${courseAtom}`} courseAtom={courseAtom} nextCourseAtom={nextCourseAtom} />;
       })}
       <div className='flex flex-col gap-y-5 align-middle'>
         <div className="flex justify-center">

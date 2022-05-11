@@ -5,8 +5,8 @@ import {SubjectInfo} from './subjects';
 const subjectAtom = atom(null as SubjectInfo);
 export const selectedSubjectAtom = atom(
   (get) => get(subjectAtom),
-  (get, set, term) => {
-    set(subjectAtom, term);
+  (get, set, subject) => {
+    set(subjectAtom, subject);
     set(selectedCourseAtom, null);
   }
 );
