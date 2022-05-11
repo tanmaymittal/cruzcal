@@ -4,6 +4,7 @@
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import SubmitICS from '../app/submit-ics/SubmitICS';
+import UserHeader from '../app/user-header/UserHeader';
 
 const PageHeader = () => {
   return (
@@ -13,6 +14,9 @@ const PageHeader = () => {
       </div>
       <div className="flex justify-center items-center">
         <p className="text-xl mb-2">All your classes. One calendar file.</p>
+      </div>
+      <div className='flex flex-row-reverse'>
+        <UserHeader />
       </div>
     </div>
   )

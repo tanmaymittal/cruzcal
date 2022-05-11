@@ -33,9 +33,6 @@ export const LogoutButton = ({onClick}) => {
 
 const UserHeaderAsync = () => {
   const [user, setUser] = useAtom(userAtom as PrimitiveAtom<UserSession>);
-
-  // Reset
-  // useEffect(() => setUser(null), []);
   
   if (user === null)
     return <LoginButton />;
@@ -44,7 +41,7 @@ const UserHeaderAsync = () => {
     <div className='flex gap-3 align-middle'>
       <div> Hi, {user.displayName}</div>
       <div>|</div>
-      <LogoutButton onClick={() => setUser()}/>
+      <LogoutButton onClick={() => setUser(null)}/>
     </div>
   )
 }

@@ -6,18 +6,20 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import ClientOnly from '../client-only/ClientOnly';
 import { courseSelectionsAtom } from 'apps/cruzcal/atoms/course-selector';
 
-const fetchCalendar = async (calendarType, courseList) => {
-  if (courseList.length === 0) return;
+const fetchCalendar = async (calendarType, term, courseList) => {
+  if (term === null)
+    return console.error('No term provided');
+  if (courseList.length === 0)
+    return console.error('No courses selected');
+  if (courseList.filter(({course}) => course === null).length > 0)
+    return console.error('Incomplete course selection');
 
   const cs = {
-    termCode: courseList[0]?.term?.code || null,
-    courseIDs: courseList
-      .filter(({course}) => course !== null)
-      .map(({course}) => `${course.courseID}`)
+    termCode: term.code,
+    courseIDs: courseList.map(({course}) => `${course.courseID}`)
   }
 
-  console.log(courseList);
-
+  console.log(cs);
 
   const res = await fetch(`/api/schedule/${calendarType}`, {
     method: 'post',
@@ -32,7 +34,7 @@ const fetchCalendar = async (calendarType, courseList) => {
     console.log(error);
   } else {
     const {uri: scheduleURI} = await res.json();
-    console.log(scheduleURI);
+    console.log('Schedule URI:', scheduleURI);
     location.href = scheduleURI;
   }
 };
@@ -41,18 +43,16 @@ const SubmitICSAsync = () => {
   const courseList = useAtomValue(courseSelectionsAtom);
 
   return (
-    // <form action='post' method='/api/calendar/ics'>
-      <button
-        className='flex gap-3 align-middle p-1 rounded-lg outline outline-1'
-        onClick={() => fetchCalendar('ics', courseList)}
-        type="submit"
-      >
-        <div>ICS</div>
-        <div>
-          <FontAwesomeIcon icon={faCalendarAlt} />
-        </div>
-      </button>
-    // </form>
+    <button
+      className='flex gap-3 align-middle p-1 rounded-lg outline outline-1'
+      onClick={() => fetchCalendar('ics', courseList[0].term, courseList)}
+      type="submit"
+    >
+      <div>ICS</div>
+      <div>
+        <FontAwesomeIcon icon={faCalendarAlt} />
+      </div>
+    </button>
   )
 }
 
