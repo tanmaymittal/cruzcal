@@ -3,9 +3,9 @@ import SubjectFilter from './SubjectFilter'
 import TermFilter from './TermFilter'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { atom, Provider, useAtom, useAtomValue } from 'jotai'
-import { courseSelectionAtomsAtom } from '../../atoms/course-selector'
-import { Suspense } from 'react'
+import { atom, PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai'
+import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector'
+import { Suspense, useEffect } from 'react'
 import { useUpdateAtom } from 'jotai/utils'
 import { DefaultSelectList } from '../select-list/select-list'
 import selectedCourseAtom from '../../atoms/selected-course'
@@ -14,38 +14,44 @@ import selectedTermAtom from '../../atoms/selected-term'
 
 const nullAtom = atom(null);
 
-export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom }) => {
+export const CourseSelection = ({ term, courseListAtoms, courseAtom, nextCourseAtom }) => {
   const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
-  const removeCourseSelection = () => {
+  const remove = () => {
     if (courseListAtoms.length > 1) {
       dispatch({ type: "remove", atom: courseAtom });
     }
   }
-  const RWCourseSelection = useAtom(courseAtom);
-
+  const RWCourseSelection = useAtom(courseAtom as PrimitiveAtom<CourseSelector>);
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
 
   return (
     <Provider>
-      <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-4 mb-5">
-        <div className="basis-3/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <TermFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <div className="basis-3/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <SubjectFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <div className="basis-1/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <CourseFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <TrashButton nextCourse={nextCourse} removeCourseSelection={removeCourseSelection}/>
-      </div>
+      <AsyncCourseSelection term={term} RWCourseSelection={RWCourseSelection} remove={remove} nextCourse={nextCourse} />;
     </Provider>
+  );
+};
+
+export const AsyncCourseSelection = ({ term, RWCourseSelection, remove, nextCourse }) => {
+  const setSelectedTerm = useUpdateAtom(selectedTermAtom);
+
+  useEffect(() => {
+    setSelectedTerm(term);
+  }, [term]);
+
+  return (
+    <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-4">
+      <div className="basis-3/4">
+        <Suspense fallback={<DefaultSelectList/>}>
+          <SubjectFilter RWCourseSelection={RWCourseSelection}/>
+        </Suspense>
+      </div>
+      <div className="basis-1/4">
+        <Suspense fallback={<DefaultSelectList/>}>
+          <CourseFilter RWCourseSelection={RWCourseSelection}/>
+        </Suspense>
+      </div>
+      <TrashButton nextCourse={nextCourse} removeCourseSelection={remove}/>
+    </div>
   )
 }
 
@@ -72,4 +78,4 @@ const TrashButton = ({removeCourseSelection, nextCourse}) => {
   )
 }
 
-export default CourseSelection
+export default CourseSelection;

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import ClientOnly from '../client-only/ClientOnly';
 import { courseSelectionsAtom } from 'apps/cruzcal/atoms/course-selector';
+import selectedTermAtom from 'apps/cruzcal/atoms/selected-term';
 
 const fetchCalendar = async (calendarType, term, courseList) => {
   if (term === null)
@@ -41,11 +42,12 @@ const fetchCalendar = async (calendarType, term, courseList) => {
 
 const SubmitICSAsync = () => {
   const courseList = useAtomValue(courseSelectionsAtom);
+  const selectedTerm = useAtomValue(selectedTermAtom);
 
   return (
     <button
       className='flex gap-3 align-middle p-1 rounded-lg outline outline-1'
-      onClick={() => fetchCalendar('ics', courseList[0].term, courseList)}
+      onClick={() => fetchCalendar('ics', selectedTerm, courseList)}
       type="submit"
     >
       <div>ICS</div>
