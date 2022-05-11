@@ -33,9 +33,14 @@ export const CourseSelection = ({ term, courseAtom, nextCourseAtom }) => {
 
 export const AsyncCourseSelection = ({ term, RWCourseSelection, remove, nextCourse }) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
+  const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
+  const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
+
+  const [courseSelection, setCourseSelection] = RWCourseSelection;
 
   useEffect(() => {
     setSelectedTerm(term);
+    setCourseSelection((prev) => ({term, subject: null, course: null}));
   }, [term]);
 
   return (

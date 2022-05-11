@@ -11,7 +11,6 @@ export interface SubjectInfo {
 
 const subjectsUrlAtom = atom((get): string => {
   const termInfo: TermInfo = get(selectedTermAtom) as TermInfo;
-  console.log(termInfo);
   if (termInfo === null)
     return null;
   else

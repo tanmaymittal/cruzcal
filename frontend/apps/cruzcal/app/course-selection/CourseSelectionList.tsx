@@ -1,11 +1,11 @@
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
+import { courseSelectionAtomsAtom, courseSelectionsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import { useAtom, useAtomValue } from 'jotai';
 import CourseSelection from './CourseSelection';
 import SubmitICS from '../submit-ics/SubmitICS';
 import SubmitGoogle from '../submit-google/SubmitGoogle';
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react';
 import { DefaultSelectList } from '../select-list/select-list';
 import termsAtom from 'apps/cruzcal/atoms/terms';
 import TermFilter from './TermFilter';
@@ -22,7 +22,7 @@ const CourseSelectionList = () => {
   // const courseList = useAtomValue(courseSelectionsAtom);
   // useEffect(() => {
   //   console.log(JSON.stringify(courseList, null, 2));
-  // }, [courseListAtoms]);
+  // }, [courseList]);
 
   return (
     <div className="basis-2/5">
