@@ -40,8 +40,8 @@ passport.deserializeUser(function(user, done) {
 
 // Setup API validation
 
-const apiSpec = path.join(__dirname, '../api/openapi.yaml');
 // const api = require(apiSpec);
+const apiSpec = path.join(__dirname, '../api/openapi.yaml');
 const api = yaml.load(fs.readFileSync(apiSpec, 'utf8'));
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api));
 app.use(
@@ -54,8 +54,10 @@ app.use(
 
 // Routes
 
-// app.get('/', (req, res) => res.sendStatus(200));
-app.get('/api', (req, res) => res.sendStatus(200));
+// Root message
+// app.get('/api', (req, res) => res.send('Cruzcal API. Docs at /api/docs'));
+
+// Authentication
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
 app.get('/api/auth/google/redirect',
   passport.authenticate(auth.googleStrategy, {
@@ -64,13 +66,23 @@ app.get('/api/auth/google/redirect',
   }),
   (req, res) => res.redirect('/'), // send(req.user)
 );
+
+// User management
 app.get('/api/user', auth.check, auth.getUser);
 app.post('/api/logout', auth.logOut);
+
+// Course selection
 app.get('/api/terms', routes.getTerms);
-app.get('/api/subjects', routes.getSubjects); // e.g. /subjects?term=2222
-app.get('/api/courses', routes.getCourses); // e.g. /courses?term=2222&subject=CSE
-app.post('/api/schedule', routes.genSchedule);
-app.post('/api/calendar', routes.genCalendar);
+app.get('/api/subjects', routes.getSubjects);
+app.get('/api/courses', routes.getCourses);
+
+// Schedule generation
+app.post('/api/schedule/:type', routes.genSchedule);
+app.get('/api/calendar/*', routes.verifySchedule);
+app.get('/api/calendar/json', (req, res) => res.json(req.body));
+app.get('/api/calendar/ics', routes.genCalendar);
+// app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
+
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -79,6 +91,7 @@ app.use((err, req, res, next) => {
     message: err.message,
     errors: err.errors,
   };
+  console.error(error);
   res.status(error.status).send(error);
 });
 

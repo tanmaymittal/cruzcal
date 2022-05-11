@@ -103,9 +103,10 @@ describe('GET /api/courses', () => {
     });
   });
   test('error with invalid subject arg', async () => {
-    await request.get('/api/courses?term=2222&subject=helloworld').expect((res) => {
-      expect(res.status).toBe(404);
-    });
+    await request.get('/api/courses?term=2222&subject=helloworld')
+      .expect((res) => {
+        expect(res.status).toBe(404);
+      });
   });
   test('responds with JSON', async () => {
     await request
@@ -161,10 +162,10 @@ describe('POST /schedule', () => {
   });
 });
 
-describe('POST /api/calendar', () => {
+describe('POST /api/calendar/ics', () => {
   test('responds with a 200 status code', async () => {
     await request
-      .post('/api/calendar')
+      .post('/api/calendar/ics')
       .send(calendarRequest)
       .expect(200);
   });
@@ -173,7 +174,7 @@ describe('POST /api/calendar', () => {
     const numOfEvents = calendarIcsString.match(beginEventMatch);
 
     await request
-      .post('/api/calendar')
+      .post('/api/calendar/ics')
       .send(calendarRequest)
       .expect('Content-Type', 'text/calendar; charset=UTF-8')
       .expect((res) => {

@@ -30,6 +30,7 @@
             "description": "Random state string to protect against attacks such as CSRF.",
             "required": true,
             "name": "state",
+            "allowReserved": true,
             "schema": {
               "type": "string"
             }
@@ -39,6 +40,7 @@
             "description": "Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.",
             "required": true,
             "name": "code",
+            "allowReserved": true,
             "schema": {
               "type": "string"
             }
@@ -141,7 +143,7 @@
             }
           },
           "default": {
-            "description": "Unexpected error",
+            "description": "Error Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -180,11 +182,8 @@
               }
             }
           },
-          "404": {
-            "description": "No subjects found"
-          },
           "default": {
-            "description": "Unexpected error",
+            "description": "Error Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -233,11 +232,8 @@
               }
             }
           },
-          "404": {
-            "description": "No courses found"
-          },
           "default": {
-            "description": "Unexpected error",
+            "description": "Error Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -249,38 +245,42 @@
         }
       }
     },
-    "/api/schedule": {
+    "/api/schedule/{type}": {
       "post": {
-        "description": "Generate location and schedule information for given courses",
+        "description": "Generate calendar schedule URI",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "type",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/CalendarType"
+            }
+          }
+        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ScheduleRequest"
+                "$ref": "#/components/schemas/CalendarRequest"
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Successfully returned location and schedule information.",
+            "description": "Successfully returned courses",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ScheduleResponse"
+                  "$ref": "#/components/schemas/CalendarResource"
                 }
               }
             }
           },
-          "400": {
-            "description": "Invalid course request format"
-          },
-          "404": {
-            "description": "At least one request course does not exist"
-          },
           "default": {
-            "description": "Unexpected error",
+            "description": "Error Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -292,19 +292,80 @@
         }
       }
     },
-    "/api/calendar": {
-      "post": {
-        "description": "Generate calendar file (.ics) for given courses",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/ScheduleRequest"
+    "/api/calendar/json": {
+      "get": {
+        "description": "Generate location and schedule information for given courses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "termCode",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TermCode"
+            }
+          },
+          {
+            "in": "query",
+            "name": "courseIDs",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
               }
             }
           }
-        },
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully returned location and schedule information.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CalendarResource"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Error Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/calendar/ics": {
+      "get": {
+        "description": "Generate calendar file (.ics) for given courses",
+        "parameters": [
+          {
+            "in": "query",
+            "name": "termCode",
+            "required": true,
+            "schema": {
+              "$ref": "#/components/schemas/TermCode"
+            }
+          },
+          {
+            "in": "query",
+            "name": "courseIDs",
+            "required": true,
+            "schema": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string"
+              }
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successfully returned location and schedule information.",
@@ -316,14 +377,8 @@
               }
             }
           },
-          "400": {
-            "description": "Invalid course request format"
-          },
-          "404": {
-            "description": "At least one request course does not exist"
-          },
           "default": {
-            "description": "Unexpected error",
+            "description": "Error Response",
             "content": {
               "application/json": {
                 "schema": {
@@ -483,6 +538,9 @@
           "professor": {
             "type": "string"
           },
+          "courseID": {
+            "type": "number"
+          },
           "lectures": {
             "type": "array",
             "items": {
@@ -491,27 +549,33 @@
           }
         }
       },
-      "ScheduleRequest": {
+      "CalendarType": {
+        "enum": ["json", "ics", "google"]
+      },
+      "CalendarRequest": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["termCode", "courses"],
+        "required": ["termCode", "courseIDs"],
         "properties": {
           "termCode": {
             "$ref": "#/components/schemas/TermCode"
           },
-          "courses": {
+          "courseIDs": {
             "type": "array",
             "items": {
-              "$ref": "#/components/schemas/CourseIdentifier"
+              "type": "string"
             }
           }
         }
       },
-      "ScheduleResponse": {
+      "CalendarResource": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["term", "courses"],
+        "required": ["uri", "term", "courses"],
         "properties": {
+          "uri": {
+            "type": "string"
+          },
           "term": {
             "$ref": "#/components/schemas/TermInfo"
           },

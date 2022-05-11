@@ -91,7 +91,7 @@ paths:
                 items:
                   "$ref": "#/components/schemas/TermInfo"
         default:
-          description: Unexpected error
+          description: Error Response
           content:
             application/json:
               schema:
@@ -114,10 +114,8 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/Subject"
-        '404':
-          description: No subjects found
         default:
-          description: Unexpected error
+          description: Error Response
           content:
             application/json:
               schema:
@@ -147,49 +145,87 @@ paths:
                 type: array
                 items:
                   "$ref": "#/components/schemas/CourseInfo"
-        '404':
-          description: No courses found
         default:
-          description: Unexpected error
+          description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
-  "/api/schedule":
+  "/api/schedule/{type}":
     post:
-      description: Generate location and schedule information for given courses
+      description: Generate calendar schedule URI
+      parameters:
+        - in: path
+          name: type
+          required: true
+          schema:
+            "$ref": "#/components/schemas/CalendarType"
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              "$ref": "#/components/schemas/ScheduleRequest"
+              "$ref": '#/components/schemas/CalendarRequest'
+      responses:
+        '201':
+          description: Successfully returned courses
+          content:
+            application/json:
+              schema:
+                "$ref": '#/components/schemas/CalendarResource'
+        default:
+          description: Error Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+  "/api/calendar/json":
+    get:
+      description: Generate location and schedule information for given courses
+      parameters:
+        - in: query
+          name: termCode
+          required: true
+          schema:
+            "$ref": "#/components/schemas/TermCode"
+        - in: query
+          name: courseIDs
+          required: true
+          schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
       responses:
         '201':
           description: Successfully returned location and schedule information.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/ScheduleResponse"
-        '400':
-          description: Invalid course request format
-        '404':
-          description: At least one request course does not exist
+                "$ref": "#/components/schemas/CalendarResource"
         default:
-          description: Unexpected error
+          description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
-  "/api/calendar":
-    post:
+  "/api/calendar/ics":
+    get:
       description: Generate calendar file (.ics) for given courses
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              "$ref": "#/components/schemas/ScheduleRequest"
+      parameters:
+        - in: query
+          name: termCode
+          required: true
+          schema:
+            "$ref": "#/components/schemas/TermCode"
+        - in: query
+          name: courseIDs
+          required: true
+          schema:
+            type: array
+            minItems: 1
+            items:
+              type: string
       responses:
         '200':
           description: Successfully returned location and schedule information.
@@ -197,16 +233,13 @@ paths:
             text/calendar:
               schema:
                 "$ref": "#/components/schemas/BinaryFile"
-        '400':
-          description: Invalid course request format
-        '404':
-          description: At least one request course does not exist
         default:
-          description: Unexpected error
+          description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
+
 
 security:
   - GoogleAuth: []
@@ -262,9 +295,9 @@ components:
       type: object
       additionalProperties: false
       required:
-      - code
-      - name
-      - date
+        - code
+        - name
+        - date
       properties:
         code:
           "$ref": "#/components/schemas/TermCode"
@@ -274,8 +307,8 @@ components:
           type: object
           additionalProperties: false
           required:
-          - start
-          - end
+            - start
+            - end
           properties:
             start:
               "$ref": "#/components/schemas/Date"
@@ -322,38 +355,45 @@ components:
       type: object
       additionalProperties: false
       required:
-      - name
-      - lectures
-      - professor
+        - name
+        - lectures
+        - professor
       properties:
         name:
           type: string
         professor:
           type: string
+        courseID:
+          type: number
         lectures:
           type: array
           items:
             "$ref": "#/components/schemas/LectureInfo"
-    ScheduleRequest:
+    CalendarType:
+      enum: [json, ics, google]
+    CalendarRequest:
       type: object
       additionalProperties: false
       required:
-      - termCode
-      - courses
+        - termCode
+        - courseIDs
       properties:
         termCode:
           "$ref": "#/components/schemas/TermCode"
-        courses:
+        courseIDs:
           type: array
           items:
-            "$ref": "#/components/schemas/CourseIdentifier"
-    ScheduleResponse:
+            type: string
+    CalendarResource:
       type: object
       additionalProperties: false
       required:
-      - term
-      - courses
+        - uri
+        - term
+        - courses
       properties:
+        uri:
+          type: string
         term:
           "$ref": "#/components/schemas/TermInfo"
         courses:
@@ -373,216 +413,3 @@ components:
       required:
       - status
       - message
-
-
-
-
-# openapi: '3.0.3'
-# info:
-#   description: CruzCal lets users select their Class and produce calendar files based
-#     on the class events they can import to their preferred calendar.
-#   version: 0.1.0
-#   title: CruzCal
-# servers:
-#   - url: http://localhost:3010/
-# paths:
-
-#   "/api/terms":
-#     get:
-#       description: Return information for all available terms
-#       responses:
-#         '201':
-#           description: Successfully returned all available terms.
-#           content:
-#             application/json:
-#               schema:
-#                 "$ref": "#/components/schemas/TermInfo"
-#         default:
-#           description: Unexpected error
-#           content:
-#             application/json:
-#               schema:
-#                 "$ref": "#/components/schemas/Error"
-#   "/api/schedule":
-#     post:
-#       description: Generate location and schedule information for given courses
-#       requestBody:
-#         required: true
-#         content:
-#           application/json:
-#             schema:
-#               "$ref": "#/components/schemas/ScheduleRequest"
-#       responses:
-#         '201':
-#           description: Successfully returned location and schedule information.
-#           content:
-#             application/json:
-#               schema:
-#                 "$ref": "#/components/schemas/ScheduleResponse"
-#         '400':
-#           description: Invalid course request format
-#         '404':
-#           description: At least one request course does not exist
-#         default:
-#           description: Unexpected error
-#           content:
-#             application/json:
-#               schema:
-#                 "$ref": "#/components/schemas/Error"
-# components:
-#   schemas:
-#     User:
-#       type: object
-#       additionalProperties: true
-#       required:
-#         - displayName
-#         - email
-#       properties:
-#         displayName:
-#           type: string
-#         email:
-#           type: string
-#           format: email
-#     CourseIdentifier:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - courseID
-#       properties:
-#         courseID:
-#           type: string
-#     Date:
-#       type: string
-#       format: date
-#     Time:
-#       type: string
-#       pattern: "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
-#     TermCode:
-#       type: number
-#       example: 2222
-#     TermInfo:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - code
-#         - name
-#         - date
-#       properties:
-#         code:
-#           "$ref": "#/components/schemas/TermCode"
-#         name:
-#           type: string
-#         date:
-#           type: object
-#           additionalProperties: false
-#           required:
-#             - start
-#             - end
-#           properties:
-#             start:
-#               "$ref": "#/components/schemas/Date"
-#             end:
-#               "$ref": "#/components/schemas/Date"
-#     Weekday:
-#       type: string
-#       enum:
-#         - Monday
-#         - Tuesday
-#         - Wednesday
-#         - Thursday
-#         - Friday
-#         - Saturday
-#         - Sunday
-#     WeeklyMeeting:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - day
-#         - start
-#         - end
-#       properties:
-#         day:
-#           "$ref": "#/components/schemas/Weekday"
-#         start:
-#           "$ref": "#/components/schemas/Time"
-#         end:
-#           "$ref": "#/components/schemas/Time"
-#     LectureInfo:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - location
-#         - times
-#       properties:
-#         location:
-#           type: string
-#         times:
-#           type: array
-#           items:
-#             "$ref": "#/components/schemas/WeeklyMeeting"
-#     CourseInfo:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - courseName
-#         - lectures
-#         - professor
-#       properties:
-#         courseName:
-#           type: string
-#         professor:
-#           type: string
-#         lectures:
-#           type: array
-#           items: 
-#             "$ref": "#/components/schemas/LectureInfo"
-#     ScheduleRequest:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - termCode
-#         - courses
-#       properties:
-#         termCode:
-#           "$ref": "#/components/schemas/TermCode"
-#         courses:
-#           type: array
-#           items:
-#             "$ref": "#/components/schemas/CourseIdentifier"
-#     ScheduleResponse:
-#       type: object
-#       additionalProperties: false
-#       required:
-#         - term
-#         - courses
-#       properties:
-#         term:
-#           "$ref": "#/components/schemas/TermInfo"
-#         courses:
-#           type: array
-#           items:
-#             "$ref": "#/components/schemas/CourseInfo"
-#     Error:
-#       properties:
-#         code:
-#           type: integer
-#           format: int32
-#         message:
-#           type: string
-#       required:
-#       - code
-#       - message
-#   securitySchemes:
-#     GoogleAuth:
-#       type: oauth2
-#       flows:
-#         authorizationCode:
-#           authorizationUrl: "https://accounts.google.com/o/oauth2/v2/auth"
-#           tokenUrl: "https://www.googleapis.com/oauth2/v4/token"
-#           scopes:
-#             https://www.googleapis.com/auth/userinfo.email: The email associated with your google account
-#             https://www.googleapis.com/auth/userinfo.profile: Public profile information for your google account
-#             https://www.googleapis.com/auth/calendar: Read, edit, delete permissions for Google Calendar
-
-# security:
-#   - GoogleAuth: []
