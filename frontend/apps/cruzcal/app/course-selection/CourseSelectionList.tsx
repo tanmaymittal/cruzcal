@@ -21,7 +21,6 @@ const CourseSelectionList = () => {
     <div className="basis-2/5">
       {courseListAtoms.map((courseAtom, i) => {
         const nextCourseAtom = courseListAtoms[i+1];
-        // return <CourseSelection key={`${courseAtom}`} courseAtom={courseAtom} courseListAtoms={courseListAtoms} nextCourseAtom={nextCourseAtom} />;
         return <CourseSelection
           key={`${courseAtom}`}
           courseAtom={courseAtom}

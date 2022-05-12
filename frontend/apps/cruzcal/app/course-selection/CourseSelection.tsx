@@ -32,17 +32,15 @@ export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, w
   const warningWrapper = () =>{
     const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-5"];
     // check if your current course name exists in any of the warnings
-    // check if the warningsAtom has any courses in the listOfErrors set
-    // if so, then add those classes to the warningDialog for the user to view
-
-    // RWCourseSelection.couse.name == warning.course.name
-
     for (let i = 0; i < warnings.length; i++) {
+      if (courseSelection.course == null || courseSelection.subject == null || courseSelection.term == null) {
+        break;
+      }
+
       if (courseSelection.course.name == warnings[i].course.name) {
         return classnames(...baseClasses, "border-2", "border-rose-500");
       }
     }
-
 
     return classnames(...baseClasses);
   }
