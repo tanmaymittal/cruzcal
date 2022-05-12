@@ -1,13 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
-import { useAtomValue } from 'jotai';
-import { Suspense } from 'react';
 
 /* Components */
+import { useAtomValue } from 'jotai';
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import WarningDialog from '../app/warning-dialog/warning-dialog';
-import { warningsAtom } from '../atoms/warnings';
-import { CourseSelector } from '../atoms/course-selector';
+import warningsAtom from '../atoms/warnings';
 
 const PageHeader = () => {
   return (
@@ -37,27 +35,12 @@ const PageFooter = () => {
     <p className="text-center text-gray-500 text-xs">
       &copy;2022 CruzCal. All rights reserved.
     </p>
+
+    // <Suspense fallback={"loading..."}>
+    //   <WarningDialog warning='Error' warningsList={useAtomValue(warningsAtom)}/>
+    // </Suspense>
   )
 };
-
-const WarningDialogBox = () => {
-  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
-  let warningAppears;
-  if (warnings.length > 0) {
-    warningAppears = <WarningDialog warningsAtom={warningsAtom}/>
-  } else {
-    warningAppears = <></>
-  }
-
-  return (
-
-    <Suspense fallback={"loading..."}>
-      {warningAppears}
-    </Suspense>
-
-  )
-};
-
 
 export function Index() {
   /*
@@ -73,8 +56,6 @@ export function Index() {
 
           {/* Add Classes */}
           <CourseSelectionList />
-
-          <WarningDialogBox />
 
           <PageFooter />
         </div>

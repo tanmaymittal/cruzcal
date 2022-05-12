@@ -1,14 +1,20 @@
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
-import { useAtomValue } from 'jotai';
+import styles from './warning-dialog.module.css';
 
+import { warningsAtom } from '../../atoms/warnings';
 import { CourseSelector } from '../../atoms/course-selector';
 
+// export type Warnings = Set<CourseSelector>;
 
 /* eslint-disable-next-line */
-export const WarningDialog = ({ warningsAtom }) => {
-  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
-  let [isOpen, setIsOpen] = useState(false)
+export interface WarningDialogProps {
+  warning: string;
+  warningsList: string[];
+}
+
+export function WarningDialog(props: WarningDialogProps) {
+  let [isOpen, setIsOpen] = useState(true)
 
   function closeModal() {
     setIsOpen(false)
@@ -20,14 +26,13 @@ export const WarningDialog = ({ warningsAtom }) => {
 
   return (
     <>
-      <div className=" inset-0 flex items-center justify-center">
+      <div className="fixed inset-0 flex items-center justify-center">
         <button
           type="button"
           onClick={openModal}
-          // className="rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-          className="rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="rounded-md bg-black bg-opacity-20 px-4 py-2 text-sm font-medium text-white hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          See warnings
+          Open warnings
         </button>
       </div>
 
@@ -61,28 +66,25 @@ export const WarningDialog = ({ warningsAtom }) => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    You may have scheduling conflicts.
+                    Scheduling
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Below are the classes with conflicts, if any.
+                      You have scheduling conflicts. Below are the classes with conflicts.
+                      // TODO: pass in the list of conflicts
                     </p>
-                      {warnings.map((warning) => {
-                        return (
-                          <p> {warning.course.name}</p>
-                          );
-                      })}
                   </div>
 
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-rose-300 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-100 px-4 py-2 text-sm font-medium text-blue-900 hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                       Got it, thanks!
                     </button>
                   </div>
+                {/* </Dialog.Panel> */}
                 </Dialog.Overlay>
               </Transition.Child>
             </div>

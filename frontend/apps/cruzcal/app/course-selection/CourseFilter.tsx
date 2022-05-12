@@ -1,12 +1,9 @@
-import { useAtomValue } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
-
-/* Components */
-import coursesAtom from '../../atoms/courses';
+import coursesAtom from '../../atoms/courses'
 import SelectList from '../select-list/select-list'
 import selectedCourseAtom from '../../atoms/selected-course';
+import { useAtomValue } from 'jotai';
 import { CourseInfo } from '../../atoms/courses';
-
+import { useUpdateAtom } from 'jotai/utils';
 
 const CourseFilter = ({RWCourseSelection}) => {
   const [courseSelection, setCourseSelection] = RWCourseSelection;
