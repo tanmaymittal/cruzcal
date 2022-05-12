@@ -26,36 +26,34 @@ export const warningsAtom = atom(
 
         // avoid null entries
         if (curr.course != null && prev.course != null) {
-            // if not same term
-            if (curr.term.code != prev.term.code)
-              return Array.from(listOfErrors);
+          // if not same term
+          if (curr.term.code != prev.term.code)
+            listOfErrors.add(curr);
 
+          // for each of curr's lectures
+          for (let curLecture of curr.course.lectures) {
+            // for each of prev's lectures
+            for (let prevLecture of prev.course.lectures) {
+              // for each cur lecture's day+time entry
+              for (let j = 0; j < curLecture.times.length; j++) {
+                // for each prev lecture's day+time entry
+                for (let k = 0; k < prevLecture.times.length; k++) {
+                  // if the two days of week are the same
+                  if (curLecture.times[j].day == prevLecture.times[k].day) {
+                    // if (!(prev.end <= cur.start || cur.end <= prev.start)), then there is a conflict
+                    if (!(timeStringToNum(prevLecture.times[k].end) <= timeStringToNum(curLecture.times[j].start) ||
+                          timeStringToNum(curLecture.times[j].end) <= timeStringToNum(prevLecture.times[k].start))) {
 
-            // determineIfError(curr, prev, listOfErrors);
-            // for each of curr's lectures
-            for (let curLecture of curr.course.lectures) {
-              // for each of prev's lectures
-              for (let prevLecture of prev.course.lectures) {
-                // for each cur lecture's day+time entry
-                for (let j = 0; j < curLecture.times.length; j++) {
-                  // for each prev lecture's day+time entry
-                  for (let k = 0; k < prevLecture.times.length; k++) {
-                    // if the two days of week are the same
-                    if (curLecture.times[j].day == prevLecture.times[k].day) {
-                      // if (!(prev.end <= cur.start || cur.end <= prev.start)), then there is a conflict
-                      if (!(timeStringToNum(prevLecture.times[k].end) <= timeStringToNum(curLecture.times[j].start) ||
-                            timeStringToNum(curLecture.times[j].end) <= timeStringToNum(prevLecture.times[k].start))) {
-
-                        // then there IS a confliect, add to list of errors
-                        listOfErrors.add(curr);
-                        listOfErrors.add(prev);
-                        break;
-                      }
+                      // then there IS a confliect, add to list of errors
+                      listOfErrors.add(curr);
+                      listOfErrors.add(prev);
+                      break;
                     }
                   }
                 }
               }
             }
+          }
         }
       }
     }
