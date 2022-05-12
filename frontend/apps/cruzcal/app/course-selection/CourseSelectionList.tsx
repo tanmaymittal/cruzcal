@@ -22,7 +22,13 @@ const CourseSelectionList = () => {
       {courseListAtoms.map((courseAtom, i) => {
         const nextCourseAtom = courseListAtoms[i+1];
         // return <CourseSelection key={`${courseAtom}`} courseAtom={courseAtom} courseListAtoms={courseListAtoms} nextCourseAtom={nextCourseAtom} />;
-        return <CourseSelection key={`${courseAtom}`} courseAtom={courseAtom} courseListAtoms={courseListAtoms} nextCourseAtom={nextCourseAtom} warningsAtom={warnings} />;
+        return <CourseSelection
+          key={`${courseAtom}`}
+          courseAtom={courseAtom}
+          courseListAtoms={courseListAtoms}
+          nextCourseAtom={nextCourseAtom}
+          warnings={warnings}
+          />;
       })}
       <div className="flex justify-center">
         <button className="text-4xl text-white" onClick={addCourse}>
