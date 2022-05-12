@@ -530,12 +530,15 @@
       "CourseInfo": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["name", "lectures", "professor"],
+        "required": ["name", "coursenum", "courseID", "lectures", "professor"],
         "properties": {
           "name": {
             "type": "string"
           },
           "professor": {
+            "type": "string"
+          },
+          "coursenum": {
             "type": "string"
           },
           "courseID": {
@@ -600,8 +603,7 @@
           "message": {
             "type": "string"
           }
-        },
-        "required": ["status", "message"]
+        }
       }
     }
   }
