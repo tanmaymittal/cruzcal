@@ -1,7 +1,8 @@
-import { atom, PrimitiveAtom, useAtomValue } from 'jotai';
+import { atom } from 'jotai';
+
 import { courseSelectionsAtom, CourseSelector } from './course-selector';
 
-function timeStringToNum(time: string) {
+const timeStringToNum = (time: string) => {
   let temp: string = time[0] + time[1] + time[3] + time[4];
   let num: number = +temp;
   return num;
@@ -14,13 +15,9 @@ export const warningsAtom = atom(
     const listOfErrors: Set<CourseSelector> = new Set;
 
     // if 1 class or less, no warnings
-    if (totalCourseSelections < 2) {
-      // console.log("Printing warnings:"); // TODO: del me
-      // console.log(listOfErrors); // TODO: del me
+    if (totalCourseSelections < 2)
       return Array.from(listOfErrors);
-    }
 
-    let conflict = false; // used to prevent duplicate conflicts
 
     for (let i = 0; i < totalCourseSelections; i++) {
       for (let j = i+1; j < totalCourseSelections; j++) {
@@ -29,16 +26,12 @@ export const warningsAtom = atom(
 
         // avoid null entries
         if (curr.course != null && prev.course != null) {
-          // to prevent comparing two same instances of the same entry
-          if (curr != prev) {
             // if not same term
-            if (curr.term.code != prev.term.code) {
-              console.log("WARNING: Not the same term. Please try another selection."); // TODO: del me
-              listOfErrors.add(curr); // TODO: check if correct
-              console.log(listOfErrors); // TODO: del me
+            if (curr.term.code != prev.term.code)
               return Array.from(listOfErrors);
-            }
 
+
+            // determineIfError(curr, prev, listOfErrors);
             // for each of curr's lectures
             for (let curLecture of curr.course.lectures) {
               // for each of prev's lectures
@@ -56,28 +49,16 @@ export const warningsAtom = atom(
                         // then there IS a confliect, add to list of errors
                         listOfErrors.add(curr);
                         listOfErrors.add(prev);
-                        console.log("Scheduling CONFLICT between: " + curr.course.name + " and " + prev.course.name + "."); // prints which two classes conflict // TODO: del me
-                        conflict = true; // prevents duplicate conflict
                         break;
                       }
                     }
                   }
-
-                  // prevents duplicate conflict
-                  if (conflict) {
-                    conflict = false;
-                    break;
-                  }
                 }
               }
             }
-          }
         }
       }
     }
-
-    console.log("Printing warnings:"); // TODO: del me
-    console.log(listOfErrors); // TODO: del me
     return Array.from(listOfErrors);
   }
 );

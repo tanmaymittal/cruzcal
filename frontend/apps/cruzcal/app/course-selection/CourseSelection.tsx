@@ -9,7 +9,6 @@ import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import CourseFilter from './CourseFilter';
 import SubjectFilter from './SubjectFilter';
 import TermFilter from './TermFilter';
-// import WarningDialog from '../warning-dialog/warning-dialog'; // TODO: place it here?
 
 /* Atoms */
 import { courseSelectionAtomsAtom } from '../../atoms/course-selector';
