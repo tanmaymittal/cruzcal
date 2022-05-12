@@ -49,7 +49,7 @@ exports.genSchedule = async (req, res) => {
 // data is either a string or a binary buffer
 const createAndSendFile = async (res, filename, data) => {
   return new Promise((resolve, reject) => {
-    const tmpfile = path.join(__dirname, `/tmp`, `cc-${uuid()}.ics`);
+    const tmpfile = path.join('/tmp', `cc-${uuid()}.ics`);
     // Create temporary file
     fs.writeFile(tmpfile, data, (writeError) => {
       if (writeError) {
@@ -83,6 +83,7 @@ exports.genCalendar = async (req, res, next) => {
     const icsData = generateIcsData(formattedTerm, formattedCourses);
     await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

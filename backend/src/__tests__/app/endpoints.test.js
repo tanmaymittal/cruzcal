@@ -34,18 +34,18 @@ afterAll(async () => {
 });
 
 test('Invalid endpoint', async () => {
-  await request.get('/hello/world').expect((res) => {
+  await request.get('/api/hello/world').expect((res) => {
     expect(res.status).not.toBe(200);
   });
 });
 
-describe('GET /terms', () => {
+describe('GET /api/terms', () => {
   test('responds with a 200 status code', async () => {
-    await request.get('/terms').expect(200);
+    await request.get('/api/terms').expect(200);
   });
   test('responds with JSON', async () => {
     await request
-      .get('/terms')
+      .get('/api/terms')
       .expect('Content-Type', /json/)
       .expect((res) => {
         expect(res.body).toBeInstanceOf(Array);
@@ -60,16 +60,16 @@ describe('GET /terms', () => {
   });
 });
 
-describe('GET /subjects', () => {
+describe('GET /api/subjects', () => {
   test('success with no parameters', async () => {
-    await request.get('/subjects').expect(200);
+    await request.get('/api/subjects').expect(200);
   });
   test('failure with invalid term', async () => {
-    await request.get('/subjects?term=-1').expect(404);
+    await request.get('/api/subjects?term=-1').expect(404);
   });
   test('success with term', async () => {
     await request
-      .get('/subjects?term=2222')
+      .get('/api/subjects?term=2222')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect((res) => {
@@ -81,35 +81,35 @@ describe('GET /subjects', () => {
   });
 });
 
-describe('GET /courses', () => {
+describe('GET /api/courses', () => {
   test('error with no parameters', async () => {
-    await request.get('/courses').expect((res) => {
+    await request.get('/api/courses').expect((res) => {
       expect(res.status).toBe(400);
     });
   });
   test('error with term parameter only', async () => {
-    await request.get('/courses?term=2222').expect((res) => {
+    await request.get('/api/courses?term=2222').expect((res) => {
       expect(res.status).toBe(400);
     });
   });
   test('error with subject parameter only', async () => {
-    await request.get('/courses?subject=CSE').expect((res) => {
+    await request.get('/api/courses?subject=CSE').expect((res) => {
       expect(res.status).toBe(400);
     });
   });
   test('error with invalid term arg', async () => {
-    await request.get('/courses?term=-1&subject=CSE').expect((res) => {
+    await request.get('/api/courses?term=-1&subject=CSE').expect((res) => {
       expect(res.status).toBe(404);
     });
   });
   test('error with invalid subject arg', async () => {
-    await request.get('/courses?term=2222&subject=helloworld').expect((res) => {
+    await request.get('/api/courses?term=2222&subject=helloworld').expect((res) => {
       expect(res.status).toBe(404);
     });
   });
   test('responds with JSON', async () => {
     await request
-      .get('/courses?term=2222&subject=CSE')
+      .get('/api/courses?term=2222&subject=CSE')
       .expect(200)
       .expect('Content-Type', /json/)
       .expect((res) => {
@@ -126,20 +126,20 @@ describe('GET /courses', () => {
 describe('POST /schedule', () => {
   test('responds with a 201 status code', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(scheduleRequest)
       .expect(201);
   });
   test('responds with JSON of courses', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(scheduleRequest)
       .expect('Content-Type', /json/);
   });
   test('responds with 404 error for invalid term', async () => {
     const badSchedReq = {...scheduleRequest, termCode: -1};
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(badSchedReq)
       .expect(404);
   });
@@ -149,22 +149,22 @@ describe('POST /schedule', () => {
       courses: [{courseID: 'hello,world!'}],
     };
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(badSchedReq)
       .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(scheduleImproperFormatRequest)
       .expect(400);
   });
 });
 
-describe('POST /calendar', () => {
+describe('POST /api/calendar', () => {
   test('responds with a 200 status code', async () => {
     await request
-      .post('/calendar')
+      .post('/api/calendar')
       .send(calendarRequest)
       .expect(200);
   });
@@ -173,7 +173,7 @@ describe('POST /calendar', () => {
     const numOfEvents = calendarIcsString.match(beginEventMatch);
 
     await request
-      .post('/calendar')
+      .post('/api/calendar')
       .send(calendarRequest)
       .expect('Content-Type', 'text/calendar; charset=UTF-8')
       .expect((res) => {
@@ -183,7 +183,7 @@ describe('POST /calendar', () => {
   test('responds with 404 error for invalid term', async () => {
     const badCalReq = {...calendarRequest, termCode: -1};
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(badCalReq)
       .expect(404);
   });
@@ -193,13 +193,13 @@ describe('POST /calendar', () => {
       courses: [{courseID: 'hello,world!'}],
     };
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(badCalReq)
       .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
-      .post('/schedule')
+      .post('/api/schedule')
       .send(calendarImproperRequest)
       .expect(400);
   });
