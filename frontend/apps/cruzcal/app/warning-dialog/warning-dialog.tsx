@@ -1,7 +1,9 @@
-import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import { useAtomValue } from 'jotai';
+import hash from 'object-hash';
 
+/* Atoms */
 import { CourseSelector } from '../../atoms/course-selector';
 
 /* eslint-disable-next-line */
@@ -67,9 +69,8 @@ export const WarningDialog = ({ warningsAtom }) => {
                     </p>
                       {warnings.map((warning) => {
                         return (
-
-                          <p> {warning.course.name} </p>
-                          );
+                          <p key={hash(warning)}>{warning.course.name}</p>
+                        );
                       })}
                   </div>
 

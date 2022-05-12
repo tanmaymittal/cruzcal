@@ -24,10 +24,8 @@ export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, w
   const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
   const RWCourseSelection = useAtom(courseAtom as PrimitiveAtom<CourseSelector>);
   const [courseSelection] = RWCourseSelection;
-  // const RWCourseSelectionName = useAtomValue(courseAtom);
 
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
-  // const warning = useAtomValue(warnings as PrimitiveAtom<CourseSelector>);
 
   const warningWrapper = () =>{
     const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-5"];
@@ -47,7 +45,6 @@ export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, w
 
   return (
     <Provider>
-      {/* <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-3 mb-5"> */}
       <div className={warningWrapper()}>
         <div className="basis-3/4">
           <Suspense fallback={<DefaultSelectList/>}>

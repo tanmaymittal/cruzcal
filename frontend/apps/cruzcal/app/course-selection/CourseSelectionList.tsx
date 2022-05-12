@@ -1,8 +1,9 @@
-import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import { useAtom } from 'jotai';
 import { useAtomValue } from 'jotai/utils';
+import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+
+import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import CourseSelection from './CourseSelection';
 import warningsAtom from 'apps/cruzcal/atoms/warnings';
 
