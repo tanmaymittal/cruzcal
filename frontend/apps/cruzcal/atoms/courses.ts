@@ -5,12 +5,14 @@ import { selectedTermAtom } from './selected-term'
 import { selectedSubjectAtom } from './selected-subject'
 import { TermInfo } from './terms'
 import { SubjectInfo } from './subjects'
+import { server } from '../config'
 
 export type Weekday = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday' | 'Saturday' | 'Sunday';
 
 export interface CourseInfo {
   name:	string,
   professor: string,
+  coursenum: string,
   courseID: number,
   lectures: {
     location:	string
@@ -28,7 +30,7 @@ export const coursesUrlAtom = atom((get): string | null => {
   if (termInfo === null || subjectInfo === null)
     return null;
   else
-    return `http://localhost:4200/api/courses?term=${termInfo.code}&subject=${subjectInfo.name}`;
+    return `${server}/api/courses?term=${termInfo.code}&subject=${subjectInfo.name}`;
 });
 
 export const coursesQueryAtom = atomWithQuery((get) => ({

@@ -30,12 +30,16 @@ app.use(passport.session());
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  process.nextTick(function() {
+    done(null, user);
+  });
 });
 
 // used to deserialize the user
 passport.deserializeUser(function(user, done) {
-  done(null, user);
+  process.nextTick(function() {
+    return done(null, user);
+  });
 });
 
 // Setup API validation
@@ -58,10 +62,10 @@ app.use(
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
 app.get('/api/auth/google/redirect',
   passport.authenticate(auth.googleStrategy, {
+    successRedirect: '/',
     failureRedirect: '/api/auth/google',
     failureMessage: true,
   }),
-  (req, res) => res.redirect('/'), // send(req.user)
 );
 
 // User management
@@ -79,7 +83,6 @@ app.get('/api/calendar/*', routes.verifySchedule);
 app.get('/api/calendar/json', (req, res) => res.json(req.body));
 app.get('/api/calendar/ics', routes.genCalendar);
 // app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
-
 
 // Error handler
 app.use((err, req, res, next) => {

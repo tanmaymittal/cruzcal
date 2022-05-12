@@ -4,9 +4,10 @@ import { Suspense, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import ClientOnly from '../client-only/ClientOnly';
+import { server } from '../../config';
 
 const fetchCalendar = async (courseList) => {
-  const res = await fetch('/api/schedule', {
+  const res = await fetch(`${server}/api/schedule`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'

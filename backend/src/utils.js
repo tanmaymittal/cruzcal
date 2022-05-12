@@ -23,6 +23,7 @@ exports.APIError = class APIError extends Error {
 exports.formatCourse = (courseObj) => {
   const courseInfo = {
     name: courseObj.name,
+    coursenum: courseObj.coursenum,
     professor: courseObj.professor,
     lectures: courseObj.lectures,
     courseID: courseObj.refnum,
@@ -46,7 +47,7 @@ exports.findTerm = async (termCode) => {
   const term = await getTermByCode(termCode);
   if (term == null) {
     const message = `Term does not exist: ${termCode}`;
-    throw new APIError(message, 404, []);
+    throw new exports.APIError(message, 404, []);
   }
   return exports.formatTerm(term);
 };
@@ -55,7 +56,7 @@ exports.findCourse = async (termCode, courseID) => {
   const course = await getCourseByID(termCode, courseID);
   if (course === null) {
     const message = `courseID does not exist: ${courseID}`;
-    throw new APIError(message, 404, []);
+    throw new exports.APIError(message, 404, []);
   }
   return exports.formatCourse(course);
 };

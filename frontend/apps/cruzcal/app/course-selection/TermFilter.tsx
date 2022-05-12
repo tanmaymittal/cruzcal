@@ -7,6 +7,10 @@ import { useUpdateAtom } from 'jotai/utils'
 const TermFilter = ({selectedTerm}: {selectedTerm: TermInfo}) => {
   const list = useAtomValue<TermInfo[]>(termsAtom);
   const updateTerm = useUpdateAtom(selectedTermAtom);
+
+  const term = {...selectedTerm};
+  term.toString = () => term.name;
+
   return (
     <SelectList
       listName="Term"

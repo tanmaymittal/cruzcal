@@ -6,6 +6,7 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import ClientOnly from '../client-only/ClientOnly';
 import { courseSelectionsAtom } from 'apps/cruzcal/atoms/course-selector';
 import selectedTermAtom from 'apps/cruzcal/atoms/selected-term';
+import { server } from '../../config';
 
 const fetchCalendar = async (calendarType, term, courseList) => {
   if (term === null)
@@ -22,7 +23,7 @@ const fetchCalendar = async (calendarType, term, courseList) => {
 
   console.log(cs);
 
-  const res = await fetch(`/api/schedule/${calendarType}`, {
+  const res = await fetch(`${server}/api/schedule/${calendarType}`, {
     method: 'post',
     headers: {
       'Content-Type': 'application/json'

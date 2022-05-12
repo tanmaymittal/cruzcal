@@ -6,6 +6,7 @@ const {
   findCourse,
   formatTerm,
   formatCourse,
+  APIError,
 } = require('./utils');
 
 const {
@@ -90,7 +91,6 @@ exports.genCalendar = async (req, res, next) => {
     const icsData = generateIcsData(term, courses);
     await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };

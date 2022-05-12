@@ -33,10 +33,8 @@ export const CourseSelection = ({ term, courseAtom, nextCourseAtom }) => {
 
 export const AsyncCourseSelection = ({ term, RWCourseSelection, remove, nextCourse }) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
-  const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
-  const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
 
-  const [courseSelection, setCourseSelection] = RWCourseSelection;
+  const [, setCourseSelection] = RWCourseSelection;
 
   useEffect(() => {
     setSelectedTerm(term);
@@ -45,12 +43,12 @@ export const AsyncCourseSelection = ({ term, RWCourseSelection, remove, nextCour
 
   return (
     <div className="flex flex-wrap md:flex-nowrap justify-center gap-x-4">
-      <div className="basis-3/4">
+      <div className="basis-2/5">
         <Suspense fallback={<DefaultSelectList/>}>
           <SubjectFilter RWCourseSelection={RWCourseSelection}/>
         </Suspense>
       </div>
-      <div className="basis-1/4">
+      <div className="basis-3/5">
         <Suspense fallback={<DefaultSelectList/>}>
           <CourseFilter RWCourseSelection={RWCourseSelection}/>
         </Suspense>

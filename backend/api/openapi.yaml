@@ -356,12 +356,16 @@ components:
       additionalProperties: false
       required:
         - name
+        - coursenum
+        - courseID
         - lectures
         - professor
       properties:
         name:
           type: string
         professor:
+          type: string
+        coursenum:
           type: string
         courseID:
           type: number
@@ -410,6 +414,3 @@ components:
           format: int32
         message:
           type: string
-      required:
-      - status
-      - message
