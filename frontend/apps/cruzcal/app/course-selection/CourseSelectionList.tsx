@@ -3,23 +3,20 @@ import { useAtomValue } from 'jotai/utils';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
-import { useAtom, useAtomValue } from 'jotai';
 
+import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
 import TermFilter from './TermFilter';  
-import { DefaultSelectList } from '../select-list/select-list';
+import WarningDialog from '../warning-dialog/warning-dialog';
 import SubmitICS from '../submit-ics/SubmitICS';
 import SubmitGoogle from '../submit-google/SubmitGoogle';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
-import termsAtom from 'apps/cruzcal/atoms/terms';
-import selectedTermAtom from 'apps/cruzcal/atoms/selected-term';
-import warningsAtom from 'apps/cruzcal/atoms/warnings';
+import warningsAtom from '../../atoms/warnings';
 
 const CourseSelectionList = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
 
-  const selectedTerm = useAtomValue(selectedTermAtom);
   const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection} });
 
   // Print out current state of selected classes
@@ -31,15 +28,17 @@ const CourseSelectionList = () => {
   return (
     <div className="basis-2/5">
       <div className="mb-5">
+        <WarningDialog />
+      </div>
+      <div className="mb-5">
         <Suspense fallback={<DefaultSelectList/>}>
-          <TermFilter selectedTerm={selectedTerm}/>
+          <TermFilter />
         </Suspense>
       </div>
       {courseListAtoms.map((courseAtom, i) => {
         const nextCourseAtom = courseListAtoms[i+1];
         return <CourseSelection
           key={`${courseAtom}`}
-          term={selectedTerm}
           courseAtom={courseAtom}
           nextCourseAtom={nextCourseAtom}
           warnings={warnings}

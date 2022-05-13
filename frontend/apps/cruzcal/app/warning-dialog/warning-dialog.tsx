@@ -5,11 +5,12 @@ import hash from 'object-hash';
 
 /* Atoms */
 import { CourseSelector } from '../../atoms/course-selector';
+import warningsAtom from '../../atoms/warnings';
 
 /* eslint-disable-next-line */
-export const WarningDialog = ({ warningsAtom }) => {
+export const WarningDialog = () => {
   const warnings = useAtomValue(warningsAtom) as CourseSelector[];
-  let [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
     setIsOpen(false)
@@ -19,13 +20,15 @@ export const WarningDialog = ({ warningsAtom }) => {
     setIsOpen(true)
   }
 
+  if (warnings.length === 0) return <></>;
+
   return (
     <>
-      <div className=" inset-0 flex items-center justify-center">
+      <div className="w-full inset-0 flex items-center justify-center">
         <button
           type="button"
           onClick={openModal}
-          className="rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="w-full rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-medium text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
           See warnings
         </button>

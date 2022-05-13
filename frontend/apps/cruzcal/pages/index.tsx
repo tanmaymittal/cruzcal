@@ -1,14 +1,9 @@
 /* eslint-disable @next/next/no-img-element */
-import { useAtomValue } from 'jotai';
-import { Suspense } from 'react';
-
 /* Components */
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import UserHeader from '../app/user-header/UserHeader';
 import WarningDialog from '../app/warning-dialog/warning-dialog';
-import { warningsAtom } from '../atoms/warnings';
-import { CourseSelector } from '../atoms/course-selector';
 
 const PageHeader = () => {
   return (
@@ -31,7 +26,7 @@ const CalendarViewBody = () => {
   return (
     <div className="basis-3/5 border-solid border-2 border-white text-white">
       {/* <h2 className="text-3xl mb-5">May 2022</h2> */}
-      {/* <CalendarView /> */}
+      <CalendarView />
     </div>
   )
 };
@@ -43,16 +38,6 @@ const PageFooter = () => {
     </p>
   )
 };
-
-const WarningDialogBox = () => {
-  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
-  let warningAppears;
-  if (warnings.length > 0) {
-    return warningAppears = <WarningDialog warningsAtom={warningsAtom}/>;
-  } else {
-    return <></>;
-  }
- };
 
 
 export function Index() {
@@ -67,11 +52,8 @@ export function Index() {
       <div className="flex flex-col md:flex-row gap-x-14 mb-5">
         <CalendarViewBody />
 
-        <CourseSelectionList />
-        
-        <WarningDialogBox />
+        <CourseSelectionList />        
       </div>
-      
       <PageFooter />
     </div>
   );

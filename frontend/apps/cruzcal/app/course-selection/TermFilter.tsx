@@ -1,12 +1,11 @@
-import selectedTermAtom from '../../atoems/selected-term'
+import selectedTermAtom from '../../atoms/selected-term'
 import termsAtom, { TermInfo } from '../../atoms/terms'
 import SelectList from '../select-list/select-list'
-import { useAtomValue } from 'jotai'
-import { useUpdateAtom } from 'jotai/utils'
+import { PrimitiveAtom, useAtom, useAtomValue } from 'jotai'
         
-const TermFilter = ({selectedTerm}: {selectedTerm: TermInfo}) => {
+const TermFilter = () => {
   const list = useAtomValue<TermInfo[]>(termsAtom);
-  const updateTerm = useUpdateAtom(selectedTermAtom);
+  const [selectedTerm, updateTerm] = useAtom(selectedTermAtom as PrimitiveAtom<TermInfo>);
 
   const term = {...selectedTerm};
   term.toString = () => term.name;

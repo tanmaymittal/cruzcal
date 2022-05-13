@@ -7,7 +7,6 @@ import classnames from 'classnames';
 
 import CourseFilter from './CourseFilter'
 import SubjectFilter from './SubjectFilter'
-import TermFilter from './TermFilter'
 
 import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector'
 import { DefaultSelectList } from '../select-list/select-list'
@@ -18,7 +17,7 @@ import selectedTermAtom from '../../atoms/selected-term'
 const nullAtom = atom(null);
 
 const warningWrapper = (warnings, selection) =>{
-  const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-5"];
+  const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3"];
   // check if your current course name exists in any of the warnings
   for (let i = 0; i < warnings.length; i++) {
     if (selection.course == null || selection.subject == null || selection.term == null) {
@@ -33,21 +32,23 @@ const warningWrapper = (warnings, selection) =>{
   return classnames(...baseClasses);
 }
 
-export const CourseSelection = ({ term, courseAtom, nextCourseAtom, warnings }) => {
+export const CourseSelection = ({ courseAtom, nextCourseAtom, warnings }) => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
   const RWCourseSelection = useAtom(courseAtom as PrimitiveAtom<CourseSelector>);
   const [courseSelection] = RWCourseSelection;
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
+  const globalTerm = useAtomValue(selectedTermAtom);
   
   const isOnlyCourse = courseListAtoms.length <= 1;
   const remove = () => dispatch({ type: "remove", atom: courseAtom });
 
   return (
     <Provider>
-      <AsyncCourseSelection
+      <CourseSelectionConsumer
         className={warningWrapper(warnings, courseSelection)}
-        term={term}
+        term={globalTerm}
         RWCourseSelection={RWCourseSelection}
+        isOnlyCourse={isOnlyCourse}
         remove={remove}
         nextCourse={nextCourse}
        />;
@@ -55,7 +56,7 @@ export const CourseSelection = ({ term, courseAtom, nextCourseAtom, warnings }) 
   );
 };
 
-export const AsyncCourseSelection = ({ className, term, RWCourseSelection, remove, nextCourse }) => {
+export const CourseSelectionConsumer = ({ className, term, RWCourseSelection, isOnlyCourse, remove, nextCourse }) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
 
   const [, setCourseSelection] = RWCourseSelection;
@@ -90,6 +91,8 @@ const TrashButton = ({removeCourseSelection, disabled, nextCourse}) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
   const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
   const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
+
+  if (disabled) return <></>;
 
   return (
     <button className='text-white' disabled={disabled} onClick={() => {
