@@ -44,7 +44,7 @@ export const warningsAtom = atom(
                     if (!(timeStringToNum(prevLecture.times[k].end) <= timeStringToNum(curLecture.times[j].start) ||
                           timeStringToNum(curLecture.times[j].end) <= timeStringToNum(prevLecture.times[k].start))) {
 
-                      // then there IS a confliect, add to list of errors
+                      // then there IS a conflict, add to list of errors
                       listOfErrors.add(curr);
                       listOfErrors.add(prev);
                       break;
