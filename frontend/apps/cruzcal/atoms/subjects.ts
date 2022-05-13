@@ -1,5 +1,6 @@
 import { atom } from "jotai";
 import { atomWithQuery } from "jotai/query";
+import { server } from "../config";
 import selectedCourseAtom from "./selected-course";
 import { selectedTermAtom } from './selected-term';
 import { TermInfo } from "./terms";
@@ -14,7 +15,7 @@ const subjectsUrlAtom = atom((get): string => {
   if (termInfo === null)
     return null;
   else
-    return `http://localhost:4200/api/subjects?term=${termInfo.code}`;
+    return `${server}/api/subjects?term=${termInfo.code}`;
 });
 
 export const subjectsQueryAtom = atomWithQuery((get) => ({

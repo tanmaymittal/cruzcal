@@ -1,6 +1,7 @@
 import { atomWithStorage, atomWithReset } from 'jotai/utils';
 import {atomWithQuery} from 'jotai/query';
 import {atom} from 'jotai';
+import { server } from '../config';
 
 export interface UserSession {
   displayName: string,
@@ -13,10 +14,9 @@ export const fetchUserAtom = atomWithQuery((get) => ({
   queryFn: async ({ queryKey: [, sUser] }) => {
     const storageUser = sUser as UserSession;
     if (storageUser !== null) return storageUser;
-    
-    const res = await fetch('http://localhost:4200/api/user');
+    const res = await fetch(`${server}/api/user`);
     const user = res.status === 200 ? await res.json() : null;
-    console.log(user);
+    // console.log(user);
     return user;
   },
 }));

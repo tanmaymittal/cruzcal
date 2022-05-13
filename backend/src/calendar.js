@@ -5,41 +5,37 @@ const generateIcsData = (termData, courseData) => {
     error,
     value,
   } = ics.createEvents(coursesToEvents(termData, courseData));
-
-  if (error) {
-    console.log(error);
-    return;
-  }
-
+  if (error) throw error;
   return value;
 };
 
 // Helpers
 const coursesToEvents = (termData, courseData) => {
   const termDates = termData.date;
-  const courseEvents = courseData.map((c) => {
-    const times = c.lectures[0].times;
-    const formattedStartTime = formatTime(times[0].start);
-    const formattedEndTime = formatTime(times[0].end);
-    const formattedStartDate = formatDate(termDates.start, 'number');
-    const formattedEndDate = formatDate(termDates.end, 'string');
-    const initialDate = getInitialDate(times, formattedStartDate);
-    return {
-      title: c.name,
-      start: [
-        ...initialDate,
-        formattedStartTime.hour,
-        formattedStartTime.minute,
-      ],
-      end: [
-        ...initialDate,
-        formattedEndTime.hour,
-        formattedEndTime.minute,
-      ],
-      location: c.lectures[0].location ? c.lectures[0].location : '',
-      recurrenceRule: createRecurrenceRule(times, formattedEndDate),
-    };
-  });
+  const courseEvents = courseData
+    .map((c) => {
+      const times = c.lectures[0].times;
+      const formattedStartTime = formatTime(times[0].start);
+      const formattedEndTime = formatTime(times[0].end);
+      const formattedStartDate = formatDate(termDates.start, 'number');
+      const formattedEndDate = formatDate(termDates.end, 'string');
+      const initialDate = getInitialDate(times, formattedStartDate);
+      return {
+        title: c.name,
+        start: [
+          ...initialDate,
+          formattedStartTime.hour,
+          formattedStartTime.minute,
+        ],
+        end: [
+          ...initialDate,
+          formattedEndTime.hour,
+          formattedEndTime.minute,
+        ],
+        location: c.lectures[0].location ? c.lectures[0].location : '',
+        recurrenceRule: createRecurrenceRule(times, formattedEndDate),
+      };
+    });
 
   return courseEvents;
 };

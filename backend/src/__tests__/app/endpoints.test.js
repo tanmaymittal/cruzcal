@@ -5,8 +5,8 @@ const app = require('../../app');
 const {
   scheduleRequest,
   scheduleImproperFormatRequest,
-  calendarRequest,
-  calendarImproperRequest,
+  calendarICSRequest,
+  calendarICSImproperRequest,
   calendarIcsString,
 } = require('./mockData');
 const {courses, terms} = require('../common');
@@ -103,9 +103,10 @@ describe('GET /api/courses', () => {
     });
   });
   test('error with invalid subject arg', async () => {
-    await request.get('/api/courses?term=2222&subject=helloworld').expect((res) => {
-      expect(res.status).toBe(404);
-    });
+    await request.get('/api/courses?term=2222&subject=helloworld')
+      .expect((res) => {
+        expect(res.status).toBe(404);
+      });
   });
   test('responds with JSON', async () => {
     await request
@@ -123,49 +124,48 @@ describe('GET /api/courses', () => {
   });
 });
 
-describe('POST /schedule', () => {
+describe('POST /schedule/json', () => {
   test('responds with a 201 status code', async () => {
     await request
-      .post('/api/schedule')
+      .post('/api/schedule/json')
       .send(scheduleRequest)
       .expect(201);
   });
   test('responds with JSON of courses', async () => {
     await request
-      .post('/api/schedule')
+      .post('/api/schedule/json')
       .send(scheduleRequest)
       .expect('Content-Type', /json/);
   });
   test('responds with 404 error for invalid term', async () => {
     const badSchedReq = {...scheduleRequest, termCode: -1};
     await request
-      .post('/api/schedule')
+      .post('/api/schedule/json')
       .send(badSchedReq)
       .expect(404);
   });
   test('responds with 404 error for invalid courseID', async () => {
     const badSchedReq = {
       ...scheduleRequest,
-      courses: [{courseID: 'hello,world!'}],
+      courseIDs: ['hello,world!'],
     };
     await request
-      .post('/api/schedule')
+      .post('/api/schedule/json')
       .send(badSchedReq)
       .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
-      .post('/api/schedule')
+      .post('/api/schedule/json')
       .send(scheduleImproperFormatRequest)
       .expect(400);
   });
 });
 
-describe('POST /api/calendar', () => {
+describe('GET /api/calendar/ics', () => {
   test('responds with a 200 status code', async () => {
     await request
-      .post('/api/calendar')
-      .send(calendarRequest)
+      .get(calendarICSRequest)
       .expect(200);
   });
   test('responds with text/calendar data', async () => {
@@ -173,34 +173,31 @@ describe('POST /api/calendar', () => {
     const numOfEvents = calendarIcsString.match(beginEventMatch);
 
     await request
-      .post('/api/calendar')
-      .send(calendarRequest)
+      .get(calendarICSRequest)
+      .send(calendarICSRequest)
       .expect('Content-Type', 'text/calendar; charset=UTF-8')
       .expect((res) => {
         expect(res.text.match(beginEventMatch)).toStrictEqual(numOfEvents);
       });
   });
   test('responds with 404 error for invalid term', async () => {
-    const badCalReq = {...calendarRequest, termCode: -1};
+    const badCalReq = calendarICSRequest.replace(
+      /termCode=\d+/g,
+      'termCode=666',
+    );
     await request
-      .post('/api/schedule')
-      .send(badCalReq)
+      .get(badCalReq)
       .expect(404);
   });
   test('responds with 404 error for invalid courseID', async () => {
-    const badCalReq = {
-      ...calendarRequest,
-      courses: [{courseID: 'hello,world!'}],
-    };
+    const badCalReq = `${calendarICSRequest}&courseIDs=helloworld`;
     await request
-      .post('/api/schedule')
-      .send(badCalReq)
+      .get(badCalReq)
       .expect(404);
   });
   test('responds with 400 error for incorrect request', async () => {
     await request
-      .post('/api/schedule')
-      .send(calendarImproperRequest)
+      .get(calendarICSImproperRequest)
       .expect(400);
   });
 });

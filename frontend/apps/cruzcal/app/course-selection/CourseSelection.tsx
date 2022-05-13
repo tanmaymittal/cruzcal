@@ -1,87 +1,104 @@
-import { Suspense } from 'react';
+import { Suspense, useEffect } from 'react'
+import { useUpdateAtom } from 'jotai/utils'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
+import { atom, PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai'
 import classnames from 'classnames';
-import { atom, PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai';
-import { useUpdateAtom } from 'jotai/utils';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 
-/* Components */
-import CourseFilter from './CourseFilter';
-import SubjectFilter from './SubjectFilter';
-import TermFilter from './TermFilter';
+import CourseFilter from './CourseFilter'
+import SubjectFilter from './SubjectFilter'
 
-/* Atoms */
-import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector';
-import { DefaultSelectList } from '../select-list/select-list';
-import selectedCourseAtom from '../../atoms/selected-course';
-import selectedSubjectAtom from '../../atoms/selected-subject';
-import selectedTermAtom from '../../atoms/selected-term';
+import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector'
+import { DefaultSelectList } from '../select-list/select-list'
+import selectedCourseAtom from '../../atoms/selected-course'
+import selectedSubjectAtom from '../../atoms/selected-subject'
+import selectedTermAtom from '../../atoms/selected-term'
 
 const nullAtom = atom(null);
 
-export const CourseSelection = ({ courseListAtoms, courseAtom, nextCourseAtom, warnings }) => {
-  const dispatch = useUpdateAtom(courseSelectionAtomsAtom);
-  const RWCourseSelection = useAtom(courseAtom as PrimitiveAtom<CourseSelector>);
-  const [courseSelection] = RWCourseSelection;
-
-  const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
-
-  const warningWrapper = () =>{
-    const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-5"];
-    // check if your current course name exists in any of the warnings
-    for (let i = 0; i < warnings.length; i++) {
-      if (courseSelection.course == null || courseSelection.subject == null || courseSelection.term == null) {
-        break;
-      }
-
-      if (courseSelection.course.name == warnings[i].course.name) {
-        return classnames(...baseClasses, "border-2", "border-rose-500");
-      }
+const warningWrapper = (warnings, selection) =>{
+  const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3"];
+  // check if your current course name exists in any of the warnings
+  for (let i = 0; i < warnings.length; i++) {
+    if (selection.course == null || selection.subject == null || selection.term == null) {
+      break;
     }
 
-    return classnames(...baseClasses);
+    if (selection.course.name == warnings[i].course.name) {
+      return classnames(...baseClasses, "border-2", "border-rose-500");
+    }
   }
+
+  return classnames(...baseClasses);
+}
+
+export const CourseSelection = ({ courseAtom, nextCourseAtom, warnings }) => {
+  const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
+  const RWCourseSelection = useAtom(courseAtom as PrimitiveAtom<CourseSelector>);
+  const [courseSelection] = RWCourseSelection;
+  const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
+  const globalTerm = useAtomValue(selectedTermAtom);
+  
+  const isOnlyCourse = courseListAtoms.length <= 1;
+  const remove = () => dispatch({ type: "remove", atom: courseAtom });
 
   return (
     <Provider>
-      <div className={warningWrapper()}>
-        <div className="basis-3/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <TermFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <div className="basis-3/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <SubjectFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <div className="basis-1/4">
-          <Suspense fallback={<DefaultSelectList/>}>
-            <CourseFilter RWCourseSelection={RWCourseSelection}/>
-          </Suspense>
-        </div>
-        <TrashButton nextCourse={nextCourse} removeCourseSelection={() => dispatch({ type: "remove", atom: courseAtom })}/>
-      </div>
+      <CourseSelectionConsumer
+        className={warningWrapper(warnings, courseSelection)}
+        term={globalTerm}
+        RWCourseSelection={RWCourseSelection}
+        isOnlyCourse={isOnlyCourse}
+        remove={remove}
+        nextCourse={nextCourse}
+       />;
     </Provider>
+  );
+};
+
+export const CourseSelectionConsumer = ({ className, term, RWCourseSelection, isOnlyCourse, remove, nextCourse }) => {
+  const setSelectedTerm = useUpdateAtom(selectedTermAtom);
+
+  const [, setCourseSelection] = RWCourseSelection;
+
+  useEffect(() => {
+    setSelectedTerm(term);
+    setCourseSelection((prev) => ({term, subject: null, course: null}));
+  }, [term]);
+
+  return (
+    <div className={className}>
+      <div className="basis-2/5">
+        <Suspense fallback={<DefaultSelectList/>}>
+          <SubjectFilter RWCourseSelection={RWCourseSelection}/>
+        </Suspense>
+      </div>
+      <div className="basis-3/5">
+        <Suspense fallback={<DefaultSelectList/>}>
+          <CourseFilter RWCourseSelection={RWCourseSelection}/>
+        </Suspense>
+      </div>
+      <TrashButton
+        nextCourse={nextCourse}
+        disabled={isOnlyCourse}
+        removeCourseSelection={remove}
+      />
+    </div>
   )
 }
 
-const TrashButton = ({removeCourseSelection, nextCourse}) => {
+const TrashButton = ({removeCourseSelection, disabled, nextCourse}) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
   const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
   const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
 
+  if (disabled) return <></>;
+
   return (
-    <button className='text-white' onClick={() => {
-      if (nextCourse) {
-        setSelectedTerm(nextCourse.term);
-        setSelectedCourse(nextCourse.course);
-        setSelectedSubject(nextCourse.subject);
-      } else {
-        setSelectedTerm(null);
-        setSelectedCourse(null);
-        setSelectedSubject(null);
-      }
+    <button className='text-white' disabled={disabled} onClick={() => {
+      setSelectedTerm(nextCourse?.term || null);
+      setSelectedCourse(nextCourse?.course || null);
+      setSelectedSubject(nextCourse?.subject || null);
       removeCourseSelection();
     }}>
       <FontAwesomeIcon icon={faTrashAlt} />
@@ -89,4 +106,4 @@ const TrashButton = ({removeCourseSelection, nextCourse}) => {
   )
 }
 
-export default CourseSelection
+export default CourseSelection;

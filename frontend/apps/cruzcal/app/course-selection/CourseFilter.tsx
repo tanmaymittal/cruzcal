@@ -12,6 +12,12 @@ const CourseFilter = ({RWCourseSelection}) => {
   const [courseSelection, setCourseSelection] = RWCourseSelection;
   const list = useAtomValue<CourseInfo[]>(coursesAtom);
   const selectCourse = useUpdateAtom(selectedCourseAtom);
+
+  const selectedCourse = {...courseSelection.course};
+  selectedCourse.toString = () => (
+    `${selectedCourse.coursenum}: ${selectedCourse.name}`
+  );
+
   return (
     <SelectList
       listName="Course"
