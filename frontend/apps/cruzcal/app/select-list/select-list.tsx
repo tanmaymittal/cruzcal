@@ -1,8 +1,8 @@
-import { Dispatch, FC } from 'react';
-import { Fragment } from 'react'
-import { Listbox, Transition } from '@headlessui/react'
-import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid'
-import { SubjectInfo } from '../../atoms/subjects';
+import { Dispatch, FC, Fragment } from 'react';
+import { Listbox, Transition } from '@headlessui/react';
+import { CheckIcon, ChevronDownIcon } from '@heroicons/react/solid';
+
+import { SubjectInfo } from '../../atoms/subjects';;
 import { TermInfo } from '../../atoms/terms';
 import { CourseInfo } from '../../atoms/courses';
 
