@@ -1,9 +1,10 @@
-import selectedTermAtom from '../../atoms/selected-term'
-import termsAtom, { TermInfo } from '../../atoms/terms'
-import SelectList from '../select-list/select-list'
-import { useAtomValue } from 'jotai'
-import { useUpdateAtom, } from 'jotai/utils'
-import { useEffect } from 'react'
+import { useAtomValue } from 'jotai';
+import { useUpdateAtom, } from 'jotai/utils';
+import { useEffect } from 'react';
+
+import selectedTermAtom from '../../atoms/selected-term';
+import termsAtom, { TermInfo } from '../../atoms/terms';
+import SelectList from '../select-list/select-list';
 
 const TermFilter = ({RWCourseSelection}) => {
   const [courseSelection, setCourseSelection] = RWCourseSelection;

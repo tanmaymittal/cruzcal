@@ -1,8 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
+import { useAtomValue } from 'jotai';
+import { Suspense } from 'react';
 
 /* Components */
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
+import WarningDialog from '../app/warning-dialog/warning-dialog';
+import { warningsAtom } from '../atoms/warnings';
+import { CourseSelector } from '../atoms/course-selector';
 
 const PageHeader = () => {
   return (
@@ -22,7 +27,7 @@ const CalendarViewBody = () => {
   return (
     <div className="basis-3/5 border-solid border-2 border-white text-white">
       {/* <h2 className="text-3xl mb-5">May 2022</h2> */}
-      <CalendarView />
+      {/* <CalendarView /> */}
     </div>
   )
 };
@@ -35,6 +40,17 @@ const PageFooter = () => {
   )
 };
 
+const WarningDialogBox = () => {
+  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
+  let warningAppears;
+  if (warnings.length > 0) {
+    return warningAppears = <WarningDialog warningsAtom={warningsAtom}/>;
+  } else {
+    return <></>;
+  }
+ };
+
+
 export function Index() {
   /*
    * Note: The corresponding styles are in the ./index.styled-components file.
@@ -43,15 +59,16 @@ export function Index() {
     <div className="container mx-auto">
       <PageHeader />
 
-      {/* Index Body */}
+      {/* Body */}
       <div className="flex flex-col md:flex-row gap-x-14">
         <CalendarViewBody />
 
-        {/* Add Classes */}
         <CourseSelectionList />
 
-        <PageFooter />
+        <WarningDialogBox />
       </div>
+      
+      <PageFooter />
     </div>
   );
 }

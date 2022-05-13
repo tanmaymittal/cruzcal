@@ -120,7 +120,7 @@
       "professor": "Terrell,S.",
       "lectures": [
         {
-          "location": "Music Center 101",
+          "location": "E Baskin M101",
           "times": [
             {
               "day": "Tuesday",
@@ -761,7 +761,7 @@
       "refnum": 70988,
       "subject": "ECE",
       "coursenum": "171L",
-      "professor": "Staff",
+      "professor": "Hurtarte,J.S.",
       "lectures": [
         {
           "location": "TBD In Person",
@@ -1496,6 +1496,20 @@
       "termcode": 2224
     },
     {
+      "name": "3D Character Rig",
+      "refnum": 71397,
+      "subject": "ARTG",
+      "coursenum": "132",
+      "professor": "Staff",
+      "lectures": [
+        {
+          "location": "Remote Instruction",
+          "times": []
+        }
+      ],
+      "termcode": 2224
+    },
+    {
       "name": "Ecofutures",
       "refnum": 71317,
       "subject": "ARTG",
@@ -1752,7 +1766,7 @@
       "refnum": 71369,
       "subject": "BIOE",
       "coursenum": "126",
-      "professor": "Staff",
+      "professor": "Favilla,A.",
       "lectures": [
         {
           "location": "Remote Instruction",
@@ -1875,7 +1889,7 @@
       "refnum": 71183,
       "subject": "BIOE",
       "coursenum": "158L",
-      "professor": "Willis-Norton,E.M.",
+      "professor": "Staff",
       "lectures": [
         {
           "location": "CoastBio 115",
@@ -3095,7 +3109,7 @@
       "refnum": 71368,
       "subject": "EART",
       "coursenum": "189B",
-      "professor": "Finnegan,N.J.",
+      "professor": "Hourigan,J.K.",
       "lectures": [
         {
           "location": "TBD In Person",
@@ -3308,6 +3322,31 @@
       "lectures": [
         {
           "location": "Remote Instruction",
+          "times": [
+            {
+              "day": "Tuesday",
+              "start": "13:00",
+              "end": "16:30"
+            },
+            {
+              "day": "Thursday",
+              "start": "13:00",
+              "end": "16:30"
+            }
+          ]
+        }
+      ],
+      "termcode": 2224
+    },
+    {
+      "name": "Managerial Econ",
+      "refnum": 71396,
+      "subject": "ECON",
+      "coursenum": "101",
+      "professor": "Staff",
+      "lectures": [
+        {
+          "location": "J Baskin Engr 152",
           "times": [
             {
               "day": "Tuesday",
@@ -4512,7 +4551,18 @@
       "lectures": [
         {
           "location": "Remote Instruction",
-          "times": []
+          "times": [
+            {
+              "day": "Tuesday",
+              "start": "11:00",
+              "end": "13:00"
+            },
+            {
+              "day": "Thursday",
+              "start": "11:00",
+              "end": "13:00"
+            }
+          ]
         }
       ],
       "termcode": 2224
@@ -4606,12 +4656,17 @@
           "location": "J Baskin Engr 156",
           "times": [
             {
-              "day": "Tuesday",
+              "day": "Monday",
               "start": "13:00",
               "end": "16:00"
             },
             {
-              "day": "Thursday",
+              "day": "Wednesday",
+              "start": "13:00",
+              "end": "16:00"
+            },
+            {
+              "day": "Friday",
               "start": "13:00",
               "end": "16:00"
             }
