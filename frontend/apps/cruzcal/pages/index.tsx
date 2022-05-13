@@ -44,17 +44,11 @@ const WarningDialogBox = () => {
   const warnings = useAtomValue(warningsAtom) as CourseSelector[];
   let warningAppears;
   if (warnings.length > 0) {
-    warningAppears = <WarningDialog warningsAtom={warningsAtom}/>
+    return warningAppears = <WarningDialog warningsAtom={warningsAtom}/>;
   } else {
-    warningAppears = <></>
+    return <></>;
   }
-
-  return (
-    <Suspense fallback={"loading..."}>
-      {warningAppears}
-    </Suspense>
-  )
-};
+ };
 
 
 export function Index() {
