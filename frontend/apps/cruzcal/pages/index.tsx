@@ -56,22 +56,20 @@ export function Index() {
    * Note: The corresponding styles are in the ./index.styled-components file.
    */
   return (
-      <div className="container mx-auto">
+    <div className="container mx-auto">
       <PageHeader />
 
-        {/* Index Body */}
-        <div className="flex flex-col md:flex-row gap-x-14">
-          <CalendarViewBody />
+      {/* Body */}
+      <div className="flex flex-col md:flex-row gap-x-14">
+        <CalendarViewBody />
 
-          {/* Add Classes */}
-          <CourseSelectionList />
+        <CourseSelectionList />
 
-          <WarningDialogBox />
-
-          <PageFooter />
-        </div>
-
+        <WarningDialogBox />
       </div>
+      
+      <PageFooter />
+    </div>
   );
 }
 
