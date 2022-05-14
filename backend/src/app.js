@@ -82,7 +82,7 @@ app.post('/api/schedule/:type', routes.genSchedule);
 app.get('/api/calendar/*', routes.verifySchedule);
 app.get('/api/calendar/json', (req, res) => res.json(req.body));
 app.get('/api/calendar/ics', routes.genCalendar);
-// app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
+app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {

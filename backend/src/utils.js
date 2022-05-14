@@ -95,3 +95,7 @@ exports.createAndSendFile = async (res, filename, data) => {
     });
   });
 };
+
+exports.getAuthTokens = () => {
+
+};

@@ -8,7 +8,7 @@ const {
   formatCourse,
   APIError,
 } = require('./utils');
-
+const {testGoogleApi} = require('./google_calendar');
 const {
   getAllTerms,
   getUniqueSubjects,
@@ -90,6 +90,17 @@ exports.genCalendar = async (req, res, next) => {
     const downloadName = 'calendar.ics';
     const icsData = generateIcsData(term, courses);
     await createAndSendFile(res, downloadName, icsData);
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Returns 'text/calendar' file type
+// Media type reference: https://www.iana.org/assignments/media-types/text/calendar
+exports.genGoogleCalendar = async (req, res, next) => {
+  try {
+    testGoogleApi();
+    return res.code(200);
   } catch (error) {
     next(error);
   }
