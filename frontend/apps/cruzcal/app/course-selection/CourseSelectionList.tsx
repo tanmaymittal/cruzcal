@@ -42,7 +42,7 @@ const CourseSelectionList = () => {
           courseAtom={courseAtom}
           nextCourseAtom={nextCourseAtom}
           warnings={warnings}
-          />;
+          />
       })}
       <div className='flex flex-col gap-y-5 align-middle'>
         <div className="flex justify-center">
