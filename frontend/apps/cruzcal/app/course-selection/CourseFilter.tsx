@@ -7,6 +7,7 @@ import coursesAtom from '../../atoms/courses'
 import selectedCourseAtom from '../../atoms/selected-course';
 import { CourseInfo } from '../../atoms/courses';
 
+// gets information about the course through context
 
 const CourseFilter = ({RWCourseSelection}) => {
   const [courseSelection, setCourseSelection] = RWCourseSelection;

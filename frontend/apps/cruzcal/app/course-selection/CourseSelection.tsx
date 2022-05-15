@@ -75,6 +75,14 @@ export const CourseSelectionConsumer = ({ className, term, RWCourseSelection, is
       </div>
       <div className="basis-3/5">
         <Suspense fallback={<DefaultSelectList/>}>
+          {/* // sends course information as context */}
+          {/* {RWCourseSelection} */}
+          {/* {<p style={{color: 'red'}}>{RWCourseSelection.map(
+            home => <div>{home}</div>)}</p>} */}
+            {/* course, term, subject} */}
+          {/* {RWCourseSelection.map(unit => <div>{
+            unit.subject.map(child => <div>{child.name}</div>)
+            }</div>)} */}
           <CourseFilter RWCourseSelection={RWCourseSelection}/>
         </Suspense>
       </div>
