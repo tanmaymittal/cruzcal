@@ -26,7 +26,7 @@ const CourseSelectionList = () => {
   // }, [courseList]);
 
   return (
-    <div className="basis-2/5">
+    <>
       <div className="mb-5">
         <WarningDialog />
       </div>
@@ -54,8 +54,8 @@ const CourseSelectionList = () => {
           <SubmitGoogle />
           <SubmitICS />
         </div>
-      </div>
-    </div>
+      </div>    
+    </>
   )
 }
 
