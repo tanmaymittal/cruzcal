@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 html {
-  background-color: black;
+  background-color: #181818;
 }
 
 .gradient-wrapper {
