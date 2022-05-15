@@ -21,11 +21,9 @@ const PageHeader = () => {
   )
 };
 
-/* Potential Calendar UI: https://github.com/hoangnm/react-native-week-view */
 const CalendarViewBody = () => {
   return (
     <div className="basis-3/5 border-solid border-2 border-white text-white">
-      {/* <h2 className="text-3xl mb-5">May 2022</h2> */}
       <CalendarView />
     </div>
   )
@@ -41,17 +39,11 @@ const PageFooter = () => {
 
 
 export function Index() {
-  /*
-   * Note: The corresponding styles are in the ./index.styled-components file.
-   */
   return (
     <div className="container mx-auto p-3">
       <PageHeader />
-
-      {/* Index Body */}
       <div className="flex flex-col md:flex-row gap-x-14 mb-5">
         <CalendarViewBody />
-
         <CourseSelectionList />        
       </div>
       <PageFooter />
