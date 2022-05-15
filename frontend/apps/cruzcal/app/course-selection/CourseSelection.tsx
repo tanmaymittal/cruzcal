@@ -17,7 +17,7 @@ import selectedTermAtom from '../../atoms/selected-term'
 const nullAtom = atom(null);
 
 const warningWrapper = (warnings, selection) =>{
-  const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3"];
+  const baseClasses = ["flex", "flex-wrap", "md:flex-nowrap", "justify-center", "gap-x-3", "mb-3"];
   // check if your current course name exists in any of the warnings
   for (let i = 0; i < warnings.length; i++) {
     if (selection.course == null || selection.subject == null || selection.term == null) {
