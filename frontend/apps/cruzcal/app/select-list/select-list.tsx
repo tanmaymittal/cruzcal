@@ -12,13 +12,14 @@ export type Subject = SubjectInfo | TermInfo | CourseInfo;
 export interface SelectListProps {
   listName: string,
   options: Subject[],
+  disabled: boolean,
   selected: Subject,
   setSelected: Dispatch<Subject>,
 }
 
-export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listName, options }) => {
+export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listName, options, disabled }) => {
   return (
-    <Listbox value={selected} onChange={setSelected}>
+    <Listbox value={selected} onChange={setSelected} disabled={disabled}>
       <div className="relative">
         <Listbox.Button className="relative w-full py-2 pl-3 pr-10 text-left bg-white rounded-lg shadow-md cursor-default hover:bg-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-opacity-75 focus-visible:ring-white focus-visible:ring-offset-orange-300 focus-visible:ring-offset-2 focus-visible:border-indigo-500 sm:text-sm">
           <span className="block truncate">{selected === null ? `Select ${listName}...` : selected.name}</span>

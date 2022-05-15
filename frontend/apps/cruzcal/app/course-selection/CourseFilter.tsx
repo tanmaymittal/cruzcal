@@ -22,6 +22,7 @@ const CourseFilter = ({RWCourseSelection}) => {
     <SelectList
       listName="Course"
       options={list}
+      disabled={courseSelection.subject ? false : true}
       selected={courseSelection.course}
       setSelected={(course: CourseInfo) => {
         selectCourse(course);

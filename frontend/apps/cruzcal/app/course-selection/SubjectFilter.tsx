@@ -6,7 +6,6 @@ import SelectList from '../select-list/select-list';
 import subjectsAtom, { SubjectInfo } from '../../atoms/subjects';
 import selectedSubjectAtom from '../../atoms/selected-subject';
 
-
 const SubjectFilter = ({RWCourseSelection}) => {
   const [courseSelection, setCourseSelection] = RWCourseSelection;
   const list = useAtomValue<SubjectInfo[]>(subjectsAtom);
@@ -19,6 +18,7 @@ const SubjectFilter = ({RWCourseSelection}) => {
     <SelectList
       listName="Subject"
       options={list}
+      disabled={courseSelection.term ? false : true}
       selected={courseSelection.subject}
       setSelected={(subject: SubjectInfo) => {
         selectSubject(subject);
