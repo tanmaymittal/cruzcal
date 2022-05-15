@@ -33,7 +33,7 @@ const SubmitGoogleAsync = () => {
   
   return (
     <button
-      className='flex gap-3 align-middle p-1 rounded-lg outline outline-1'
+      className='flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1'
       onClick={() => fetchCalendar(courseList)}
       disabled={isDisabled}
       type="submit"
