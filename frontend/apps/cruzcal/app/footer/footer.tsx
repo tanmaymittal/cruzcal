@@ -3,8 +3,8 @@ export interface FooterProps {}
 
 export function Footer(props: FooterProps) {
   return (
-    <div className="container">
-      <p className="text-center text-gray-500 text-xs">
+    <div className="container mx-auto p-3">
+      <p className="text-center text-white text-xs">
         &copy;2022 CruzCal. All rights reserved.
       </p>      
     </div>
