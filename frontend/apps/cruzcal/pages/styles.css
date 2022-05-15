@@ -12,8 +12,6 @@ body {
   background-color: #181818;
 }
 
-.gradient-wrapper {
-  background: linear-gradient(90deg, rgba(185,248,225,1) 0%, rgba(232,240,214,1) 35%, rgba(123,163,248,1) 100%);
-  border-radius: 1.25rem;
-  font-size: 1.5rem;
+.fc .fc-toolbar.fc-header-toolbar {
+  margin-bottom: 0 !important;
 }
