@@ -51,7 +51,7 @@ export const CourseSelection = ({ courseAtom, nextCourseAtom, warnings }) => {
         isOnlyCourse={isOnlyCourse}
         remove={remove}
         nextCourse={nextCourse}
-       />;
+       />
     </Provider>
   );
 };
