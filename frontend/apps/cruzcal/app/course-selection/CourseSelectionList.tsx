@@ -8,8 +8,7 @@ import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
 import TermFilter from './TermFilter';  
 import WarningDialog from '../warning-dialog/warning-dialog';
-import SubmitICS from '../submit-ics/SubmitICS';
-import SubmitGoogle from '../submit-google/SubmitGoogle';
+import Submit from '../submit/Submit';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import warningsAtom from '../../atoms/warnings';
@@ -51,8 +50,9 @@ const CourseSelectionList = () => {
           </button>
         </div>
         <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
-          <SubmitGoogle />
-          <SubmitICS />
+          <Submit type='json'/>
+          <Submit type='ics'/>
+          <Submit type='google'/>
         </div>
       </div>
     </div>

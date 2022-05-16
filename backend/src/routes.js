@@ -59,6 +59,9 @@ exports.genSchedule = async (req, res, next) => {
 };
 
 exports.verifySchedule = async (req, res, next) => {
+  if (typeof req.query.courseIDs === 'string') {
+    req.query.courseIDs = [req.query.courseIDs];
+  }
   try {
     const {termCode, courseIDs} = req.query;
     const term = await findTerm(termCode);
@@ -82,9 +85,11 @@ exports.verifySchedule = async (req, res, next) => {
   }
 };
 
+exports.genJSON = async (req, res) => res.json(req.body);
+
 // Returns 'text/calendar' file type
 // Media type reference: https://www.iana.org/assignments/media-types/text/calendar
-exports.genCalendar = async (req, res, next) => {
+exports.genICS = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     const downloadName = 'calendar.ics';
@@ -93,4 +98,8 @@ exports.genCalendar = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
+};
+
+exports.genGoogleCalendar = async (req, res) => {
+  res.json(req.body);
 };

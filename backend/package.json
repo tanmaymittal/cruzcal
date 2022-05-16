@@ -18,6 +18,7 @@
     "express": "*",
     "express-openapi-validator": "*",
     "express-session": "*",
+    "googleapis": "^100.0.0",
     "ics": "^2.35.0",
     "js-yaml": "*",
     "passport": "^0.5.2",
