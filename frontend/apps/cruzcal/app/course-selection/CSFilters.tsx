@@ -1,11 +1,15 @@
-import coursesAtom, { CourseInfo } from "apps/cruzcal/atoms/courses";
-import selectedCourseAtom from "apps/cruzcal/atoms/selected-course";
-import selectedSubjectAtom from "apps/cruzcal/atoms/selected-subject";
-import selectedTermAtom from "apps/cruzcal/atoms/selected-term";
-import subjectsAtom, { SubjectInfo } from "apps/cruzcal/atoms/subjects";
-import { useUpdateAtom, useAtomValue, waitForAll } from "jotai/utils";
-import { useEffect } from "react";
-import SelectList from "../select-list/select-list";
+import { Suspense, useEffect } from "react";
+import { useAtomValue, useUpdateAtom } from "jotai/utils";
+
+import SelectList, { DefaultSelectList } from "../select-list/select-list";
+
+import coursesAtom, { CourseInfo } from "../../atoms/courses";
+import subjectsAtom, { SubjectInfo } from "../../atoms/subjects";
+import termsAtom, { TermInfo } from '../../atoms/terms';
+import { courseSelectionsAtom } from "../../atoms/course-selector";
+import selectedTermAtom from "../../atoms/selected-term";
+import selectedSubjectAtom from "../../atoms/selected-subject";
+import selectedCourseAtom from "../../atoms/selected-course";
 
 export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
@@ -35,27 +39,46 @@ export const CourseFilter = ({selection, setSelection}) => {
       )}
     />
   );
+};
+
+
+export const TermFilter = ({selected, setSelected}) => {
+  const terms = useAtomValue(termsAtom);
+  const setCourseSelections = useUpdateAtom(courseSelectionsAtom);
+
+  return (
+    <SelectList
+      listName="Term"
+      options={terms}
+      selected={selected}
+      setSelected={(term: TermInfo) => {
+        setSelected(term);
+        setCourseSelections([{term, subject: null, course: null}]);
+      }}
+    />
+  );
 }
 
-export const CourseSelectionFilters = ({ selection, setSelection }) => {
+
+export const CSFilters = ({courseSelection, setCourseSelection}) => {
   const setSelectedTerm = useUpdateAtom(selectedTermAtom);
   const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
   const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
 
   useEffect(() => {
-    setSelectedTerm(selection.term);
-    setSelectedSubject(selection.subject);
-    setSelectedCourse(selection.course);
-  }, [selection]);
+    setSelectedTerm(courseSelection.term);
+    setSelectedSubject(courseSelection.subject);
+    setSelectedCourse(courseSelection.course);
+  }, [courseSelection]);
 
   return (
     <div className='w-full grid grid-cols-[2fr_3fr] gap-x-3'>
-      <div>
-        <SubjectFilter selection={selection} setSelection={setSelection}/>
-      </div>
-      <div>
-        <CourseFilter selection={selection} setSelection={setSelection}/>
-      </div>
+      <Suspense fallback={<DefaultSelectList />}>
+        <SubjectFilter selection={courseSelection} setSelection={setCourseSelection}/>
+      </Suspense>
+      <Suspense fallback={<DefaultSelectList />}>
+        <CourseFilter selection={courseSelection} setSelection={setCourseSelection}/>
+      </Suspense>
     </div>
-  )
-}
+  );
+};

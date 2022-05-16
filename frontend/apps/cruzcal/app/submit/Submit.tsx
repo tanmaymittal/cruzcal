@@ -4,8 +4,7 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 import ClientOnly from '../client-only/ClientOnly';
 
-import { server } from '../../config';
-import { CalendarType, fetchCalendar, setAuthWindow, setupGoogleAuth } from './utilities';
+import { CalendarType, fetchCalendar, setupGoogleAuth } from './utilities';
 
 import { courseSelectionsAtom } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';

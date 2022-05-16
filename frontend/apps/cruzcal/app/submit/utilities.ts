@@ -12,12 +12,16 @@ const submitICS = (url) => location.href = url;
 const submitJSON = async (url) => {
   const res = await fetch(url);
   switch (res.status) {
-    case 200:
+    case 200: {
       const calendar = await res.json();
       console.log(calendar);
-    break;
-    default:
-      console.log('Error:', res.status);
+      break;
+    }
+    default: {
+      const error = await res.json();
+      console.error(error);
+      break;
+    }
   }
 }
 

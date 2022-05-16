@@ -1,22 +1,22 @@
-import { useAtom } from 'jotai';
-import { useAtomValue } from 'jotai/utils';
+import { PrimitiveAtom, useAtom } from 'jotai';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
 
 import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
-import TermSelector from './TermSelector';  
+import {TermFilter} from './CSFilters';  
 import WarningDialog from '../warning-dialog/warning-dialog';
 import Submit from '../submit/Submit';
 import ClientOnly from '../client-only/ClientOnly';
 
-import { courseSelectionAtomsAtom, courseSelectionsAtom, defaultCourseSelection } from '../../atoms/course-selector';
+import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';
+import { TermInfo } from 'apps/cruzcal/atoms/terms';
 
 const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
-  const selectedTerm = useAtomValue(selectedTermAtom);
+  const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom as PrimitiveAtom<TermInfo>);
 
   const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection, term: selectedTerm} });
   const removeCourse = (courseAtom) => dispatch({ type: "remove", atom: courseAtom });
@@ -33,7 +33,7 @@ const CourseSelectionListAsync = () => {
       </div>
       <div className="mb-5">
         <Suspense fallback={<DefaultSelectList/>}>
-          <TermSelector />
+          <TermFilter selected={selectedTerm} setSelected={setSelectedTerm}/>
         </Suspense>
       </div>
       {courseListAtoms.map((courseAtom, i) => {

@@ -1,12 +1,12 @@
-import { Suspense } from 'react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
 import { PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai'
 import classnames from 'classnames';
 
+import { CSFilters } from './CSFilters'
+
 import { CourseSelector, multipleCourseSelectionsAtom } from '../../atoms/course-selector'
 import warningsAtom from '../../atoms/warnings';
-import { CourseSelectionFilters } from './CSFilters'
 
 
 const warningWrapper = (warnings, selection) =>{
@@ -33,12 +33,10 @@ export const CourseSelection = ({ courseAtom, remove }) => {
   return (
     <div className={warningWrapper(warnings, courseSelection)}>
       <Provider>
-        <Suspense fallback={"Loading..."}>
-          <CourseSelectionFilters
-            selection={courseSelection}
-            setSelection={setCourseSelection}
-          />
-        </Suspense>
+        <CSFilters
+          courseSelection={courseSelection}
+          setCourseSelection={setCourseSelection}
+        />
       </Provider>
       {multipleCourseSelections && (
         <button className='text-white' onClick={remove}>

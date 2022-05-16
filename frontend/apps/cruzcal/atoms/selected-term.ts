@@ -7,7 +7,7 @@ import { atomWithStorage } from 'jotai/utils';
 const termAtom = atomWithStorage('selected-term', null as TermInfo);
 export const selectedTermAtom = atom(
   (get) => get(termAtom),
-  (get, set, term) => {
+  (get, set, term: TermInfo) => {
     set(termAtom, term);
     set(selectedSubjectAtom, null);
     set(selectedCourseAtom, null);
