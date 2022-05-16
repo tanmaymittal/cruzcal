@@ -1,4 +1,4 @@
-const {generateIcsData} = require('./calendar');
+const {generateIcsData, testGoogleApi} = require('./calendar');
 const {
   createAndSendFile,
   generateScheduleURI,
@@ -8,7 +8,6 @@ const {
   formatCourse,
   APIError,
 } = require('./utils');
-const {testGoogleApi} = require('./google_calendar');
 const {
   getAllTerms,
   getUniqueSubjects,
@@ -59,6 +58,9 @@ exports.genSchedule = async (req, res, next) => {
 };
 
 exports.verifySchedule = async (req, res, next) => {
+  if (typeof req.query.courseIDs === 'string') {
+    req.query.courseIDs = [req.query.courseIDs];
+  }
   try {
     const {termCode, courseIDs} = req.query;
     const term = await findTerm(termCode);
@@ -95,12 +97,12 @@ exports.genCalendar = async (req, res, next) => {
   }
 };
 
-// Returns 'text/calendar' file type
-// Media type reference: https://www.iana.org/assignments/media-types/text/calendar
 exports.genGoogleCalendar = async (req, res, next) => {
   try {
-    testGoogleApi();
-    return res.code(200);
+    const {term, courses} = req.body;
+    console.log('user in googlecal', req.user);
+    testGoogleApi(req.user.creds.token, term, courses);
+    return res.sendStatus(200);
   } catch (error) {
     next(error);
   }

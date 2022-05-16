@@ -96,6 +96,13 @@ exports.createAndSendFile = async (res, filename, data) => {
   });
 };
 
-exports.getAuthTokens = () => {
+exports.saveAuthTokens = (tokens) => {
+  const data = JSON.stringify(tokens);
+  fs.writeFileSync('./tokens.json', data);
+};
 
+exports.getAuthTokens = () => {
+  const tokenJson = path.resolve(__dirname, '../tokens.json');
+  const tokens = JSON.parse(fs.readFileSync(tokenJson));
+  return tokens;
 };

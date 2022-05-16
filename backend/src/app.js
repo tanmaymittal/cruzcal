@@ -30,16 +30,12 @@ app.use(passport.session());
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-  process.nextTick(function() {
-    done(null, user);
-  });
+  done(null, user);
 });
 
 // used to deserialize the user
 passport.deserializeUser(function(user, done) {
-  process.nextTick(function() {
-    return done(null, user);
-  });
+  return done(null, user);
 });
 
 // Setup API validation
@@ -51,8 +47,8 @@ app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api));
 app.use(
   OpenApiValidator.middleware({
     apiSpec: api,
-    validateRequests: true,
-    validateResponses: true,
+    validateRequests: false,
+    validateResponses: false,
   }),
 );
 
@@ -82,7 +78,9 @@ app.post('/api/schedule/:type', routes.genSchedule);
 app.get('/api/calendar/*', routes.verifySchedule);
 app.get('/api/calendar/json', (req, res) => res.json(req.body));
 app.get('/api/calendar/ics', routes.genCalendar);
-app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
+app.get('/api/calendar/google',
+  routes.genGoogleCalendar,
+);
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -96,3 +94,4 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+// http://localhost:4200/api/calendar/google?termCode=2222&courseIDs=50005

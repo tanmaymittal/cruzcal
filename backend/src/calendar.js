@@ -1,4 +1,5 @@
 const ics = require('ics');
+const {google} = require('googleapis');
 
 const generateIcsData = (termData, courseData) => {
   const {
@@ -9,7 +10,69 @@ const generateIcsData = (termData, courseData) => {
   return value;
 };
 
+
+const testGoogleApi = (token, termData, coursesData) => {
+  const oauth2Client = createOAuth2Client(token);
+  const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
+  console.log('courseEvents', courseEvents);
+  const calendar = google.calendar('v3');
+  // calendar.events.list({
+  //   auth: oauth2Client,
+  //   calendarId: 'primary',
+  //   timeMin: (new Date()).toISOString(),
+  //   maxResults: 10,
+  //   singleEvents: true,
+  //   orderBy: 'starttime',
+  // }, (err, response) => {
+  //   console.log('err', err);
+  //   console.log('response', response);
+  // });
+
+  // const event = {
+  //   'summary': 'Google I/O 2022',
+  //   'location': '800 Howard St., San Francisco, CA 94103',
+  //   'description': 'A chance to hear more about Google\'s developer products.',
+  //   'start': {
+  //     'dateTime': '2022-05-28T09:00:00-07:00',
+  //     'timeZone': 'America/Los_Angeles',
+  //   },
+  //   'end': {
+  //     'dateTime': '2022-05-28T17:00:00-07:00',
+  //     'timeZone': 'America/Los_Angeles',
+  //   },
+  //   'recurrence': [
+  //     'RRULE:FREQ=DAILY;COUNT=2',
+  //   ],
+  // };
+
+  courseEvents.forEach((event) => {
+    calendar.events.insert({
+      auth: oauth2Client,
+      calendarId: 'primary',
+      resource: event,
+    }, function(err, event) {
+      if (err) {
+        console.log('Error contacting the Calendar service: ' + err);
+        return;
+      }
+      console.log('Event created: %s', event.data.htmlLink);
+    });
+  });
+};
+
 // Helpers
+const createOAuth2Client = (token) => {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    '/api/auth/google/redirect',
+  );
+  oauth2Client.credentials = {
+    access_token: token,
+  };
+  return oauth2Client;
+};
+
 const coursesToEvents = (termData, courseData) => {
   const termDates = termData.date;
   const courseEvents = courseData
@@ -34,6 +97,32 @@ const coursesToEvents = (termData, courseData) => {
         ],
         location: c.lectures[0].location ? c.lectures[0].location : '',
         recurrenceRule: createRecurrenceRule(times, formattedEndDate),
+      };
+    });
+
+  return courseEvents;
+};
+
+const coursesToEventsGoogleApi = (termData, courseData) => {
+  const termDates = termData.date;
+  const courseEvents = courseData
+    .map((c) => {
+      const times = c.lectures[0].times;
+      const startTime = times[0].start;
+      const endTime = times[0].end;
+      const formattedEndDate = formatDate(termDates.end, 'string');
+      return {
+        summary: c.name,
+        start: {
+          dateTime: `${termDates.start}T${startTime}:00-07:00`,
+          timeZone: 'America/Los_Angeles',
+        },
+        end: {
+          dateTime: `${termDates.start}T${endTime}:00-07:00`,
+          timeZone: 'America/Los_Angeles',
+        },
+        location: c.lectures[0].location ? c.lectures[0].location : '',
+        recurrence: [`RRULE:${createRecurrenceRule(times, formattedEndDate)}`],
       };
     });
 
@@ -114,4 +203,5 @@ module.exports = {
    * @return {string} - newly created ics file
    */
   generateIcsData,
+  testGoogleApi,
 };

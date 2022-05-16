@@ -13,22 +13,17 @@ exports.googleStrategy = new GoogleStrategy(
     ],
   },
   function verify(token, refresh, profile, cb) {
-    process.nextTick(function() {
-      console.log(token);
-      console.log(profile);
-      const {emails} = profile;
-      const ucscEmails = emails.filter((e) => e.value.endsWith('ucsc.edu'));
-      const ucscError = ucscEmails.length === 0;
-      console.log(`Attends UCSC? ${!ucscError}`);
-      profile.email = profile.emails[0].value;
-      // if (ucscError) {
-      //   cb('Authentication Error: User does not have a ucsc email');
-      // } else cb(null, profile);
-      cb(null, profile);
-    });
+    const user = {
+      creds: {token, refresh},
+    };
+    // profile.creds = {token, refresh};
+
+    console.log('token', token);
+    cb(null, user);
   });
 
 exports.check = async (req, res, next) => {
+  console.log('req.isAuthenticated', req.isAuthenticated);
   if (req.isAuthenticated()) next();
   else res.sendStatus(401);
 };
