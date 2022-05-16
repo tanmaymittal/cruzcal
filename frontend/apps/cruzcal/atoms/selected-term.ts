@@ -2,8 +2,9 @@ import {atom} from 'jotai'
 import {TermInfo} from './terms';
 import selectedCourseAtom from './selected-course';
 import selectedSubjectAtom from './selected-subject';
+import { atomWithStorage } from 'jotai/utils';
 
-const termAtom = atom(null as TermInfo);
+const termAtom = atomWithStorage('selected-term', null as TermInfo);
 export const selectedTermAtom = atom(
   (get) => get(termAtom),
   (get, set, term) => {

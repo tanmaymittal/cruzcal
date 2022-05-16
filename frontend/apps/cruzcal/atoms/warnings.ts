@@ -10,8 +10,8 @@ const timeStringToNum = (time: string) => {
 
 export const warningsAtom = atom(
   (get) => {
-    const courseSelectionAtom = get(courseSelectionsAtom);
-    const totalCourseSelections = courseSelectionAtom.length;
+    const courseSelections = get(courseSelectionsAtom);
+    const totalCourseSelections = courseSelections.length;
     const listOfErrors: Set<CourseSelector> = new Set;
 
     // if 1 class or less, no warnings
@@ -21,8 +21,8 @@ export const warningsAtom = atom(
 
     for (let i = 0; i < totalCourseSelections; i++) {
       for (let j = i+1; j < totalCourseSelections; j++) {
-        let prev = courseSelectionAtom[i]; // a previous entry
-        let curr = courseSelectionAtom[j]; // most current/recent entry
+        let prev = courseSelections[i]; // a previous entry
+        let curr = courseSelections[j]; // most current/recent entry
 
         // avoid null entries
         if (curr.course != null && prev.course != null) {

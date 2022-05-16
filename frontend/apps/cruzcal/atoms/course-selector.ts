@@ -1,5 +1,5 @@
-import { atom, PrimitiveAtom } from "jotai";
-import { splitAtom } from "jotai/utils";
+import { atom } from "jotai";
+import { atomWithStorage, splitAtom } from "jotai/utils";
 import { CourseInfo } from "./courses";
 import { SubjectInfo } from "./subjects";
 import { TermInfo } from "./terms";
@@ -11,12 +11,14 @@ export interface CourseSelector {
 }
 
 export const defaultCourseSelection: CourseSelector = {
-  course: null,
   term: null,
+  course: null,
   subject: null,
 };
 
-export const courseSelectionAtom: PrimitiveAtom<CourseSelector> = atom(defaultCourseSelection);
-export const courseSelectionsAtom: PrimitiveAtom<CourseSelector[]> = atom([{...defaultCourseSelection}]);
+export const courseSelectionsAtom = atomWithStorage('course-selector', [{...defaultCourseSelection}]);
 export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
+
+export const multipleCourseSelectionsAtom = atom((get) => get(courseSelectionAtomsAtom).length > 1);
+
 

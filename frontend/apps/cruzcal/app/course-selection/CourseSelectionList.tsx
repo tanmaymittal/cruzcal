@@ -6,20 +6,22 @@ import { Suspense } from 'react';
 
 import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
-import TermFilter from './TermFilter';  
+import TermSelector from './TermSelector';  
 import WarningDialog from '../warning-dialog/warning-dialog';
 import Submit from '../submit/Submit';
+import ClientOnly from '../client-only/ClientOnly';
 
-import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
-import warningsAtom from '../../atoms/warnings';
+import { courseSelectionAtomsAtom, courseSelectionsAtom, defaultCourseSelection } from '../../atoms/course-selector';
+import selectedTermAtom from '../../atoms/selected-term';
 
-const CourseSelectionList = () => {
+const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
+  const selectedTerm = useAtomValue(selectedTermAtom);
 
-  const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection} });
+  const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection, term: selectedTerm} });
+  const removeCourse = (courseAtom) => dispatch({ type: "remove", atom: courseAtom });
 
-  // Print out current state of selected classes
-  const warnings = useAtomValue(warningsAtom);
+  // const courseList = useAtomValue(courseSelectionsAtom);
   // useEffect(() => {
   //   console.log(JSON.stringify(courseList, null, 2));
   // }, [courseList]);
@@ -31,17 +33,17 @@ const CourseSelectionList = () => {
       </div>
       <div className="mb-5">
         <Suspense fallback={<DefaultSelectList/>}>
-          <TermFilter />
+          <TermSelector />
         </Suspense>
       </div>
       {courseListAtoms.map((courseAtom, i) => {
-        const nextCourseAtom = courseListAtoms[i+1];
-        return <CourseSelection
-          key={`${courseAtom}`}
-          courseAtom={courseAtom}
-          nextCourseAtom={nextCourseAtom}
-          warnings={warnings}
-          />;
+        return (
+          <CourseSelection
+            key={`${courseAtom}`}
+            courseAtom={courseAtom}
+            remove={() => removeCourse(courseAtom)}
+          />
+        );
       })}
       <div className='flex flex-col gap-y-5 align-middle'>
         <div className="flex justify-center">
@@ -57,6 +59,14 @@ const CourseSelectionList = () => {
       </div>
     </div>
   )
+}
+
+export const CourseSelectionList = () => {
+  return (
+    <ClientOnly>
+      <CourseSelectionListAsync />
+    </ClientOnly>
+  );
 }
 
 export default CourseSelectionList
