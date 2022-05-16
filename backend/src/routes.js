@@ -59,9 +59,6 @@ exports.genSchedule = async (req, res, next) => {
 };
 
 exports.verifySchedule = async (req, res, next) => {
-  if (typeof req.query.courseIDs === 'string') {
-    req.query.courseIDs = [req.query.courseIDs];
-  }
   try {
     const {termCode, courseIDs} = req.query;
     const term = await findTerm(termCode);
