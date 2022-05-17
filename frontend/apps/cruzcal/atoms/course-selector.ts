@@ -1,6 +1,7 @@
 import { atom } from "jotai";
 import { atomWithStorage, splitAtom } from "jotai/utils";
 import { CourseInfo } from "./courses";
+import selectedTermAtom from "./selected-term";
 import { SubjectInfo } from "./subjects";
 import { TermInfo } from "./terms";
 
@@ -21,4 +22,8 @@ export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
 
 export const multipleCourseSelectionsAtom = atom((get) => get(courseSelectionAtomsAtom).length > 1);
 
+export const termAndCourseSelectionsAtom = atom((get) => ({
+  term: get(selectedTermAtom),
+  courses: get(courseSelectionsAtom)
+}));
 
