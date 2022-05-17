@@ -1,11 +1,11 @@
 const tmp = require('tmp');
 const fs = require('fs');
+const path = require('path');
 
 const {
   getTermByCode,
   getCourseByID,
 } = require('./db');
-const path = require('path');
 
 exports.APIError = class APIError extends Error {
   /**
