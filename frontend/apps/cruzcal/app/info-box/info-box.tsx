@@ -21,10 +21,12 @@ export function InfoBox() {
               </Disclosure.Button>
               <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
                 You can login with your UCSC credentials to ascociate your account.
+
                 To add classes to your schedule, first select the your intended term.
                 The subject drop down will populate with the respective courses
-                available for that term. Once the subject is selected you can add
-                your desired course number.
+                available for that term.
+
+                Once the subject is selected you can add your desired course number.
               </Disclosure.Panel>
             </>
           )}
