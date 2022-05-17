@@ -1,4 +1,4 @@
-const {generateIcsData, testGoogleApi} = require('./calendar');
+const {generateIcsData, addGoogleCalApiEvents} = require('./calendar');
 const {
   createAndSendFile,
   generateScheduleURI,
@@ -101,7 +101,7 @@ exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     console.log('user in googlecal', req.user);
-    testGoogleApi(req.user.creds.token, term, courses);
+    addGoogleCalApiEvents(req.user.creds.token, term, courses);
     return res.sendStatus(200);
   } catch (error) {
     next(error);

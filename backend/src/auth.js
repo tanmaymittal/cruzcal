@@ -16,9 +16,7 @@ exports.googleStrategy = new GoogleStrategy(
     const user = {
       creds: {token, refresh},
     };
-    // profile.creds = {token, refresh};
 
-    console.log('token', token);
     cb(null, user);
   });
 

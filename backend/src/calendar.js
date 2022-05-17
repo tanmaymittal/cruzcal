@@ -11,39 +11,10 @@ const generateIcsData = (termData, courseData) => {
 };
 
 
-const testGoogleApi = (token, termData, coursesData) => {
+const addGoogleCalApiEvents = (token, termData, coursesData) => {
   const oauth2Client = createOAuth2Client(token);
   const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
-  console.log('courseEvents', courseEvents);
   const calendar = google.calendar('v3');
-  // calendar.events.list({
-  //   auth: oauth2Client,
-  //   calendarId: 'primary',
-  //   timeMin: (new Date()).toISOString(),
-  //   maxResults: 10,
-  //   singleEvents: true,
-  //   orderBy: 'starttime',
-  // }, (err, response) => {
-  //   console.log('err', err);
-  //   console.log('response', response);
-  // });
-
-  // const event = {
-  //   'summary': 'Google I/O 2022',
-  //   'location': '800 Howard St., San Francisco, CA 94103',
-  //   'description': 'A chance to hear more about Google\'s developer products.',
-  //   'start': {
-  //     'dateTime': '2022-05-28T09:00:00-07:00',
-  //     'timeZone': 'America/Los_Angeles',
-  //   },
-  //   'end': {
-  //     'dateTime': '2022-05-28T17:00:00-07:00',
-  //     'timeZone': 'America/Los_Angeles',
-  //   },
-  //   'recurrence': [
-  //     'RRULE:FREQ=DAILY;COUNT=2',
-  //   ],
-  // };
 
   courseEvents.forEach((event) => {
     calendar.events.insert({
@@ -114,7 +85,6 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
       const formattedEndDate = formatDate(termDates.end, 'string');
       const initialDate = getInitialDate(times, formattedStartDate);
       const formattedInitialDate = formatInitialDate(initialDate);
-      console.log('initialDate', initialDate);
       return {
         summary: c.name,
         start: {
@@ -162,7 +132,6 @@ const formatInitialDate = (initialDateArr) => {
   if (day.length < 2) {
     day = '0' + day;
   }
-
   return `${initialDateArr[0]}-${month}-${day}`;
 };
 
@@ -217,5 +186,5 @@ module.exports = {
    * @return {string} - newly created ics file
    */
   generateIcsData,
-  testGoogleApi,
+  addGoogleCalApiEvents,
 };
