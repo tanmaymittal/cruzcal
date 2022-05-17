@@ -1,10 +1,11 @@
+const tmp = require('tmp');
 const fs = require('fs');
-const path = require('path');
-const {v4: uuid} = require('uuid');
+
 const {
   getTermByCode,
   getCourseByID,
 } = require('./db');
+const path = require('path');
 
 exports.APIError = class APIError extends Error {
   /**
@@ -74,22 +75,24 @@ exports.generateScheduleURI = (type, term, courses) => {
 
 // data is either a string or a binary buffer
 exports.createAndSendFile = async (res, filename, data) => {
+  const extension = path.extname(filename);
+
   return new Promise((resolve, reject) => {
-    const tmpfile = path.join('/tmp', `cc-${uuid()}.ics`);
-    // Create temporary file
-    fs.writeFile(tmpfile, data, (writeError) => {
-      if (writeError) {
-        reject(new Error('could not create temporary file'));
-      }
-      // Send file download to client
-      res.download(tmpfile, filename, (downloadError) => {
-        if (downloadError) {
-          reject(new Error('response download failed'));
-        }
-        // Remove temporary file
-        fs.unlink(tmpfile, (err) => {
-          if (err) reject(new Error('temporary file failed to delete'));
-          else resolve();
+    tmp.file({postfix: extension}, (createError, path, fd, cleanupCallback) => {
+      const cleanup = (err) => {
+        cleanupCallback();
+        if (err) reject(err);
+      };
+
+      if (createError) cleanup(createError);
+
+      fs.writeFile(path, data, {encoding: 'utf8'}, (writeError) => {
+        if (writeError) cleanup(writeError);
+
+        // Send file download to client
+        res.download(path, filename, (downloadError) => {
+          if (downloadError) cleanup(downloadError);
+          else cleanup();
         });
       });
     });

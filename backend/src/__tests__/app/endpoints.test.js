@@ -174,7 +174,6 @@ describe('GET /api/calendar/ics', () => {
 
     await request
       .get(calendarICSRequest)
-      .send(calendarICSRequest)
       .expect('Content-Type', 'text/calendar; charset=UTF-8')
       .expect((res) => {
         expect(res.text.match(beginEventMatch)).toStrictEqual(numOfEvents);
