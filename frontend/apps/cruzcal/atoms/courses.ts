@@ -42,7 +42,11 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
       const res = await fetch(url as string);
       if (res.status != 200) throw res;
       return (await res.json())
-        .sort((a: CourseInfo, b: CourseInfo) => a.name.localeCompare(b.name));
+        .sort((a: CourseInfo, b: CourseInfo) => {
+          const aCnum = parseInt(a.coursenum.replace(/\D/g, ''));
+          const bCnum = parseInt(b.coursenum.replace(/\D/g, ''));
+          return aCnum - bCnum;
+        });
     } catch (error) {
       console.log(error);
       return [];
