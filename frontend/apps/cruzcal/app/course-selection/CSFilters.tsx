@@ -29,14 +29,26 @@ export const SubjectFilter = ({selection, setSelection}) => {
 export const CourseFilter = ({selection, setSelection}) => {
   const courses = useAtomValue(coursesAtom);
 
+  const coursesMap = {};
+
+  const mapSelection = (course) => {
+    if (course === null) return null;
+    else {
+      const name = `${course.coursenum}: ${course.name}`;
+      coursesMap[name] = course;
+      return {...course, name};
+    }
+  };
+
   return (
     <SelectList
       listName="Course"
-      options={courses}
-      selected={selection.course}
-      setSelected={(course: CourseInfo) => (
-        setSelection((prev) => ({...prev, course}))
-      )}
+      options={courses.map(mapSelection)}
+      selected={mapSelection(selection.course)}
+      setSelected={(courseInfo: CourseInfo) => {
+        const course: CourseInfo = coursesMap[courseInfo.name] || null;
+        setSelection((prev) => ({...prev, course}));
+      }}
     />
   );
 };
