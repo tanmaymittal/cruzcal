@@ -2,8 +2,9 @@
 /* Components */
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
+import ToggleSwitch from '../app/toggle-switch/toggle-switch';
 import UserHeader from '../app/user-header/UserHeader';
-import WarningDialog from '../app/warning-dialog/warning-dialog';
+// import WarningDialog from '../app/warning-dialog/warning-dialog';
 
 const PageHeader = () => {
   return (
@@ -50,9 +51,12 @@ export function Index() {
 
       {/* Index Body */}
       <div className="flex flex-col md:flex-row gap-x-14 mb-5">
-        <CalendarViewBody />
+        {/* <CalendarViewBody /> */}
+        {/* TODO: add CalendarViewBody back later; it causes hydration errors */}
+        {/* TODO: remove ToggleSwitch */}
+        {/* <ToggleSwitch/> */}
 
-        <CourseSelectionList />        
+        <CourseSelectionList />
       </div>
       <PageFooter />
     </div>

@@ -1,18 +1,18 @@
-import { Suspense, useEffect } from 'react'
-import { useUpdateAtom } from 'jotai/utils'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faTrashAlt } from '@fortawesome/free-solid-svg-icons'
-import { atom, PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai'
+import { Suspense, useEffect } from 'react';
+import { atom, PrimitiveAtom, Provider, useAtom, useAtomValue } from 'jotai';
+import { useUpdateAtom } from 'jotai/utils';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTrashAlt } from '@fortawesome/free-solid-svg-icons';
 import classnames from 'classnames';
 
-import CourseFilter from './CourseFilter'
-import SubjectFilter from './SubjectFilter'
+import CourseFilter from './CourseFilter';
+import SubjectFilter from './SubjectFilter';
 
-import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector'
-import { DefaultSelectList } from '../select-list/select-list'
-import selectedCourseAtom from '../../atoms/selected-course'
-import selectedSubjectAtom from '../../atoms/selected-subject'
-import selectedTermAtom from '../../atoms/selected-term'
+import { courseSelectionAtomsAtom, CourseSelector } from '../../atoms/course-selector';
+import { DefaultSelectList } from '../select-list/select-list';
+import selectedCourseAtom from '../../atoms/selected-course';
+import selectedSubjectAtom from '../../atoms/selected-subject';
+import selectedTermAtom from '../../atoms/selected-term';
 
 const nullAtom = atom(null);
 
@@ -38,7 +38,7 @@ export const CourseSelection = ({ courseAtom, nextCourseAtom, warnings }) => {
   const [courseSelection] = RWCourseSelection;
   const nextCourse = useAtomValue(nextCourseAtom || nullAtom);
   const globalTerm = useAtomValue(selectedTermAtom);
-  
+
   const isOnlyCourse = courseListAtoms.length <= 1;
   const remove = () => dispatch({ type: "remove", atom: courseAtom });
 

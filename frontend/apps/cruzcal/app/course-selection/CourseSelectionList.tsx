@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 
 import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
-import TermFilter from './TermFilter';  
+import TermFilter from './TermFilter';
 import WarningDialog from '../warning-dialog/warning-dialog';
 import SubmitICS from '../submit-ics/SubmitICS';
 import SubmitGoogle from '../submit-google/SubmitGoogle';
