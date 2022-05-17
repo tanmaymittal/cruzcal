@@ -110,15 +110,19 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
       const times = c.lectures[0].times;
       const startTime = times[0].start;
       const endTime = times[0].end;
+      const formattedStartDate = formatDate(termDates.start, 'number');
       const formattedEndDate = formatDate(termDates.end, 'string');
+      const initialDate = getInitialDate(times, formattedStartDate);
+      const formattedInitialDate = formatInitialDate(initialDate);
+      console.log('initialDate', initialDate);
       return {
         summary: c.name,
         start: {
-          dateTime: `${termDates.start}T${startTime}:00-07:00`,
+          dateTime: `${formattedInitialDate}T${startTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
         },
         end: {
-          dateTime: `${termDates.start}T${endTime}:00-07:00`,
+          dateTime: `${formattedInitialDate}T${endTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
         },
         location: c.lectures[0].location ? c.lectures[0].location : '',
@@ -149,6 +153,19 @@ const formatDate = (date, formatType) => {
   };
 };
 
+const formatInitialDate = (initialDateArr) => {
+  let month = String(initialDateArr[1]);
+  let day = String(initialDateArr[2]);
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+
+  return `${initialDateArr[0]}-${month}-${day}`;
+};
+
 const getInitialDate = (courseTimes, formattedStartDate) => {
   const days = [
     'Sunday',
@@ -166,17 +183,14 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     formattedStartDate.month - 1,
     formattedStartDate.day,
   );
-  const initialDate = new Date();
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
-  initialDate.setDate(
-    termStartDate.getDate() + dayDifference,
-  );
+  termStartDate.setDate(termStartDate.getDate() + dayDifference);
 
   return [
-    initialDate.getFullYear(),
-    initialDate.getMonth(),
-    initialDate.getDate(),
+    termStartDate.getFullYear(),
+    termStartDate.getMonth() + 1,
+    termStartDate.getDate(),
   ];
 };
 
@@ -184,7 +198,7 @@ const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   // find the day closest to termStartDateIdx that is >= to it
   const closestIdx = courseDaysIdx.filter((idx) => idx >= termStartDateIdx)[0];
   if (!closestIdx) {
-    return (6 - termStartDateIdx) + courseDaysIdx[0];
+    return (7 - termStartDateIdx) + courseDaysIdx[0];
   }
   return closestIdx - termStartDateIdx;
 };
