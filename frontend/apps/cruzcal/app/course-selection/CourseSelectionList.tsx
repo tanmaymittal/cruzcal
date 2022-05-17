@@ -10,9 +10,11 @@ import TermFilter from './TermFilter';
 import WarningDialog from '../warning-dialog/warning-dialog';
 import SubmitICS from '../submit-ics/SubmitICS';
 import SubmitGoogle from '../submit-google/SubmitGoogle';
+import InfoBox from '../info-box/info-box';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import warningsAtom from '../../atoms/warnings';
+
 
 const CourseSelectionList = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
@@ -53,6 +55,9 @@ const CourseSelectionList = () => {
         <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
           <SubmitGoogle />
           <SubmitICS />
+        </div>
+        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
+        <InfoBox />
         </div>
       </div>
     </div>
