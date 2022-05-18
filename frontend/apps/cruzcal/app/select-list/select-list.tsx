@@ -45,21 +45,21 @@ export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listNam
                 }
                 value={option}
               >
-                {({ selected }) => (
-                  <>
-                    <span
-                      className={`block truncate ${selected ? 'font-medium' : 'font-normal'
-                        }`}
-                    >
-                      {option.name}
-                    </span>
-                    {selected ? (
-                      <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
-                        <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                {() => { 
+                  const target = selected?.name === option.name;
+                  return (
+                    <>
+                      <span className={`block truncate ${target ? 'font-medium' : 'font-normal'}`}>
+                        {option.name}
                       </span>
-                    ) : null}
-                  </>
-                )}
+                      {target && (
+                        <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-amber-600">
+                          <CheckIcon className="w-5 h-5" aria-hidden="true" />
+                        </span>
+                      )}
+                    </>
+                  );
+                }}
               </Listbox.Option>
             ))}
           </Listbox.Options>

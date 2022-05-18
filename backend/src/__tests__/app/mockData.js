@@ -8,6 +8,8 @@ const scheduleImproperFormatRequest = {
   'courses': ['50444'],
 };
 
+const JSONRequestNoTimes = '/api/calendar/json?termCode=2222&courseIDs=66666';
+const ICSRequestNoTimes = '/api/calendar/json?termCode=2222&courseIDs=66666';
 const calendarICSRequest = '/api/calendar/ics?termCode=2222&courseIDs=50444';
 const calendarICSImproperRequest =
   '/api/calendar/ics?termCode=hello&courseIDs=50444';
@@ -34,6 +36,8 @@ END:VCALENDAR
 module.exports = {
   scheduleRequest,
   scheduleImproperFormatRequest,
+  JSONRequestNoTimes,
+  ICSRequestNoTimes,
   calendarICSRequest,
   calendarICSImproperRequest,
   calendarIcsString,

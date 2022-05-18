@@ -3,7 +3,6 @@
 import CalendarView from '../app/calendar-view/calendar-view';
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import UserHeader from '../app/user-header/UserHeader';
-import WarningDialog from '../app/warning-dialog/warning-dialog';
 
 const PageHeader = () => {
   return (
