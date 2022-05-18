@@ -6,10 +6,11 @@ import SelectList, { DefaultSelectList } from "../select-list/select-list";
 import coursesAtom, { CourseInfo } from "../../atoms/courses";
 import subjectsAtom, { SubjectInfo } from "../../atoms/subjects";
 import termsAtom, { TermInfo } from '../../atoms/terms';
-import { courseSelectionsAtom } from "../../atoms/course-selector";
+import { courseSelectionsAtom, CourseSelector } from "../../atoms/course-selector";
 import selectedTermAtom from "../../atoms/selected-term";
 import selectedSubjectAtom from "../../atoms/selected-subject";
 import selectedCourseAtom from "../../atoms/selected-course";
+import { atom } from "jotai";
 
 export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
@@ -71,16 +72,17 @@ export const TermFilter = ({selected, setSelected}) => {
   );
 }
 
+const fetchCourseSelectionAtom = atom(null, (get, set, courseSelection: CourseSelector) => {
+  set(selectedTermAtom, courseSelection.term);
+  set(selectedSubjectAtom, courseSelection.subject);
+  set(selectedCourseAtom, courseSelection.course);
+})
 
 export const CSFilters = ({courseSelection, setCourseSelection}) => {
-  const setSelectedTerm = useUpdateAtom(selectedTermAtom);
-  const setSelectedSubject = useUpdateAtom(selectedSubjectAtom);
-  const setSelectedCourse = useUpdateAtom(selectedCourseAtom);
+  const fetchCourseSelection = useUpdateAtom(fetchCourseSelectionAtom);
 
   useEffect(() => {
-    setSelectedTerm(courseSelection.term);
-    setSelectedSubject(courseSelection.subject);
-    setSelectedCourse(courseSelection.course);
+    fetchCourseSelection(courseSelection);
   }, [courseSelection]);
 
   return (

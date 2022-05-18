@@ -6,11 +6,11 @@ import ClientOnly from '../client-only/ClientOnly';
 
 import { CalendarType, fetchCalendar, setupGoogleAuth } from './utilities';
 
-import { termAndCourseSelectionsAtom } from '../../atoms/course-selector';
+import { scheduleSelectionsAtom } from '../../atoms/course-selector';
 import { userAuthenticatedAtom } from 'apps/cruzcal/atoms/user';
 
 const SubmitButton = ({type}: {type: CalendarType}) => {
-  const {term, courses} = useAtomValue(termAndCourseSelectionsAtom);
+  const {term, courses} = useAtomValue(scheduleSelectionsAtom);
   const userAuthenticated = useAtomValue(userAuthenticatedAtom);
 
   return (
