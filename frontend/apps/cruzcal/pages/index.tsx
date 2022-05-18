@@ -24,7 +24,7 @@ const PageHeader = () => {
 const CalendarViewBody = () => {
   return (
     <div className="basis-3/5 border-solid border-2 border-white text-white">
-      {/* <h2 className="text-3xl mb-5">May 2022</h2> */}
+      <h2 className="text-3xl mb-5">May 2022</h2>
       <CalendarView />
     </div>
   )
