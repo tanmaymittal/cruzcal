@@ -170,7 +170,7 @@ describe('GET /api/calendar/json', () => {
       .get(JSONRequestNoTimes)
       .expect('Content-Type', /json/)
       .expect(400)
-      .expect((res) => console.log('MESSAGE:', res.body.message));
+      .expect((res) => expect(res.body.message).toBe('No meeting times'));
   });
 });
 
