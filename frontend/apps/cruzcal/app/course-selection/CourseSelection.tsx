@@ -18,7 +18,7 @@ const warningWrapper = (warnings, selection) =>{
     }
 
     if (selection.course.name == warnings[i].course.name) {
-      return classnames(...baseClasses, "border-2", "border-rose-500");
+      return classnames(...baseClasses, "border-2", "border-rose-500", "rounded-lg");
     }
   }
 
