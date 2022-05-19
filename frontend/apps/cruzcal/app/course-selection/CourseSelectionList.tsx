@@ -27,7 +27,7 @@ const CourseSelectionListAsync = () => {
   // }, [courseList]);
 
   return (
-    <div className="basis-2/5">
+    <>
       <div className="mb-5">
         <WarningDialog />
       </div>
@@ -56,8 +56,8 @@ const CourseSelectionListAsync = () => {
           <Submit type='ics'/>
           <Submit type='google'/>
         </div>
-      </div>
-    </div>
+      </div>    
+    </>
   )
 }
 
