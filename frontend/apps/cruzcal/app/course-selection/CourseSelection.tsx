@@ -31,7 +31,7 @@ export const CourseSelection = ({ courseAtom, remove }) => {
   const warnings = useAtomValue(warningsAtom);
 
   return (
-    <div className={warningWrapper(warnings, courseSelection)}>
+    <div className='flex gap-x-3 w-full mb-5'>
       <Provider>
         <CSFilters
           courseSelection={courseSelection}
