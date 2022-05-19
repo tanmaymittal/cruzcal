@@ -3,7 +3,6 @@
 import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import Header from '../app/header/header';
 import Footer from '../app/footer/footer';
-import WarningDialog from '../app/warning-dialog/warning-dialog';
 import dynamic from 'next/dynamic'
 
 const Calendar = dynamic(
