@@ -28,16 +28,12 @@ app.use(passport.session());
 
 // used to serialize the user for the session
 passport.serializeUser(function(user, done) {
-  process.nextTick(function() {
-    done(null, user);
-  });
+  done(null, user);
 });
 
 // used to deserialize the user
 passport.deserializeUser(function(user, done) {
-  process.nextTick(function() {
-    return done(null, user);
-  });
+  return done(null, user);
 });
 
 // Setup API validation
@@ -57,6 +53,7 @@ app.use(
 // Routes
 
 // Authentication
+app.get('/api/auth/check', auth.check, (_, res) => res.sendStatus(200));
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
 app.get('/api/auth/google/redirect',
   passport.authenticate(auth.googleStrategy, {
@@ -78,9 +75,9 @@ app.get('/api/courses', routes.getCourses);
 // Schedule generation
 app.post('/api/schedule/:type', routes.genSchedule);
 app.get('/api/calendar/*', routes.verifySchedule);
-app.get('/api/calendar/json', (req, res) => res.json(req.body));
-app.get('/api/calendar/ics', routes.genCalendar);
-// app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
+app.get('/api/calendar/json', routes.genJSON);
+app.get('/api/calendar/ics', routes.genICS);
+app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {
