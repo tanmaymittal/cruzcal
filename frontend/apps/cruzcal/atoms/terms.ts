@@ -1,7 +1,6 @@
 import { atom } from 'jotai';
 import { atomWithQuery } from 'jotai/query'
 import { server } from '../config';
-import fetch from "node-fetch";
 
 export interface TermInfo {
   // {"code":"2224","date":{"end":"08/26/22","start":"07/25/22"},"name":"2022 Summer Quarter"}
