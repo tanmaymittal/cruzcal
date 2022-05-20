@@ -219,7 +219,7 @@ paths:
           schema:
             "$ref": "#/components/schemas/TermCode"
         - in: query
-          name: courseIDs[]
+          name: courseIDs
           required: true
           schema:
             type: array
