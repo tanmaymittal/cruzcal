@@ -51,6 +51,18 @@ exports.terms = [
 
 exports.courses = [
   {
+    name: 'No lecture time class',
+    refnum: 66666,
+    subject: 'CSE',
+    coursenum: '666',
+    professor: 'Cruzcal',
+    lectures: [{
+      location: 'TBD',
+      times: [],
+    }],
+    termcode: 2222,
+  },
+  {
     name: 'Intro Software Eng',
     refnum: 50444,
     subject: 'CSE',

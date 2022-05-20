@@ -39,9 +39,6 @@ const PageFooter = () => {
 };
 
 export function Index() {
-  /*
-   * Note: The corresponding styles are in the ./index.styled-components file.
-   */
   return (
     <div className="container mx-auto p-3">
       <PageHeader />
