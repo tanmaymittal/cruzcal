@@ -1,7 +1,7 @@
 const express = require('express');
 const session = require('express-session');
 const path = require('path');
-const cors = require('cors');
+// const cors = require('cors');
 const fs = require('fs');
 const yaml = require('js-yaml');
 const swaggerUi = require('swagger-ui-express');
@@ -14,7 +14,7 @@ const auth = require('./auth');
 // Initialize app
 
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(session({
