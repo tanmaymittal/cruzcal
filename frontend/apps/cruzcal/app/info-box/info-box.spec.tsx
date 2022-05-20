@@ -1,11 +1,10 @@
-import React from 'react';
 import { render } from '@testing-library/react';
 
-import Index from '../pages/index';
+import InfoBox from './info-box';
 
-describe('Index', () => {
+describe('InfoBox', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<Index />);
+    const { baseElement } = render(<InfoBox />);
     expect(baseElement).toBeTruthy();
   });
 });

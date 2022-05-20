@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import ClassInfo from './class-info';
+import ToggleSwitch from './toggle-switch';
 
-describe('ClassInfo', () => {
+describe('ToggleSwitch', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<ClassInfo />);
+    const { baseElement } = render(<ToggleSwitch />);
     expect(baseElement).toBeTruthy();
   });
 });

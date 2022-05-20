@@ -9,6 +9,7 @@ import {TermFilter} from './CSFilters';
 import WarningDialog from '../warning-dialog/warning-dialog';
 import Submit from '../submit/Submit';
 import ClientOnly from '../client-only/ClientOnly';
+import InfoBox from '../info-box/info-box';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';
@@ -27,7 +28,7 @@ const CourseSelectionListAsync = () => {
   // }, [courseList]);
 
   return (
-    <>
+    <div>
       <div className="mb-5">
         <WarningDialog />
       </div>
@@ -56,8 +57,11 @@ const CourseSelectionListAsync = () => {
           <Submit type='ics'/>
           <Submit type='google'/>
         </div>
-      </div>    
-    </>
+        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
+          <InfoBox />
+        </div>
+      </div>
+    </div>
   )
 }
 
