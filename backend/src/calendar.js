@@ -1,5 +1,4 @@
 const ics = require('ics');
-const {APIError} = require('./utils');
 
 const generateIcsData = (termData, courseData) => {
   const {
@@ -16,13 +15,6 @@ const coursesToEvents = (termData, courseData) => {
   const events = [];
   for (const course of courseData) {
     for (const {location, recurrence} of course.lectures) {
-      if (recurrence?.time === null || recurrence?.days === null) {
-        throw new APIError(
-          'Course has no meeting times',
-          404,
-          [{course}],
-        );
-      }
       const formattedStartTime = formatTime(recurrence.time.start);
       const formattedEndTime = formatTime(recurrence.time.end);
       const formattedStartDate = formatDate(termDate.start, 'number');

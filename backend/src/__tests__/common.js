@@ -53,6 +53,7 @@ exports.courses = [
   {
     'name': 'No lecture time class',
     'refnum': 66666,
+    'section': '01',
     'subject': 'CSE',
     'coursenum': '666',
     'professor': ['Cruzcal'],
@@ -63,33 +64,9 @@ exports.courses = [
     'termcode': 2222,
   },
   {
-    'name': 'Adv Programming',
-    'refnum': 70158,
-    'subject': 'CSE',
-    'coursenum': '111',
-    'professor': [
-      'Harrison,D.C.',
-    ],
-    'lectures': [
-      {
-        'location': 'Engineer 2 192',
-        'recurrence': {
-          'days': [
-            'Tuesday',
-            'Thursday',
-          ],
-          'time': {
-            'end': '12:30',
-            'start': '09:00',
-          },
-        },
-      },
-    ],
-    'termcode': 2224,
-  },
-  {
     'name': 'Intro Software Eng',
     'refnum': 50444,
+    'section': '01',
     'subject': 'CSE',
     'coursenum': '115A',
     'professor': [
@@ -116,14 +93,17 @@ exports.courses = [
   {
     'name': 'Math Methods II',
     'refnum': 70312,
+    'section': '01',
     'subject': 'AM',
     'coursenum': '20',
-    'professor': 'Lu,L.K.',
+    'professor': [
+      'Lu,L.K.',
+    ],
     'lectures': [
       {
         'location': 'Engineer 2 192',
         'recurrence': {
-          'day': [
+          'days': [
             'Tuesday',
             'Thursday',
           ],
@@ -139,14 +119,17 @@ exports.courses = [
   {
     'name': 'Intro Print/Draw',
     'refnum': 70072,
+    'section': '01',
     'subject': 'ART',
     'coursenum': '20G',
-    'professor': 'Henry,B.M.',
+    'professor': [
+      'Henry,B.M.',
+    ],
     'lectures': [
       {
         'location': 'E Baskin G101',
         'recurrence': {
-          'day': [
+          'days': [
             'Tuesday',
             'Thursday',
           ],
@@ -162,14 +145,17 @@ exports.courses = [
   {
     'name': 'Intro Draw/Paint',
     'refnum': 70253,
+    'section': '01',
     'subject': 'ART',
     'coursenum': '20J',
-    'professor': 'Terrell,S.',
+    'professor': [
+      'Terrell,S.',
+    ],
     'lectures': [
       {
         'location': 'E Baskin M101',
         'recurrence': {
-          'day': [
+          'days': [
             'Tuesday',
             'Thursday',
           ],
@@ -185,9 +171,12 @@ exports.courses = [
   {
     'name': 'Intro New Media',
     'refnum': 71279,
+    'section': '01',
     'subject': 'ART',
     'coursenum': '20K',
-    'professor': 'Harris,Y.C.',
+    'professor': [
+      'Harris,Y.C.',
+    ],
     'lectures': [
       {
         'location': 'Online',
