@@ -14,7 +14,6 @@ const generateIcsData = (termData, courseData) => {
 const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   const oauth2Client = createOAuth2Client(token);
   const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
-  console.log('coursesData', coursesData);
   google.options({auth: oauth2Client});
   const calendar = google.calendar('v3');
   const candidateId = generateNameForCalendarId(termData, coursesData);
@@ -58,7 +57,6 @@ const generateNameForCalendarId = (termData, coursesData) => {
   coursesData.forEach((c) => {
     calendarId += `${c.name}, `;
   });
-  console.log('calendarId', calendarId);
   return calendarId.substring(0, calendarId.length - 2);
 };
 
