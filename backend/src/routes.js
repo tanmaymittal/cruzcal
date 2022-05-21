@@ -30,8 +30,6 @@ exports.getCourses = async (req, res) => {
   const {term: termcode, subject} = req.query;
   const conditions = {termcode, subject};
 
-  console.log(conditions);
-
   const courses = (await getAllCourses(conditions)).map(formatCourse);
 
   if (courses.length === 0) res.sendStatus(404);
@@ -52,13 +50,9 @@ exports.genSchedule = async (req, res, next) => {
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
       const errors = course.lectures
-        .filter(({recurrence}) => recurrence === null)
-        .map((course) => ({
-          message: 'No meeting times',
-          course,
-        }));
+        .filter(({recurrence}) => recurrence === null);
       if (errors.length > 0) {
-        throw new APIError('No meeting times for courses', 400, errors);
+        throw new APIError('No meeting times for courses', 400, [{course}]);
       }
       courses.push(course);
     }

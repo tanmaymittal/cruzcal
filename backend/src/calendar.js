@@ -16,11 +16,11 @@ const coursesToEvents = (termData, courseData) => {
   const events = [];
   for (const course of courseData) {
     for (const {location, recurrence} of course.lectures) {
-      if (recurrence === null) {
+      if (recurrence?.time === null || recurrence?.days === null) {
         throw new APIError(
           'Course has no meeting times',
           404,
-          [{message, course}],
+          [{course}],
         );
       }
       const formattedStartTime = formatTime(recurrence.time.start);
@@ -30,13 +30,20 @@ const coursesToEvents = (termData, courseData) => {
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
       events.push({
         title: course.name,
+        geo: {lat: 37.0, lon: -122.06}, // UCSC
+        startOutputType: 'local',
+        endOutputType: 'local',
         start: [
-          ...initialDate,
+          initialDate.year,
+          initialDate.month,
+          initialDate.date,
           formattedStartTime.hour,
           formattedStartTime.minute,
         ],
         end: [
-          ...initialDate,
+          initialDate.year,
+          initialDate.month,
+          initialDate.date,
           formattedEndTime.hour,
           formattedEndTime.minute,
         ],
@@ -56,15 +63,15 @@ const formatTime = (time) => {
   };
 };
 
-const formatDate = (date, formatType) => {
-  const [year, month, day] = date.split('-');
+const formatDate = (dateString, formatType) => {
+  const [year, month, date] = dateString.split('-');
   if (formatType === 'string') {
-    return {year, month, day};
+    return {year, month, date};
   }
   return {
     year: Number(year),
     month: Number(month),
-    day: Number(day),
+    date: Number(date),
   };
 };
 
@@ -78,39 +85,39 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     'Friday',
     'Saturday',
   ];
-  const courseDays = courseTimes.map((t) => t.day);
-  const courseDaysIdx = courseDays.map((d) => days.indexOf(d));
+
   const termStartDate = new Date(
     formattedStartDate.year,
-    formattedStartDate.month - 1,
-    formattedStartDate.day,
-  );
-  const initialDate = new Date();
-  const termStartDateIdx = termStartDate.getDay();
-  const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
-  initialDate.setDate(
-    termStartDate.getDate() + dayDifference,
+    formattedStartDate.month - 1, // 0-based months
+    formattedStartDate.date,
   );
 
-  return [
-    initialDate.getFullYear(),
-    initialDate.getMonth(),
-    initialDate.getDate(),
-  ];
+  const courseDaysIdx = courseTimes.map((d) => days.indexOf(d));
+  const termStartDateIdx = termStartDate.getDay();
+  const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
+
+  const initialDate = new Date(termStartDate);
+  initialDate.setDate(termStartDate.getDate() + dayDifference);
+
+  return {
+    year: initialDate.getFullYear(),
+    month: initialDate.getMonth() + 1, // reset to 1-based months
+    date: initialDate.getDate(),
+  };
 };
 
 const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   // find the day closest to termStartDateIdx that is >= to it
   const closestIdx = courseDaysIdx.filter((idx) => idx >= termStartDateIdx)[0];
   if (!closestIdx) {
-    return (6 - termStartDateIdx) + courseDaysIdx[0];
+    return (courseDaysIdx[0] + 7) - termStartDateIdx;
   }
   return closestIdx - termStartDateIdx;
 };
 
-const createRecurrenceRule = (days, date) => {
+const createRecurrenceRule = (days, endDate) => {
   const byDay = days.map((day) => day.slice(0, 2).toUpperCase()).join(',');
-  const until = `${date.year}${date.month}${date.day}T000000Z`;
+  const until = `${endDate.year}${endDate.month}${endDate.date}`;
 
   return `FREQ=WEEKLY;BYDAY=${byDay};INTERVAL=1;UNTIL=${until}`;
 };

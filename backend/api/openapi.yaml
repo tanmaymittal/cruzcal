@@ -404,6 +404,7 @@ components:
       required:
         - name
         - coursenum
+        - section
         - courseID
         - lectures
         - professor
@@ -415,6 +416,8 @@ components:
           items:
             type: string
         coursenum:
+          type: string
+        section:
           type: string
         courseID:
           type: number

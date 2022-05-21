@@ -8,7 +8,7 @@ export interface CourseIdentifier {
   courseID: string
 };
 
-const submitICS = (url) => location.href = url;
+const submitICS = (url) => window.open(url);
 const submitJSON = async (url) => {
   const res = await fetch(url);
   switch (res.status) {

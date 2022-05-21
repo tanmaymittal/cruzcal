@@ -67,6 +67,7 @@ const getCourses = async (termCode) => {
         result.push({
           name: course.n,
           refnum: course.num,
+          section: course.s,
           subject: dept,
           coursenum: course.c,
           professor: course.ins.d,

@@ -11,16 +11,19 @@ export type Weekday = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'
 
 export interface CourseInfo {
   name:	string,
-  professor: string,
+  professor: string[],
   coursenum: string,
+  section: string,
   courseID: number,
   lectures: {
     location:	string
-    times: {
-      day: Weekday,
-      start: string
-      end: string
-    }[]
+    recurrence: {
+      days: Weekday[],
+      time: {
+        start: string,
+        end: string
+      }
+    }
   }[]
 }
 
@@ -41,14 +44,15 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
     try {
       const res = await fetch(url as string);
       if (res.status != 200) throw res;
-      return (await res.json())
+      const courses = (await res.json())
         .sort((a: CourseInfo, b: CourseInfo) => {
           const aCnum = parseInt(a.coursenum.replace(/\D/g, ''));
           const bCnum = parseInt(b.coursenum.replace(/\D/g, ''));
           return aCnum - bCnum;
         });
+      return courses;
     } catch (error) {
-      console.log(error);
+      console.log(await error.json());
       return [];
     }
   },
