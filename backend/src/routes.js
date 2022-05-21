@@ -100,7 +100,6 @@ exports.genCalendar = async (req, res, next) => {
 exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
-    console.log('user in googlecal', req.user);
     addGoogleCalApiEvents(req.user.creds.token, term, courses);
     return res.sendStatus(200);
   } catch (error) {

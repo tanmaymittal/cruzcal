@@ -21,7 +21,6 @@ exports.googleStrategy = new GoogleStrategy(
   });
 
 exports.check = async (req, res, next) => {
-  console.log('req.isAuthenticated', req.isAuthenticated);
   if (req.isAuthenticated()) next();
   else res.sendStatus(401);
 };

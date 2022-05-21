@@ -14,21 +14,21 @@ const generateIcsData = (termData, courseData) => {
 const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   const oauth2Client = createOAuth2Client(token);
   const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
+  console.log('coursesData', coursesData);
   google.options({auth: oauth2Client});
   const calendar = google.calendar('v3');
+  const candidateId = generateNameForCalendarId(termData, coursesData);
+  const calendarId = candidateId ? candidateId : 'primary';
   const calendarResponse = await calendar.calendars.insert({
     requestBody: {
-      'summary': 'New Calendar',
+      'summary': calendarId,
       'time_zone': 'America/Los_Angeles',
     },
   });
-  const calendarId = calendarResponse.data.id ?
-    calendarResponse.data.id :
-    'primary';
 
   courseEvents.forEach((event) => {
     calendar.events.insert({
-      calendarId: calendarId,
+      calendarId: calendarResponse.data.id,
       resource: event,
     }, function(err, event) {
       if (err) {
@@ -51,6 +51,15 @@ const createOAuth2Client = (token) => {
     access_token: token,
   };
   return oauth2Client;
+};
+
+const generateNameForCalendarId = (termData, coursesData) => {
+  let calendarId = `${termData.name}: `;
+  coursesData.forEach((c) => {
+    calendarId += `${c.name}, `;
+  });
+  console.log('calendarId', calendarId);
+  return calendarId.substring(0, calendarId.length - 2);
 };
 
 const coursesToEvents = (termData, courseData) => {
