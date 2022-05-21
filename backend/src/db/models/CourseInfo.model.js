@@ -26,7 +26,7 @@ module.exports = function(sequelize) {
     },
     professor: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.JSONB,
     },
     lectures: {
       allowNull: false,

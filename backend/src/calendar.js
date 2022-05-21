@@ -1,4 +1,5 @@
 const ics = require('ics');
+const {APIError} = require('./utils');
 
 const generateIcsData = (termData, courseData) => {
   const {
@@ -11,17 +12,24 @@ const generateIcsData = (termData, courseData) => {
 
 // Helpers
 const coursesToEvents = (termData, courseData) => {
-  const termDates = termData.date;
-  const courseEvents = courseData
-    .map((c) => {
-      const times = c.lectures[0].times;
-      const formattedStartTime = formatTime(times[0].start);
-      const formattedEndTime = formatTime(times[0].end);
-      const formattedStartDate = formatDate(termDates.start, 'number');
-      const formattedEndDate = formatDate(termDates.end, 'string');
-      const initialDate = getInitialDate(times, formattedStartDate);
-      return {
-        title: c.name,
+  const termDate = termData.date;
+  const events = [];
+  for (const course of courseData) {
+    for (const {location, recurrence} of course.lectures) {
+      if (recurrence === null) {
+        throw new APIError(
+          'Course has no meeting times',
+          404,
+          [{message, course}],
+        );
+      }
+      const formattedStartTime = formatTime(recurrence.time.start);
+      const formattedEndTime = formatTime(recurrence.time.end);
+      const formattedStartDate = formatDate(termDate.start, 'number');
+      const formattedEndDate = formatDate(termDate.end, 'string');
+      const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+      events.push({
+        title: course.name,
         start: [
           ...initialDate,
           formattedStartTime.hour,
@@ -32,12 +40,12 @@ const coursesToEvents = (termData, courseData) => {
           formattedEndTime.hour,
           formattedEndTime.minute,
         ],
-        location: c.lectures[0].location ? c.lectures[0].location : '',
-        recurrenceRule: createRecurrenceRule(times, formattedEndDate),
-      };
-    });
-
-  return courseEvents;
+        location,
+        recurrenceRule: createRecurrenceRule(recurrence.days, formattedEndDate),
+      });
+    }
+  }
+  return events;
 };
 
 const formatTime = (time) => {
@@ -100,8 +108,8 @@ const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   return closestIdx - termStartDateIdx;
 };
 
-const createRecurrenceRule = (times, date) => {
-  const byDay = times.map((t) => t.day.slice(0, 2).toUpperCase()).join(',');
+const createRecurrenceRule = (days, date) => {
+  const byDay = days.map((day) => day.slice(0, 2).toUpperCase()).join(',');
   const until = `${date.year}${date.month}${date.day}T000000Z`;
 
   return `FREQ=WEEKLY;BYDAY=${byDay};INTERVAL=1;UNTIL=${until}`;

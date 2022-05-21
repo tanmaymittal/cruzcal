@@ -84,6 +84,11 @@ describe('GET /api/subjects', () => {
 });
 
 describe('GET /api/courses', () => {
+  test('responds with a 201 status code', async () => {
+    await request
+      .get('/api/courses?term=2222&subject=CSE')
+      .expect(200);
+  });
   test('error with no parameters', async () => {
     await request.get('/api/courses').expect((res) => {
       expect(res.status).toBe(400);
@@ -113,7 +118,6 @@ describe('GET /api/courses', () => {
   test('responds with JSON', async () => {
     await request
       .get('/api/courses?term=2222&subject=CSE')
-      .expect(200)
       .expect('Content-Type', /json/)
       .expect((res) => {
         expect(res.body).toBeInstanceOf(Array);

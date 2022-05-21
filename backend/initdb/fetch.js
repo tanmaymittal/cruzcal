@@ -69,16 +69,24 @@ const getCourses = async (termCode) => {
           refnum: course.num,
           subject: dept,
           coursenum: course.c,
-          professor: course.ins.d[0],
-          lectures: course.loct.map(({t, loc}) => {
-            const location = loc;
-            const times = t?.day ? t.day.map((day) => ({
-              day,
-              start: t.time.start,
-              end: t.time.end,
-            })) : [];
-            return {location, times};
-          }),
+          professor: course.ins.d,
+          lectures: course.loct.map(({t: recurrence, loc: location}) => ({
+            location,
+            recurrence: recurrence === null ? null : {
+              days: recurrence.day || null,
+              time: recurrence.time || null,
+            },
+          })),
+          // lectures: course.loct.map(({t, loc}) => {
+          //   const location = loc;
+          //   // console.log(t.day)
+          //   const times = t?.day ? t.day.map((day) => ({
+          //     day,
+          //     start: t.time.start,
+          //     end: t.time.end,
+          //   })) : [];
+          //   return {location, times};
+          // }),
           termcode: parseInt(termCode),
         });
       }
