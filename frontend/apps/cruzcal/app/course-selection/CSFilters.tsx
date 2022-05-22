@@ -10,17 +10,16 @@ import { courseSelectionsAtom, CourseSelector } from "../../atoms/course-selecto
 import selectedTermAtom from "../../atoms/selected-term";
 import selectedSubjectAtom from "../../atoms/selected-subject";
 import selectedCourseAtom from "../../atoms/selected-course";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 
 export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
-  const selectedTerm = useAtomValue(selectedTermAtom);
+  
   return (
     <SelectList
       listName="Subject"
       options={subjects}
       selected={selection.subject}
-      disabled={selectedTerm ? false : true}
       setSelected={(subject: SubjectInfo) => (
         setSelection((prev) => ({...prev, subject, course: null}))
       )}
@@ -30,7 +29,6 @@ export const SubjectFilter = ({selection, setSelection}) => {
 
 export const CourseFilter = ({selection, setSelection}) => {
   const courses = useAtomValue(coursesAtom);
-  const selectedSubject = useAtomValue(selectedSubjectAtom);
 
   const coursesMap = {};
 
@@ -48,7 +46,6 @@ export const CourseFilter = ({selection, setSelection}) => {
       listName="Course"
       options={courses.map(mapSelection)}
       selected={mapSelection(selection.course)}
-      disabled={selectedSubject ? false : true}
       setSelected={(courseInfo: CourseInfo) => {
         const course: CourseInfo = coursesMap[courseInfo.name] || null;
         setSelection((prev) => ({...prev, course}));
