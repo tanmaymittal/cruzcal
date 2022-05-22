@@ -62,6 +62,14 @@ const getCourses = async (termCode) => {
     const url = `https://andromeda.miragespace.net/slugsurvival/data/fetch/terms/${termCode}.json`;
     const {data: coursesByDept} = await axios.get(url);
     const result = [];
+
+    const getRecurrence = (t) => {
+      if (t === null || !(t?.day) || !(t?.time)) {
+        return null;
+      }
+      return {days: t.day, time: t.time};
+    };
+
     for (const dept of Object.getOwnPropertyNames(coursesByDept)) {
       for (const course of coursesByDept[dept]) {
         result.push({
@@ -71,23 +79,10 @@ const getCourses = async (termCode) => {
           subject: dept,
           coursenum: course.c,
           professor: course.ins.d,
-          lectures: course.loct.map(({t: recurrence, loc: location}) => ({
-            location,
-            recurrence: recurrence === null ? null : {
-              days: recurrence.day || null,
-              time: recurrence.time || null,
-            },
+          lectures: course.loct.map(({t, loc}) => ({
+            location: loc,
+            recurrence: getRecurrence(t),
           })),
-          // lectures: course.loct.map(({t, loc}) => {
-          //   const location = loc;
-          //   // console.log(t.day)
-          //   const times = t?.day ? t.day.map((day) => ({
-          //     day,
-          //     start: t.time.start,
-          //     end: t.time.end,
-          //   })) : [];
-          //   return {location, times};
-          // }),
           termcode: parseInt(termCode),
         });
       }

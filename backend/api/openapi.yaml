@@ -323,7 +323,6 @@ components:
       pattern: "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
     TimeRange:
       type: object
-      nullable: true
       additionalProperties: false
       required:
         - start
@@ -382,7 +381,6 @@ components:
       properties:
         days:
           type: array
-          nullable: true
           items:
             "$ref": "#/components/schemas/Weekday"
         time:

@@ -84,7 +84,7 @@ describe('GET /api/subjects', () => {
 });
 
 describe('GET /api/courses', () => {
-  test('responds with a 201 status code', async () => {
+  test('responds with a 200 status code', async () => {
     await request
       .get('/api/courses?term=2222&subject=CSE')
       .expect(200);

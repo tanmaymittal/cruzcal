@@ -71,9 +71,7 @@ exports.verifySchedule = async (req, res, next) => {
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
       course.lectures.forEach(({recurrence}) => {
-        if (recurrence === null ||
-            recurrence.time === null ||
-            recurrence.days === null) {
+        if (recurrence === null) {
           throw new APIError('No meeting times', 400, [{
             message: 'Course has no meeting times',
             course,
