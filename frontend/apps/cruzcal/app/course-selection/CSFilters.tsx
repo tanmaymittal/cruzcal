@@ -42,7 +42,7 @@ export const SubjectFilter = ({selection, setSelection, warnings}) => {
       options={subjects}
       selected={selection.subject}
       disabled={selectedTerm ? false : true}
-      warnings={warningWrapper(warnings, selection)}
+      warnings={warningWrapper(warnings, selection) ? true : false}
       setSelected={(subject: SubjectInfo) => (
         setSelection((prev) => ({...prev, subject, course: null}))
       )}
@@ -71,7 +71,7 @@ export const CourseFilter = ({selection, setSelection, warnings}) => {
       options={courses.map(mapSelection)}
       selected={mapSelection(selection.course)}
       disabled={selectedSubject ? false : true}
-      warnings={warningWrapper(warnings, selection)}
+      warnings={warningWrapper(warnings, selection) ? true : false}
       setSelected={(courseInfo: CourseInfo) => {
         const course: CourseInfo = coursesMap[courseInfo.name] || null;
         setSelection((prev) => ({...prev, course}));
