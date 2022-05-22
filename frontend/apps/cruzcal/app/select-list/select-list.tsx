@@ -80,7 +80,7 @@ export const DefaultSelectList = () => {
       selected={{ name: 'Loading...' }}
       setSelected={() => undefined}
       listName="Default"
-      disabled={true}
+      disabled={false}
       options={[]}
     />
   );
