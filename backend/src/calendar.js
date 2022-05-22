@@ -61,33 +61,40 @@ const generateNameForCalendarId = (termData, coursesData) => {
 };
 
 const coursesToEvents = (termData, courseData) => {
-  const termDates = termData.date;
-  const courseEvents = courseData
-    .map((c) => {
-      const times = c.lectures[0].times;
-      const formattedStartTime = formatTime(times[0].start);
-      const formattedEndTime = formatTime(times[0].end);
-      const formattedStartDate = formatDate(termDates.start, 'number');
-      const formattedEndDate = formatDate(termDates.end, 'string');
-      const initialDate = getInitialDate(times, formattedStartDate);
-      return {
-        title: c.name,
+  const termDate = termData.date;
+  const events = [];
+  for (const course of courseData) {
+    for (const {location, recurrence} of course.lectures) {
+      const formattedStartTime = formatTime(recurrence.time.start);
+      const formattedEndTime = formatTime(recurrence.time.end);
+      const formattedStartDate = formatDate(termDate.start, 'number');
+      const formattedEndDate = formatDate(termDate.end, 'string');
+      const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+      events.push({
+        title: course.name,
+        geo: {lat: 37.0, lon: -122.06}, // UCSC
+        startOutputType: 'local',
+        endOutputType: 'local',
         start: [
-          ...initialDate,
+          initialDate.year,
+          initialDate.month,
+          initialDate.date,
           formattedStartTime.hour,
           formattedStartTime.minute,
         ],
         end: [
-          ...initialDate,
+          initialDate.year,
+          initialDate.month,
+          initialDate.date,
           formattedEndTime.hour,
           formattedEndTime.minute,
         ],
-        location: c.lectures[0].location ? c.lectures[0].location : '',
-        recurrenceRule: createRecurrenceRule(times, formattedEndDate),
-      };
-    });
-
-  return courseEvents;
+        location,
+        recurrenceRule: createRecurrenceRule(recurrence.days, formattedEndDate),
+      });
+    }
+  }
+  return events;
 };
 
 const coursesToEventsGoogleApi = (termData, courseData) => {
@@ -127,15 +134,15 @@ const formatTime = (time) => {
   };
 };
 
-const formatDate = (date, formatType) => {
-  const [year, month, day] = date.split('-');
+const formatDate = (dateString, formatType) => {
+  const [year, month, date] = dateString.split('-');
   if (formatType === 'string') {
-    return {year, month, day};
+    return {year, month, date};
   }
   return {
     year: Number(year),
     month: Number(month),
-    day: Number(day),
+    date: Number(date),
   };
 };
 
@@ -161,8 +168,7 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     'Friday',
     'Saturday',
   ];
-  const courseDays = courseTimes.map((t) => t.day);
-  const courseDaysIdx = courseDays.map((d) => days.indexOf(d));
+
   const termStartDate = new Date(
     formattedStartDate.year,
     formattedStartDate.month - 1,
@@ -188,9 +194,9 @@ const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   return closestIdx - termStartDateIdx;
 };
 
-const createRecurrenceRule = (times, date) => {
-  const byDay = times.map((t) => t.day.slice(0, 2).toUpperCase()).join(',');
-  const until = `${date.year}${date.month}${date.day}T000000Z`;
+const createRecurrenceRule = (days, endDate) => {
+  const byDay = days.map((day) => day.slice(0, 2).toUpperCase()).join(',');
+  const until = `${endDate.year}${endDate.month}${endDate.date}`;
 
   return `FREQ=WEEKLY;BYDAY=${byDay};INTERVAL=1;UNTIL=${until}`;
 };

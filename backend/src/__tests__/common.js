@@ -51,104 +51,138 @@ exports.terms = [
 
 exports.courses = [
   {
-    name: 'Intro Software Eng',
-    refnum: 50444,
-    subject: 'CSE',
-    coursenum: '115A',
-    professor: 'Jullig,R.K.',
-    lectures: [{
-      location: 'J Baskin Engr 152',
-      times: [
-        {
-          day: 'Monday',
-          start: '08:00',
-          end: '09:05',
-        },
-        {
-          day: 'Wednesday',
-          start: '08:00',
-          end: '09:05',
-        },
-        {
-          day: 'Friday',
-          start: '08:00',
-          end: '09:05',
-        },
-      ],
+    'name': 'No lecture time class',
+    'refnum': 66666,
+    'section': '01',
+    'subject': 'CSE',
+    'coursenum': '666',
+    'professor': ['Cruzcal'],
+    'lectures': [{
+      'location': 'TBD',
+      'recurrence': null,
     }],
-    termcode: 2222,
+    'termcode': 2222,
   },
   {
-    name: 'Personal Computers',
-    refnum: 50355,
-    subject: 'CSE',
-    coursenum: '3',
-    professor: 'Moulds,G.B.',
-    lectures: [
+    'name': 'Intro Software Eng',
+    'refnum': 50444,
+    'section': '01',
+    'subject': 'CSE',
+    'coursenum': '115A',
+    'professor': [
+      'Jullig,R.K.',
+    ],
+    'lectures': [
       {
-        'times': [
-          {
-            'day': 'Tuesday',
-            'end': '16:55',
-            'start': '15:20',
+        'location': 'J Baskin Engr 152',
+        'recurrence': {
+          'days': [
+            'Monday',
+            'Wednesday',
+            'Friday',
+          ],
+          'time': {
+            'end': '09:05',
+            'start': '08:00',
           },
-          {
-            'day': 'Thursday',
-            'end': '16:55',
-            'start': '15:20',
-          },
-        ],
-        'location': 'ClassroomUnit 002',
+        },
       },
     ],
-    termcode: 2222,
+    'termcode': 2222,
   },
   {
-    name: 'Com Sys/Assmbly Lan',
-    refnum: 51457,
-    subject: 'CSE',
-    coursenum: '12',
-    professor: 'Nath,S.',
-    lectures: [
+    'name': 'Math Methods II',
+    'refnum': 70312,
+    'section': '01',
+    'subject': 'AM',
+    'coursenum': '20',
+    'professor': [
+      'Lu,L.K.',
+    ],
+    'lectures': [
       {
-        'times': [
-          {
-            'day': 'Tuesday',
-            'end': '13:15',
-            'start': '11:40',
+        'location': 'Engineer 2 192',
+        'recurrence': {
+          'days': [
+            'Tuesday',
+            'Thursday',
+          ],
+          'time': {
+            'end': '16:30',
+            'start': '13:00',
           },
-          {
-            'day': 'Thursday',
-            'end': '13:15',
-            'start': '11:40',
-          },
-        ],
-        'location': 'ClassroomUnit 002',
+        },
       },
     ],
-    termcode: 2222,
+    'termcode': 2224,
   },
   {
-    name: 'Math Methods I',
-    refnum: 44770,
-    subject: 'AM',
-    coursenum: '10',
-    professor: 'Jonsson,V.',
-    lectures: [{
-      location: 'Humn Lecture Hall',
-      times: [
-        {
-          day: 'Tuesday',
-          start: '11:40',
-          end: '13:15',
+    'name': 'Intro Print/Draw',
+    'refnum': 70072,
+    'section': '01',
+    'subject': 'ART',
+    'coursenum': '20G',
+    'professor': [
+      'Henry,B.M.',
+    ],
+    'lectures': [
+      {
+        'location': 'E Baskin G101',
+        'recurrence': {
+          'days': [
+            'Tuesday',
+            'Thursday',
+          ],
+          'time': {
+            'end': '16:00',
+            'start': '09:30',
+          },
         },
-        {
-          day: 'Thursday',
-          start: '11:40',
-          end: '13:15',
+      },
+    ],
+    'termcode': 2224,
+  },
+  {
+    'name': 'Intro Draw/Paint',
+    'refnum': 70253,
+    'section': '01',
+    'subject': 'ART',
+    'coursenum': '20J',
+    'professor': [
+      'Terrell,S.',
+    ],
+    'lectures': [
+      {
+        'location': 'E Baskin M101',
+        'recurrence': {
+          'days': [
+            'Tuesday',
+            'Thursday',
+          ],
+          'time': {
+            'end': '19:00',
+            'start': '13:00',
+          },
         },
-      ],
-    }],
-    termcode: 2220,
+      },
+    ],
+    'termcode': 2224,
+  },
+  {
+    'name': 'Intro New Media',
+    'refnum': 71279,
+    'section': '01',
+    'subject': 'ART',
+    'coursenum': '20K',
+    'professor': [
+      'Harris,Y.C.',
+    ],
+    'lectures': [
+      {
+        'location': 'Online',
+        'recurrence': null,
+      },
+    ],
+    'termcode': 2224,
   },
 ];

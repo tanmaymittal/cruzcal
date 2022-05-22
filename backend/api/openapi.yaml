@@ -7,6 +7,14 @@ info:
 servers:
 - url: http://localhost:3010/
 paths:
+  "/api/auth/check":
+    get:
+      description: Check if a client is authenticated
+      responses:
+        200:
+          description: User is authenticated
+        401:
+          description: User is not authenticated
   "/api/auth/google":
     get:
       description: Fill out...
@@ -241,7 +249,7 @@ paths:
                 "$ref": "#/components/schemas/Error"
   "/api/calendar/google":
     get:
-      description: Create new calendar events on behalf of the user.
+      description: Generate location and schedule information for given courses
       parameters:
         - in: query
           name: termCode
@@ -257,19 +265,18 @@ paths:
             items:
               type: string
       responses:
-        '200':
-          description: Successfully created calendar events.
+        '201':
+          description: Successfully returned location and schedule information.
           content:
-            text/calendar:
+            application/json:
               schema:
-                "$ref": "#/components/schemas/BinaryFile"
+                "$ref": "#/components/schemas/CalendarResource"
         default:
           description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
-
 
 security:
   - GoogleAuth: []
@@ -314,6 +321,17 @@ components:
     Time:
       type: string
       pattern: "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+    TimeRange:
+      type: object
+      additionalProperties: false
+      required:
+        - start
+        - end
+      properties:
+        start:
+          "$ref": "#/components/schemas/Time"
+        end:
+          "$ref": "#/components/schemas/Time"
     TermCode:
       type: number
       example: 2222
@@ -355,37 +373,36 @@ components:
       - Sunday
     WeeklyMeeting:
       type: object
+      nullable: true
       additionalProperties: false
       required:
-      - day
-      - start
-      - end
+      - days
+      - time
       properties:
-        day:
-          "$ref": "#/components/schemas/Weekday"
-        start:
-          "$ref": "#/components/schemas/Time"
-        end:
-          "$ref": "#/components/schemas/Time"
+        days:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Weekday"
+        time:
+          "$ref": "#/components/schemas/TimeRange"
     LectureInfo:
       type: object
       additionalProperties: false
       required:
       - location
-      - times
+      - recurrence
       properties:
         location:
           type: string
-        times:
-          type: array
-          items:
-            "$ref": "#/components/schemas/WeeklyMeeting"
+        recurrence:
+          "$ref": "#/components/schemas/WeeklyMeeting"
     CourseInfo:
       type: object
       additionalProperties: false
       required:
         - name
         - coursenum
+        - section
         - courseID
         - lectures
         - professor
@@ -393,8 +410,12 @@ components:
         name:
           type: string
         professor:
-          type: string
+          type: array
+          items:
+            type: string
         coursenum:
+          type: string
+        section:
           type: string
         courseID:
           type: number

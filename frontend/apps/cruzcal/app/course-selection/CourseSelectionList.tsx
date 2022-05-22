@@ -1,48 +1,50 @@
-import { useAtom } from 'jotai';
-import { useAtomValue } from 'jotai/utils';
+import { PrimitiveAtom, useAtom } from 'jotai';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
 
 import { DefaultSelectList } from '../select-list/select-list';
 import CourseSelection from './CourseSelection';
-import TermFilter from './TermFilter';  
+import {TermFilter} from './CSFilters';  
 import WarningDialog from '../warning-dialog/warning-dialog';
-import SubmitICS from '../submit-ics/SubmitICS';
-import SubmitGoogle from '../submit-google/SubmitGoogle';
+import Submit from '../submit/Submit';
+import ClientOnly from '../client-only/ClientOnly';
+import InfoBox from '../info-box/info-box';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
-import warningsAtom from '../../atoms/warnings';
+import selectedTermAtom from '../../atoms/selected-term';
+import { TermInfo } from 'apps/cruzcal/atoms/terms';
 
-const CourseSelectionList = () => {
+const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
+  const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom as PrimitiveAtom<TermInfo>);
 
-  const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection} });
+  const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection, term: selectedTerm} });
+  const removeCourse = (courseAtom) => dispatch({ type: "remove", atom: courseAtom });
 
-  // Print out current state of selected classes
-  const warnings = useAtomValue(warningsAtom);
+  // const courseList = useAtomValue(courseSelectionsAtom);
   // useEffect(() => {
   //   console.log(JSON.stringify(courseList, null, 2));
   // }, [courseList]);
 
   return (
-    <div className="basis-2/5">
+    <div>
       <div className="mb-5">
         <WarningDialog />
       </div>
       <div className="mb-5">
         <Suspense fallback={<DefaultSelectList/>}>
-          <TermFilter />
+          <TermFilter selected={selectedTerm} setSelected={setSelectedTerm}/>
         </Suspense>
       </div>
       {courseListAtoms.map((courseAtom, i) => {
-        const nextCourseAtom = courseListAtoms[i+1];
-        return <CourseSelection
-          key={`${courseAtom}`}
-          courseAtom={courseAtom}
-          nextCourseAtom={nextCourseAtom}
-          warnings={warnings}
-          />;
+        return (
+          <CourseSelection
+            key={`${courseAtom}`}
+            courseAtom={courseAtom}
+            remove={() => removeCourse(courseAtom)}
+          />
+        );
       })}
       <div className='flex flex-col gap-y-5 align-middle'>
         <div className="flex justify-center">
@@ -51,12 +53,24 @@ const CourseSelectionList = () => {
           </button>
         </div>
         <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
-          <SubmitGoogle />
-          <SubmitICS />
+          <Submit type='json'/>
+          <Submit type='ics'/>
+          <Submit type='google'/>
+        </div>
+        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
+          <InfoBox />
         </div>
       </div>
     </div>
   )
+}
+
+export const CourseSelectionList = () => {
+  return (
+    <ClientOnly>
+      <CourseSelectionListAsync />
+    </ClientOnly>
+  );
 }
 
 export default CourseSelectionList

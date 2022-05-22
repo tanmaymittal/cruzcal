@@ -8,6 +8,8 @@ const {
   calendarICSRequest,
   calendarICSImproperRequest,
   calendarIcsString,
+  JSONRequestNoTimes,
+  ICSRequestNoTimes,
 } = require('./mockData');
 const {courses, terms} = require('../common');
 
@@ -82,6 +84,11 @@ describe('GET /api/subjects', () => {
 });
 
 describe('GET /api/courses', () => {
+  test('responds with a 200 status code', async () => {
+    await request
+      .get('/api/courses?term=2222&subject=CSE')
+      .expect(200);
+  });
   test('error with no parameters', async () => {
     await request.get('/api/courses').expect((res) => {
       expect(res.status).toBe(400);
@@ -111,7 +118,6 @@ describe('GET /api/courses', () => {
   test('responds with JSON', async () => {
     await request
       .get('/api/courses?term=2222&subject=CSE')
-      .expect(200)
       .expect('Content-Type', /json/)
       .expect((res) => {
         expect(res.body).toBeInstanceOf(Array);
@@ -162,11 +168,27 @@ describe('POST /schedule/json', () => {
   });
 });
 
+describe('GET /api/calendar/json', () => {
+  test('Course has no meeting times', async () => {
+    await request
+      .get(JSONRequestNoTimes)
+      .expect('Content-Type', /json/)
+      .expect(400)
+      .expect((res) => expect(res.body.message).toBe('No meeting times'));
+  });
+});
+
 describe('GET /api/calendar/ics', () => {
   test('responds with a 200 status code', async () => {
     await request
       .get(calendarICSRequest)
       .expect(200);
+  });
+  test('Course has no meeting times', async () => {
+    await request
+      .get(ICSRequestNoTimes)
+      .expect(400)
+      .expect((res) => expect(res.body.message).toBe('No meeting times'));
   });
   test('responds with text/calendar data', async () => {
     const beginEventMatch = /BEGIN:VEVENT/g;

@@ -3,15 +3,14 @@ import { atom } from 'jotai';
 import { courseSelectionsAtom, CourseSelector } from './course-selector';
 
 const timeStringToNum = (time: string) => {
-  let temp: string = time[0] + time[1] + time[3] + time[4];
-  let num: number = +temp;
-  return num;
+  const [hr, min] = time.split(':').map((num) => parseInt(num));
+  return hr * 60 + min;
 }
 
 export const warningsAtom = atom(
   (get) => {
-    const courseSelectionAtom = get(courseSelectionsAtom);
-    const totalCourseSelections = courseSelectionAtom.length;
+    const courseSelections = get(courseSelectionsAtom);
+    const totalCourseSelections = courseSelections.length;
     const listOfErrors: Set<CourseSelector> = new Set;
 
     // if 1 class or less, no warnings
@@ -21,8 +20,8 @@ export const warningsAtom = atom(
 
     for (let i = 0; i < totalCourseSelections; i++) {
       for (let j = i+1; j < totalCourseSelections; j++) {
-        let prev = courseSelectionAtom[i]; // a previous entry
-        let curr = courseSelectionAtom[j]; // most current/recent entry
+        let prev = courseSelections[i]; // a previous entry
+        let curr = courseSelections[j]; // most current/recent entry
 
         // avoid null entries
         if (curr.course != null && prev.course != null) {
@@ -32,17 +31,23 @@ export const warningsAtom = atom(
 
           // for each of curr's lectures
           for (let curLecture of curr.course.lectures) {
+            const curLecNumMeetings = curLecture?.recurrence?.days?.length || 0;
             // for each of prev's lectures
             for (let prevLecture of prev.course.lectures) {
+              const prevLecNumMeetings = prevLecture?.recurrence?.days?.length || 0;
               // for each cur lecture's day+time entry
-              for (let j = 0; j < curLecture.times.length; j++) {
+              for (let j = 0; j < curLecNumMeetings; j++) {
                 // for each prev lecture's day+time entry
-                for (let k = 0; k < prevLecture.times.length; k++) {
+                for (let k = 0; k < prevLecNumMeetings; k++) {
+                  const curDay = curLecture.recurrence.days[j];
+                  const prevDay = prevLecture.recurrence.days[k];
+                  const curTime = curLecture.recurrence.time;
+                  const prevTime = prevLecture.recurrence.time;
                   // if the two days of week are the same
-                  if (curLecture.times[j].day == prevLecture.times[k].day) {
+                  if (curDay == prevDay) {
                     // if (!(prev.end <= cur.start || cur.end <= prev.start)), then there is a conflict
-                    if (!(timeStringToNum(prevLecture.times[k].end) <= timeStringToNum(curLecture.times[j].start) ||
-                          timeStringToNum(curLecture.times[j].end) <= timeStringToNum(prevLecture.times[k].start))) {
+                    if (!(timeStringToNum(curTime.end) <= timeStringToNum(prevTime.start) ||
+                          timeStringToNum(prevTime.end) <= timeStringToNum(curTime.start))) {
 
                       // then there IS a conflict, add to list of errors
                       listOfErrors.add(curr);

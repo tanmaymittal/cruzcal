@@ -1,5 +1,10 @@
 const tmp = require('tmp');
 const fs = require('fs');
+<<<<<<< HEAD
+=======
+const path = require('path');
+
+>>>>>>> pablo/fix-ics-gen
 const {
   getTermByCode,
   getCourseByID,
@@ -23,6 +28,7 @@ exports.APIError = class APIError extends Error {
 exports.formatCourse = (courseObj) => {
   const courseInfo = {
     name: courseObj.name,
+    section: courseObj.section,
     coursenum: courseObj.coursenum,
     professor: courseObj.professor,
     lectures: courseObj.lectures,

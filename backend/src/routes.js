@@ -48,6 +48,11 @@ exports.genSchedule = async (req, res, next) => {
     const courses = [];
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
+      const errors = course.lectures
+        .filter(({recurrence}) => recurrence === null);
+      if (errors.length > 0) {
+        throw new APIError('No meeting times for courses', 400, [{course}]);
+      }
       courses.push(course);
     }
     const uri = generateScheduleURI(type, term, courses);
@@ -67,8 +72,8 @@ exports.verifySchedule = async (req, res, next) => {
     const courses = [];
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
-      course.lectures.forEach((lec) => {
-        if (lec.times.length === 0) {
+      course.lectures.forEach(({recurrence}) => {
+        if (recurrence === null) {
           throw new APIError('No meeting times', 400, [{
             message: 'Course has no meeting times',
             course,
@@ -84,9 +89,11 @@ exports.verifySchedule = async (req, res, next) => {
   }
 };
 
+exports.genJSON = async (req, res) => res.json(req.body);
+
 // Returns 'text/calendar' file type
 // Media type reference: https://www.iana.org/assignments/media-types/text/calendar
-exports.genCalendar = async (req, res, next) => {
+exports.genICS = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     const downloadName = 'calendar.ics';

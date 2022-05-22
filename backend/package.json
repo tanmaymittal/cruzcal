@@ -4,30 +4,28 @@
   "description": "CruzCal lets users select their Class and produce calendar files based on the class events they can import to their preferred calendar.",
   "author": "CruzCal Developers",
   "devDependencies": {
+    "nodemon": "*",
+    "dotenv": "*",
     "eslint": "*",
     "eslint-config-google": "*",
     "http": "*",
-    "jest": "*",
-    "nodemon": "*",
-    "supertest": "*"
+    "jest": "^28.1.0",
+    "supertest": "^6.2.3"
   },
   "dependencies": {
-    "axios": "*",
-    "cors": "*",
-    "dotenv": "*",
-    "express": "*",
-    "express-openapi-validator": "*",
-    "express-session": "*",
+    "axios": "^0.27.2",
+    "express": "^4.18.1",
+    "express-openapi-validator": "^4.13.7",
+    "express-session": "^1.17.3",
     "googleapis": "^100.0.0",
     "ics": "^2.35.0",
-    "js-yaml": "*",
+    "js-yaml": "^4.1.0",
     "passport": "^0.5.2",
     "passport-google-oauth20": "^2.0.0",
-    "pg": "*",
-    "sequelize": "*",
-    "swagger-ui-express": "*",
-    "tmp": "^0.2.1",
-    "uuid": "^8.3.2"
+    "pg": "^8.7.3",
+    "sequelize": "^6.19.2",
+    "swagger-ui-express": "^4.4.0",
+    "tmp": "^0.2.1"
   },
   "scripts": {
     "start": "nodemon src/server.js",
@@ -41,6 +39,7 @@
     "collectCoverageFrom": [
       "src/**/*.{js,jsx}",
       "!src/server.js",
+      "!src/auth.js",
       "!initdb/**"
     ],
     "testMatch": [

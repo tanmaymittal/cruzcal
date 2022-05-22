@@ -10,7 +10,7 @@ export interface UserSession {
 
 export const storageUserAtom = atomWithStorage('user', null as UserSession);
 export const fetchUserAtom = atomWithQuery((get) => ({
-  queryKey: ['users', get(storageUserAtom)],
+  queryKey: ['user', get(storageUserAtom)],
   queryFn: async ({ queryKey: [, sUser] }) => {
     const storageUser = sUser as UserSession;
     if (storageUser !== null) return storageUser;
@@ -20,6 +20,14 @@ export const fetchUserAtom = atomWithQuery((get) => ({
     return user;
   },
 }));
+export const userAuthenticatedAtom = atomWithQuery((get) => ({
+  queryKey: ['userAuthenticated'],
+  queryFn: async ({}) => {
+    const res = await fetch(`${server}/api/auth/check`);
+    return res.status === 200;
+  },
+}));
+
 export const userAtom = atom(
   (get) => get(fetchUserAtom),
   (get, set, newUser) => set(storageUserAtom, newUser)
