@@ -24,8 +24,8 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
       'time_zone': 'America/Los_Angeles',
     },
   });
-
   courseEvents.forEach((event) => {
+    console.log('google event', event);
     calendar.events.insert({
       calendarId: calendarResponse.data.id,
       resource: event,
@@ -98,15 +98,18 @@ const coursesToEvents = (termData, courseData) => {
 };
 
 const coursesToEventsGoogleApi = (termData, courseData) => {
+  console.log('termData', termData);
+  console.log('courseData', courseData[0].lectures[0]);
   const termDates = termData.date;
   const courseEvents = courseData
     .map((c) => {
-      const times = c.lectures[0].times;
-      const startTime = times[0].start;
-      const endTime = times[0].end;
+      const recurrence = c.lectures[0].recurrence;
+      const startTime = recurrence.time.start;
+      const endTime = recurrence.time.end;
       const formattedStartDate = formatDate(termDates.start, 'number');
       const formattedEndDate = formatDate(termDates.end, 'string');
-      const initialDate = getInitialDate(times, formattedStartDate);
+      const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+      console.log('initialDate', initialDate);
       const formattedInitialDate = formatInitialDate(initialDate);
       return {
         summary: c.name,
@@ -119,7 +122,9 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
           timeZone: 'America/Los_Angeles',
         },
         location: c.lectures[0].location ? c.lectures[0].location : '',
-        recurrence: [`RRULE:${createRecurrenceRule(times, formattedEndDate)}`],
+        recurrence: [
+          `RRULE:${createRecurrenceRule(recurrence.days, formattedEndDate)}`,
+        ],
       };
     });
 
@@ -168,12 +173,16 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     'Friday',
     'Saturday',
   ];
+  const courseDays = courseTimes;
+  const courseDaysIdx = courseDays.map((d) => days.indexOf(d));
 
   const termStartDate = new Date(
     formattedStartDate.year,
     formattedStartDate.month - 1,
-    formattedStartDate.day,
+    formattedStartDate.date,
   );
+
+  console.log('termStartDate', termStartDate);
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
   termStartDate.setDate(termStartDate.getDate() + dayDifference);
