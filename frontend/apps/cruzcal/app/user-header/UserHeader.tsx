@@ -1,17 +1,17 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faSignIn, faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faSignOut } from '@fortawesome/free-solid-svg-icons'
+import { faGoogle } from '@fortawesome/free-brands-svg-icons'
 import { useAtom, PrimitiveAtom } from 'jotai';
 import { userAtom, UserSession } from '../../atoms/user';
-import { useEffect } from 'react';
 import ClientOnly from '../client-only/ClientOnly';
 
 export const LoginButton = () => {
   return (
     <form action="/api/auth/google">
       <button type="submit" className="flex gap-3 align-middle">
-        <div className="text-white">Log in</div>
+        <div className="text-white">Sign in with Google</div>
         <div>
-          <FontAwesomeIcon icon={faSignIn} className="text-white" />
+          <FontAwesomeIcon icon={faGoogle} className="text-white" />
         </div>
       </button>
     </form>
