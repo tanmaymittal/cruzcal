@@ -57,9 +57,6 @@ const CourseSelectionListAsync = () => {
           <Submit type='ics'/>
           <Submit type='google'/>
         </div>
-        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
-          <InfoBox />
-        </div>
       </div>
     </div>
   )
