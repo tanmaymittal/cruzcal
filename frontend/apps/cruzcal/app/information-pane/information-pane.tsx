@@ -63,11 +63,18 @@ export const InformationPane = () => {
                     How do I use this app?
                   </Dialog.Title>
                   <div className="mt-2">
-                    <p className="text-sm text-gray-500">
-                      You can login with your UCSC credentials to associate your account. To add classes to your schedule, first select the your intended term. The subject drop down will populate with the respective courses available for that term. Once the subject is selected you can add your desired course number.
+                    <p>
+                      You can login with your UCSC credentials to associate your account. To add classes to your schedule,
                     </p>
+                    <ol className='list-decimal ml-4 text-gray-600'>
+                      <li>Select the intended term. The subject dropdown will populate with the respective courses available for that term</li>
+                      <li>Select a subject</li>
+                      <li>Select your desired course number</li>
+                    </ol>
                   </div>
-                  <InfoBox />
+                  <div className='mt-4'>
+                    <InfoBox />
+                  </div>
                 </Dialog.Panel>
               </Transition.Child>
             </div>
