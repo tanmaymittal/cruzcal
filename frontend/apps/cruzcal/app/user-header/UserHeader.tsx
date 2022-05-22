@@ -8,11 +8,8 @@ import ClientOnly from '../client-only/ClientOnly';
 export const LoginButton = () => {
   return (
     <form action="/api/auth/google">
-      <button type="submit" className="flex gap-3 align-middle">
-        <div className="text-white">Sign in with Google</div>
-        <div>
-          <FontAwesomeIcon icon={faGoogle} className="text-white" />
-        </div>
+      <button type="submit" className="flex gap-3 align-middle bg-white rounded-lg px-3 py-1 hover:bg-gray-300">
+        Sign in with Google <FontAwesomeIcon icon={faGoogle} className="self-center" />
       </button>
     </form>
   );
@@ -21,11 +18,8 @@ export const LoginButton = () => {
 export const LogoutButton = ({onClick}) => {
   return (
     <form action="/api/logout" method="post">
-      <button type="submit" className="flex gap-3 align-middle">
-        <div className="text-white">Log out</div>
-        <div>
-          <FontAwesomeIcon icon={faSignOut} className="text-white" />
-        </div>
+      <button type="submit" className="flex gap-3 align-middle text-black bg-white rounded-lg px-3 py-1 hover:bg-gray-300">
+        Log out <FontAwesomeIcon icon={faSignOut} className='self-center'/>
       </button>
     </form>
   );
@@ -38,7 +32,7 @@ const UserHeaderAsync = () => {
     return <LoginButton />;
   
   return (
-    <div className="flex gap-3 align-middle text-white">
+    <div className="flex gap-3 align-middle text-white items-center">
       <div> Hi, {user.displayName}</div>
       <div>|</div>
       <LogoutButton onClick={() => setUser(null)}/>
