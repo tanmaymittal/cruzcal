@@ -38,7 +38,7 @@ const UserHeaderAsync = () => {
     return <LoginButton />;
   
   return (
-    <div className="flex gap-3 align-middle">
+    <div className="flex gap-3 align-middle text-white">
       <div> Hi, {user.displayName}</div>
       <div>|</div>
       <LogoutButton onClick={() => setUser(null)}/>
