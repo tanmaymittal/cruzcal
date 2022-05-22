@@ -6,8 +6,8 @@ export interface InfoBoxProps {}
 
 export function InfoBox() {
   return (
-    <div className="w-full px-4">
-      <div className="mx-auto w-full max-w-md rounded-2xl bg-white p-2">
+    <div className="w-full">
+      <div className="mx-auto w-full rounded-2xl">
         <Disclosure as="div" className="mt-2">
           {({ open }) => (
             <>
