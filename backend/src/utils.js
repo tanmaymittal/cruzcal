@@ -1,10 +1,7 @@
 const tmp = require('tmp');
 const fs = require('fs');
-<<<<<<< HEAD
-=======
 const path = require('path');
 
->>>>>>> pablo/fix-ics-gen
 const {
   getTermByCode,
   getCourseByID,
