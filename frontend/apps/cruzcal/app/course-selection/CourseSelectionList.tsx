@@ -9,7 +9,6 @@ import {TermFilter} from './CSFilters';
 import WarningDialog from '../warning-dialog/warning-dialog';
 import Submit from '../submit/Submit';
 import ClientOnly from '../client-only/ClientOnly';
-import InfoBox from '../info-box/info-box';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';
