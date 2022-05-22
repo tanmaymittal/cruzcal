@@ -52,7 +52,10 @@ exports.genSchedule = async (req, res, next) => {
       const errors = course.lectures
         .filter(({recurrence}) => recurrence === null);
       if (errors.length > 0) {
-        throw new APIError('No meeting times for courses', 400, [{course}]);
+        throw new APIError('No meeting times', 400, [{
+          message: 'Course has no meeting times',
+          course,
+        }]);
       }
       courses.push(course);
     }
