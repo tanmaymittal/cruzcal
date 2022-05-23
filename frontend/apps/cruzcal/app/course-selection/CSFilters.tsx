@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from "react";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 
-import SelectList, { DefaultSelectList } from "../select-list/select-list";
+import { ComboboxSelect, DefaultComboboxSelect } from '../combobox-select/combobox-select';
 
 import coursesAtom, { CourseInfo } from "../../atoms/courses";
 import subjectsAtom, { SubjectInfo } from "../../atoms/subjects";
@@ -16,7 +16,7 @@ export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
   const selectedTerm = useAtomValue(selectedTermAtom);
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Subject"
       options={subjects}
       selected={selection.subject}
@@ -24,7 +24,6 @@ export const SubjectFilter = ({selection, setSelection}) => {
       setSelected={(subject: SubjectInfo) => (
         setSelection((prev) => ({...prev, subject, course: null}))
       )}
-      disabled={false}
     />
   );
 };
@@ -45,7 +44,7 @@ export const CourseFilter = ({selection, setSelection}) => {
   };
 
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Course"
       options={courses.map(mapSelection)}
       selected={mapSelection(selection.course)}
@@ -54,7 +53,6 @@ export const CourseFilter = ({selection, setSelection}) => {
         const course: CourseInfo = coursesMap[courseInfo.name] || null;
         setSelection((prev) => ({...prev, course}));
       }}
-      disabled={false}
     />
   );
 };
@@ -65,7 +63,7 @@ export const TermFilter = ({selected, setSelected}) => {
   const setCourseSelections = useUpdateAtom(courseSelectionsAtom);
 
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Term"
       options={terms}
       selected={selected}
@@ -73,7 +71,6 @@ export const TermFilter = ({selected, setSelected}) => {
         setSelected(term);
         setCourseSelections([{term, subject: null, course: null}]);
       }}
-      disabled={false}
     />
   );
 }
@@ -93,10 +90,10 @@ export const CSFilters = ({courseSelection, setCourseSelection}) => {
 
   return (
     <div className='w-full grid grid-cols-[2fr_3fr] gap-x-3'>
-      <Suspense fallback={<DefaultSelectList />}>
+      <Suspense fallback={<DefaultComboboxSelect />}>
         <SubjectFilter selection={courseSelection} setSelection={setCourseSelection}/>
       </Suspense>
-      <Suspense fallback={<DefaultSelectList />}>
+      <Suspense fallback={<DefaultComboboxSelect />}>
         <CourseFilter selection={courseSelection} setSelection={setCourseSelection}/>
       </Suspense>
     </div>
