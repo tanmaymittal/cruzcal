@@ -3,7 +3,7 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
 
-import { DefaultSelectList } from '../select-list/select-list';
+import { DefaultComboboxSelect } from '../combobox-select/combobox-select';
 import CourseSelection from './CourseSelection';
 import {TermFilter} from './CSFilters';  
 import WarningDialog from '../warning-dialog/warning-dialog';
@@ -36,7 +36,7 @@ const CourseSelectionListAsync = () => {
         <WarningDialog />
       </div>
       <div className="mb-5">
-        <Suspense fallback={<DefaultSelectList/>}>
+        <Suspense fallback={<DefaultComboboxSelect/>}>
           <TermFilter selected={selectedTerm} setSelected={setSelectedTerm}/>
         </Suspense>
       </div>
