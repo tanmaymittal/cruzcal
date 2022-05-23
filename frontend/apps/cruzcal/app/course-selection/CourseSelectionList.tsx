@@ -13,6 +13,7 @@ import ClientOnly from '../client-only/ClientOnly';
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';
 import { TermInfo } from 'apps/cruzcal/atoms/terms';
+import OnlineClassesDialog from '../online-classes-dialog/online-classes-dialog';
 
 const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
@@ -28,6 +29,9 @@ const CourseSelectionListAsync = () => {
 
   return (
     <div>
+      <div className="mb-5">
+        <OnlineClassesDialog />
+      </div>
       <div className="mb-5">
         <WarningDialog />
       </div>

@@ -17,14 +17,11 @@ export const onlineClassesAtom = atom(
     for (let i = 0; i < totalCourseSelections; i++) {
       let curr = courseSelections[i]; // most current entry
       // avoid null entries
-      console.log(curr.course);
       if (curr.course != null) {
         // loop through each lecture
         for (let curLecture of curr.course.lectures) {
-          // console.log(curLecture.times.length);
-          if (curLecture.times.length == 0) {
+          if (curLecture.recurrence == null) {
             // add to list of errors
-            console.log("Online class");
             listOfErrors.add(curr);
             break;
           }
