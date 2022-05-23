@@ -16,6 +16,10 @@ module.exports = function(sequelize) {
       allowNull: false,
       type: DataTypes.STRING,
     },
+    section: {
+      allowNull: false,
+      type: DataTypes.STRING,
+    },
     subject: {
       allowNull: false,
       type: DataTypes.STRING,
@@ -26,7 +30,7 @@ module.exports = function(sequelize) {
     },
     professor: {
       allowNull: false,
-      type: DataTypes.STRING,
+      type: DataTypes.JSONB,
     },
     lectures: {
       allowNull: false,

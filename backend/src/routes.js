@@ -49,6 +49,14 @@ exports.genSchedule = async (req, res, next) => {
     const courses = [];
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
+      const errors = course.lectures
+        .filter(({recurrence}) => recurrence === null);
+      if (errors.length > 0) {
+        throw new APIError('No meeting times', 400, [{
+          message: 'Course has no meeting times',
+          course,
+        }]);
+      }
       courses.push(course);
     }
     const uri = generateScheduleURI(type, term, courses);
@@ -65,8 +73,8 @@ exports.verifySchedule = async (req, res, next) => {
     const courses = [];
     for (const courseID of courseIDs) {
       const course = await findCourse(term.code, courseID);
-      course.lectures.forEach((lec) => {
-        if (lec.times.length === 0) {
+      course.lectures.forEach(({recurrence}) => {
+        if (recurrence === null) {
           throw new APIError('No meeting times', 400, [{
             message: 'Course has no meeting times',
             course,

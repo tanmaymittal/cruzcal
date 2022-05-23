@@ -15,15 +15,66 @@ paths:
           description: User is authenticated
         401:
           description: User is not authenticated
+  "/api/auth/google/calendar":
+    get:
+      description: Authenticate Google Calendar submission
+      responses: 
+        '302':
+          description: Redirecting to Google authorization server
+  "/api/auth/google/calendar/redirect":
+    get:
+      description: Handle redirect from Google Authentication
+      parameters:
+        - in: query
+          description: Random state string to protect against attacks such as CSRF.
+          required: true
+          name: state
+          allowReserved: true
+          schema:
+            type: string
+        - in: query
+          description: Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.
+          required: true
+          name: code
+          allowReserved: true
+          schema:
+            type: string
+        - in: query
+          description: Scopes for authenticated user
+          required: true
+          allowReserved: true
+          name: scope
+          schema:
+            type: array
+        - in: query
+          description: Index of which user is selected.
+          name: authuser
+          schema:
+            type: string
+        - in: query
+          description: Organization associated with google account.
+          name: hd
+          schema:
+            type: string
+        - in: query
+          description: Indicates if user should be prompted for consent on every access.
+          name: prompt
+          schema:
+            type: string
+      responses:
+        '302':
+          description: Successful authorization. Redirecting to landing page
+        default:
+          description: Authorization failed.
   "/api/auth/google":
     get:
-      description: Fill out...
+      description: Authorize and authenticate user
       responses: 
         '302':
           description: Redirecting to Google authorization server
   "/api/auth/google/redirect":
     get:
-      description: Fill out...
+      description: Handle redirect from Google authorization of user
       parameters:
         - in: query
           description: Random state string to protect against attacks such as CSRF.
@@ -68,7 +119,7 @@ paths:
           description: Authorization failed.
   "/api/user":
     get:
-      description: Fill out...
+      description: Return json representation of public user information
       security:
         - GoogleAuth:
           - https://www.googleapis.com/auth/userinfo.email
@@ -82,7 +133,7 @@ paths:
                 "$ref": "#/components/schemas/User"
   "/api/logout":
     post:
-      description: Fill out...
+      description: Logout authenticated user
       responses:
         '302':
           description: Successful logout. Redirecting to landing page.
@@ -205,12 +256,12 @@ paths:
             items:
               type: string
       responses:
-        '201':
+        '200':
           description: Successfully returned location and schedule information.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/CalendarResource"
+                "$ref": "#/components/schemas/JSONCalendar"
         default:
           description: Error Response
           content:
@@ -265,7 +316,7 @@ paths:
             items:
               type: string
       responses:
-        '201':
+        '200':
           description: Successfully returned location and schedule information.
           content:
             application/json:
@@ -321,6 +372,17 @@ components:
     Time:
       type: string
       pattern: "^([0-1]?[0-9]|2[0-3]):[0-5][0-9]$"
+    TimeRange:
+      type: object
+      additionalProperties: false
+      required:
+        - start
+        - end
+      properties:
+        start:
+          "$ref": "#/components/schemas/Time"
+        end:
+          "$ref": "#/components/schemas/Time"
     TermCode:
       type: number
       example: 2222
@@ -362,37 +424,36 @@ components:
       - Sunday
     WeeklyMeeting:
       type: object
+      nullable: true
       additionalProperties: false
       required:
-      - day
-      - start
-      - end
+      - days
+      - time
       properties:
-        day:
-          "$ref": "#/components/schemas/Weekday"
-        start:
-          "$ref": "#/components/schemas/Time"
-        end:
-          "$ref": "#/components/schemas/Time"
+        days:
+          type: array
+          items:
+            "$ref": "#/components/schemas/Weekday"
+        time:
+          "$ref": "#/components/schemas/TimeRange"
     LectureInfo:
       type: object
       additionalProperties: false
       required:
       - location
-      - times
+      - recurrence
       properties:
         location:
           type: string
-        times:
-          type: array
-          items:
-            "$ref": "#/components/schemas/WeeklyMeeting"
+        recurrence:
+          "$ref": "#/components/schemas/WeeklyMeeting"
     CourseInfo:
       type: object
       additionalProperties: false
       required:
         - name
         - coursenum
+        - section
         - courseID
         - lectures
         - professor
@@ -400,8 +461,12 @@ components:
         name:
           type: string
         professor:
-          type: string
+          type: array
+          items:
+            type: string
         coursenum:
+          type: string
+        section:
           type: string
         courseID:
           type: number
@@ -424,6 +489,19 @@ components:
           type: array
           items:
             type: string
+    JSONCalendar:
+      type: object
+      additionalProperties: false
+      required:
+        - term
+        - courses
+      properties:
+        term:
+          "$ref": "#/components/schemas/TermInfo"
+        courses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseInfo"
     CalendarResource:
       type: object
       additionalProperties: false

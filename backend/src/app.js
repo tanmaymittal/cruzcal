@@ -62,9 +62,18 @@ app.get('/api/auth/google/redirect',
     failureMessage: true,
   }),
 );
+app.get('/api/auth/google/calendar',
+  passport.authenticate(auth.googleCalendarStrategy));
+app.get('/api/auth/google/calendar/redirect',
+  passport.authenticate(auth.googleCalendarStrategy, {
+    successRedirect: '/',
+    failureRedirect: '/api/auth/google/calendar',
+    failureMessage: true,
+  }),
+);
 
 // User management
-app.get('/api/user', auth.check, auth.getUser);
+app.get('/api/user', auth.loggedIn, auth.getUser);
 app.post('/api/logout', auth.logOut);
 
 // Course selection

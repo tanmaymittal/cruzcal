@@ -12,7 +12,7 @@ export type Subject = SubjectInfo | TermInfo | CourseInfo;
 export interface SelectListProps {
   listName: string,
   options: Subject[],
-  disabled: boolean,
+  disabled?: boolean,
   selected: Subject,
   setSelected: Dispatch<Subject>,
 }
@@ -82,6 +82,7 @@ export const DefaultSelectList = () => {
       listName="Default"
       disabled={false}
       options={[]}
+      disabled={false}
     />
   );
 };

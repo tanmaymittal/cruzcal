@@ -26,7 +26,6 @@ export const courseSelectionsStorageAtom = atomWithStorage('course-selector', [{
 export const courseSelectionsAtom = atom(
   (get) => get(courseSelectionsStorageAtom),
   (get, set, courseSelections) => {
-    // console.log(courseSelections);
     set(courseSelectionsStorageAtom, courseSelections);
     // set(scheduleSelectionsAtom, {...get(scheduleSelectionsAtom), courses: courseSelections});
   },
