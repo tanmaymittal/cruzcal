@@ -82,7 +82,6 @@ export const DefaultSelectList = () => {
       listName="Default"
       disabled={false}
       options={[]}
-      disabled={false}
     />
   );
 };
