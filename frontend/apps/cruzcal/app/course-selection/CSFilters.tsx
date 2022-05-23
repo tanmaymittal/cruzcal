@@ -37,7 +37,7 @@ export const CourseFilter = ({selection, setSelection}) => {
   const mapSelection = (course) => {
     if (course === null) return null;
     else {
-      const name = `${course.coursenum}: ${course.name}-${course.section}`;
+      const name = `${course.coursenum} - ${course.section}: ${course.name}`;
       coursesMap[name] = course;
       return {...course, name};
     }
