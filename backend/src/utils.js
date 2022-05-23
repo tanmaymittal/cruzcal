@@ -24,6 +24,7 @@ exports.APIError = class APIError extends Error {
 exports.formatCourse = (courseObj) => {
   const courseInfo = {
     name: courseObj.name,
+    section: courseObj.section,
     coursenum: courseObj.coursenum,
     professor: courseObj.professor,
     lectures: courseObj.lectures,

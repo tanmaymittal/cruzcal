@@ -24,6 +24,7 @@ export const SubjectFilter = ({selection, setSelection}) => {
       setSelected={(subject: SubjectInfo) => (
         setSelection((prev) => ({...prev, subject, course: null}))
       )}
+      disabled={false}
     />
   );
 };
@@ -37,7 +38,7 @@ export const CourseFilter = ({selection, setSelection}) => {
   const mapSelection = (course) => {
     if (course === null) return null;
     else {
-      const name = `${course.coursenum}: ${course.name}`;
+      const name = `${course.coursenum}: ${course.name}-${course.section}`;
       coursesMap[name] = course;
       return {...course, name};
     }
@@ -53,6 +54,7 @@ export const CourseFilter = ({selection, setSelection}) => {
         const course: CourseInfo = coursesMap[courseInfo.name] || null;
         setSelection((prev) => ({...prev, course}));
       }}
+      disabled={false}
     />
   );
 };
@@ -71,6 +73,7 @@ export const TermFilter = ({selected, setSelected}) => {
         setSelected(term);
         setCourseSelections([{term, subject: null, course: null}]);
       }}
+      disabled={false}
     />
   );
 }
