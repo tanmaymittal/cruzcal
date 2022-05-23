@@ -30,7 +30,7 @@ export const OnlineClassesDialog = () => {
           onClick={openModal}
           className="w-full rounded-md bg-yellow-500 bg-opacity-100 px-4 py-2 text-sm font-bold text-black hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          Online Classes
+          Asynchronous Classes
         </button>
       </div>
 
