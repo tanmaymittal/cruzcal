@@ -337,7 +337,7 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/CalendarResource"
+                "$ref": "#/components/schemas/JSONCalendar"
         default:
           description: Error Response
           content:
