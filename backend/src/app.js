@@ -52,6 +52,10 @@ app.use(
 
 // Routes
 
+process.env.API_VERSION = 0.1;
+app.get('/api/version/latest',
+  (_, res) => res.type('text/plain').send(process.env.API_VERSION));
+
 // Authentication
 app.get('/api/auth/check', auth.check, (_, res) => res.sendStatus(200));
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
