@@ -256,12 +256,12 @@ paths:
             items:
               type: string
       responses:
-        '201':
+        '200':
           description: Successfully returned location and schedule information.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/CalendarResource"
+                "$ref": "#/components/schemas/JSONCalendar"
         default:
           description: Error Response
           content:
@@ -316,7 +316,7 @@ paths:
             items:
               type: string
       responses:
-        '201':
+        '200':
           description: Successfully returned location and schedule information.
           content:
             application/json:
@@ -489,6 +489,19 @@ components:
           type: array
           items:
             type: string
+    JSONCalendar:
+      type: object
+      additionalProperties: false
+      required:
+        - term
+        - courses
+      properties:
+        term:
+          "$ref": "#/components/schemas/TermInfo"
+        courses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseInfo"
     CalendarResource:
       type: object
       additionalProperties: false
