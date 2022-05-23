@@ -17,7 +17,6 @@ export const warningsAtom = atom(
     if (totalCourseSelections < 2)
       return Array.from(listOfErrors);
 
-
     for (let i = 0; i < totalCourseSelections; i++) {
       for (let j = i+1; j < totalCourseSelections; j++) {
         let prev = courseSelections[i]; // a previous entry
@@ -31,10 +30,14 @@ export const warningsAtom = atom(
 
           // for each of curr's lectures
           for (let curLecture of curr.course.lectures) {
-            const curLecNumMeetings = curLecture?.recurrence?.days?.length || 0;
+            if (curLecture.recurrence === null) continue;
+            const curLecNumMeetings = curLecture.recurrence.days.length;
+
             // for each of prev's lectures
             for (let prevLecture of prev.course.lectures) {
-              const prevLecNumMeetings = prevLecture?.recurrence?.days?.length || 0;
+              if (prevLecture.recurrence === null) continue;
+              const prevLecNumMeetings = prevLecture.recurrence.days.length;
+
               // for each cur lecture's day+time entry
               for (let j = 0; j < curLecNumMeetings; j++) {
                 // for each prev lecture's day+time entry

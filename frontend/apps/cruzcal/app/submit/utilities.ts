@@ -23,9 +23,11 @@ const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQuer
   try {
     const res = await fetch(url);
     if (res.status !== 200) throw res;
+    console.log('Successful event creation!');
+    checkAuth({ type: 'refetch' });
+
     const schedule = await res.json();
     console.log(schedule);
-    checkAuth({ type: 'refetch' })
   } catch (error) {
     console.error(error);
   }
