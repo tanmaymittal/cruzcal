@@ -4,6 +4,9 @@ import CourseSelectionList from '../app/course-selection/CourseSelectionList';
 import Header from '../app/header/header';
 import Footer from '../app/footer/footer';
 import dynamic from 'next/dynamic'
+import { versionAtom } from '../atoms/version';
+import { useUpdateAtom } from 'jotai/utils';
+import { useEffect } from 'react';
 
 const Calendar = dynamic(
   () => import('../app/calendar-view/calendar-view'),
@@ -11,6 +14,12 @@ const Calendar = dynamic(
 )
 
 export function Index() {
+  const dispatchVersion = useUpdateAtom(versionAtom);
+
+  useEffect(() => {
+    dispatchVersion({type: 'check'});
+  }, []);
+
   return (
     <>
       <Header />

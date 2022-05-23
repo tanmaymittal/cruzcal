@@ -7,6 +7,22 @@ info:
 servers:
 - url: http://localhost:3010/
 paths:
+  "/api/version/latest":
+    get:
+      description: Check latest API version
+      responses:
+        200:
+          description: Latest API version
+          content:
+            text/plain:
+              schema:
+                type: string
+        default:
+          description: Error Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
   "/api/auth/check":
     get:
       description: Check if a client is authenticated
