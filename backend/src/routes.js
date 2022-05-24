@@ -108,7 +108,7 @@ exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     addGoogleCalApiEvents(req.user.creds.token, term, courses);
-    return res.sendStatus(200);
+    return res.status(200).send({term, courses});
   } catch (error) {
     next(error);
   }

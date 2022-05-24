@@ -53,11 +53,8 @@ const createOAuth2Client = (token) => {
 };
 
 const generateNameForCalendarId = (termData, coursesData) => {
-  let calendarId = `${termData.name}: `;
-  coursesData.forEach((c) => {
-    calendarId += `${c.name}, `;
-  });
-  return calendarId.substring(0, calendarId.length - 2);
+  const courseNameList = coursesData.map(({name}) => name).join(', ');
+  return `${termData.name}: ${courseNameList}`;
 };
 
 const coursesToEvents = (termData, courseData) => {
@@ -98,21 +95,18 @@ const coursesToEvents = (termData, courseData) => {
 };
 
 const coursesToEventsGoogleApi = (termData, courseData) => {
-  console.log('termData', termData);
-  console.log('courseData', courseData[0].lectures[0]);
-  const termDates = termData.date;
-  const courseEvents = courseData
-    .map((c) => {
-      const recurrence = c.lectures[0].recurrence;
+  const termDate = termData.date;
+  const events = [];
+  for (const course of courseData) {
+    for (const {location, recurrence} of course.lectures) {
       const startTime = recurrence.time.start;
       const endTime = recurrence.time.end;
-      const formattedStartDate = formatDate(termDates.start, 'number');
-      const formattedEndDate = formatDate(termDates.end, 'string');
+      const formattedStartDate = formatDate(termDate.start, 'number');
+      const formattedEndDate = formatDate(termDate.end, 'string');
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
-      console.log('initialDate', initialDate);
       const formattedInitialDate = formatInitialDate(initialDate);
-      return {
-        summary: c.name,
+      events.push({
+        summary: course.name,
         start: {
           dateTime: `${formattedInitialDate}T${startTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
@@ -121,14 +115,14 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
           dateTime: `${formattedInitialDate}T${endTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
         },
-        location: c.lectures[0].location ? c.lectures[0].location : '',
+        location,
         recurrence: [
           `RRULE:${createRecurrenceRule(recurrence.days, formattedEndDate)}`,
         ],
-      };
-    });
-
-  return courseEvents;
+      });
+    }
+  }
+  return events;
 };
 
 const formatTime = (time) => {
