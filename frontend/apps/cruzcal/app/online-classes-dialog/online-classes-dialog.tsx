@@ -1,15 +1,15 @@
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import hash from 'object-hash';
 
 /* Atoms */
 import { CourseSelector } from '../../atoms/course-selector';
-import warningsAtom from '../../atoms/warnings';
+import onlineClassesAtom from 'apps/cruzcal/atoms/online-classes';
 
 /* eslint-disable-next-line */
-export const WarningDialog = () => {
-  const warnings = useAtomValue(warningsAtom) as CourseSelector[];
+export const OnlineClassesDialog = () => {
+  const onlineClasses = useAtomValue(onlineClassesAtom) as CourseSelector[];
   const [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
@@ -20,7 +20,7 @@ export const WarningDialog = () => {
     setIsOpen(true)
   }
 
-  if (warnings.length === 0) return <></>;
+  if (onlineClasses.length === 0) return <></>;
 
   return (
     <>
@@ -28,9 +28,9 @@ export const WarningDialog = () => {
         <button
           type="button"
           onClick={openModal}
-          className="w-full rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-bold text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+          className="w-full rounded-md bg-yellow-500 bg-opacity-100 px-4 py-2 text-sm font-bold text-black hover:bg-opacity-90 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          See warnings
+          Asynchronous Classes
         </button>
       </div>
 
@@ -64,15 +64,15 @@ export const WarningDialog = () => {
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
                   >
-                    You may have scheduling conflicts.
+                    You have added a class that does not have scheduled lecture times.
                   </Dialog.Title>
                   <div className="mt-2">
                     <p className="text-sm text-gray-500">
-                      Below are the classes with conflicts, if any.
+                      Below are the classes with no lecture times
                     </p>
-                      {warnings.map((warning) => {
+                      {onlineClasses.map((warning) => {
                         return (
-                          <p key={hash(warning)}>{warning.course.name}</p>
+                          <p key={hash(warning)}>{warning.subject.name} {warning.course.coursenum} - {warning.course.section}: {warning.course.name}</p>
                         );
                       })}
                   </div>
@@ -80,7 +80,7 @@ export const WarningDialog = () => {
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-rose-300 px-4 py-2 text-sm font-medium text-rose-700 hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-yellow-300 px-4 py-2 text-sm font-medium text-yellow-700 hover:bg-rose-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                       Got it, thanks!
@@ -96,4 +96,4 @@ export const WarningDialog = () => {
   );
 }
 
-export default WarningDialog;
+export default OnlineClassesDialog;

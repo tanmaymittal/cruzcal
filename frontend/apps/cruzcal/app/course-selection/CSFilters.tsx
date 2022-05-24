@@ -1,7 +1,7 @@
 import { Suspense, useEffect } from "react";
 import { useAtomValue, useUpdateAtom } from "jotai/utils";
 
-import SelectList, { DefaultSelectList } from "../select-list/select-list";
+import { ComboboxSelect, DefaultComboboxSelect } from '../combobox-select/combobox-select';
 
 import coursesAtom, { CourseInfo } from "../../atoms/courses";
 import subjectsAtom, { SubjectInfo } from "../../atoms/subjects";
@@ -10,48 +10,49 @@ import { courseSelectionsAtom, CourseSelector } from "../../atoms/course-selecto
 import selectedTermAtom from "../../atoms/selected-term";
 import selectedSubjectAtom from "../../atoms/selected-subject";
 import selectedCourseAtom from "../../atoms/selected-course";
-import { atom } from "jotai";
+import { atom, useAtom } from "jotai";
 
 export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
-  
+  const selectedTerm = useAtomValue(selectedTermAtom);
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Subject"
       options={subjects}
       selected={selection.subject}
+      disabled={selectedTerm ? false : true}
       setSelected={(subject: SubjectInfo) => (
         setSelection((prev) => ({...prev, subject, course: null}))
       )}
-      disabled={false}
     />
   );
 };
 
 export const CourseFilter = ({selection, setSelection}) => {
   const courses = useAtomValue(coursesAtom);
+  const selectedSubject = useAtomValue(selectedSubjectAtom);
 
   const coursesMap = {};
 
   const mapSelection = (course) => {
     if (course === null) return null;
     else {
-      const name = `${course.coursenum}: ${course.name}-${course.section}`;
+      const name = `${course.coursenum} - ${course.section}: ${course.name}`;
       coursesMap[name] = course;
       return {...course, name};
     }
   };
 
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Course"
       options={courses.map(mapSelection)}
       selected={mapSelection(selection.course)}
+      disabled={selectedSubject ? false : true}
       setSelected={(courseInfo: CourseInfo) => {
         const course: CourseInfo = coursesMap[courseInfo.name] || null;
         setSelection((prev) => ({...prev, course}));
       }}
-      disabled={false}
     />
   );
 };
@@ -62,7 +63,7 @@ export const TermFilter = ({selected, setSelected}) => {
   const setCourseSelections = useUpdateAtom(courseSelectionsAtom);
 
   return (
-    <SelectList
+    <ComboboxSelect
       listName="Term"
       options={terms}
       selected={selected}
@@ -70,7 +71,6 @@ export const TermFilter = ({selected, setSelected}) => {
         setSelected(term);
         setCourseSelections([{term, subject: null, course: null}]);
       }}
-      disabled={false}
     />
   );
 }
@@ -90,10 +90,10 @@ export const CSFilters = ({courseSelection, setCourseSelection}) => {
 
   return (
     <div className='w-full grid grid-cols-[2fr_3fr] gap-x-3'>
-      <Suspense fallback={<DefaultSelectList />}>
+      <Suspense fallback={<DefaultComboboxSelect />}>
         <SubjectFilter selection={courseSelection} setSelection={setCourseSelection}/>
       </Suspense>
-      <Suspense fallback={<DefaultSelectList />}>
+      <Suspense fallback={<DefaultComboboxSelect />}>
         <CourseFilter selection={courseSelection} setSelection={setCourseSelection}/>
       </Suspense>
     </div>

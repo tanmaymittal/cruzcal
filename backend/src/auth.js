@@ -1,46 +1,47 @@
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const {google} = require('googleapis');
 
-const oauth2Client = new google.auth.OAuth2(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_AUTH_REDIRECT,
+const googleStrategyOptions = {
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: process.env.GOOGLE_AUTH_REDIRECT,
+  state: true,
+  scope: [
+    'https://www.googleapis.com/auth/userinfo.email',
+    'https://www.googleapis.com/auth/userinfo.profile',
+    'https://www.googleapis.com/auth/calendar',
+  ],
+};
+
+process.env.GOOGLE_CALENDAR_REDIRECT = '/api/auth/google/calendar/redirect';
+exports.googleCalendarStrategy = new GoogleStrategy(
+  {
+    ...googleStrategyOptions,
+    callbackURL: process.env.GOOGLE_CALENDAR_REDIRECT,
+  },
+  async (token, refresh, profile, cb) => {
+    const user = {
+      creds: {token, refresh},
+    };
+    cb(null, user);
+  },
 );
-google.options({auth: oauth2Client});
 
 exports.googleStrategy = new GoogleStrategy(
-  {
-    clientID: process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: process.env.GOOGLE_AUTH_REDIRECT,
-    state: true,
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/calendar',
-    ],
-  },
-  async function verify(token, refresh, profile, cb) {
+  googleStrategyOptions,
+  async (token, refresh, profile, cb) => {
     const user = {
       displayName: profile.displayName,
       creds: {token, refresh},
+      account: profile,
     };
-    // console.log(JSON.stringify({token, refresh}));
-    // fs.writeFile('tokens.json', JSON.stringify({token}), () => {});
-    // oauth2Client.setCredentials({access_token: token});
-    // const calendar = google.calendar({
-    //   version: 'v3',
-    //   auth: token,
-    // });
-    // try {
-    //   const res = await calendar.calendarList.list();
-    //   console.log(res?.data?.items?.length);
-    // } catch (error) {
-    //   console.log(error);
-    // }
-    // profile.email = profile.emails[0].value;
     cb(null, user);
-  });
+  },
+);
+
+exports.loggedIn = async (req, res, next) => {
+  if (req.isAuthenticated() && req.user?.account) next();
+  else res.sendStatus(401);
+};
 
 exports.check = async (req, res, next) => {
   if (req.isAuthenticated()) next();

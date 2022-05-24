@@ -51,19 +51,6 @@ exports.terms = [
 
 exports.courses = [
   {
-    'name': 'No lecture time class',
-    'refnum': 66666,
-    'section': '01',
-    'subject': 'CSE',
-    'coursenum': '666',
-    'professor': ['Cruzcal'],
-    'lectures': [{
-      'location': 'TBD',
-      'recurrence': null,
-    }],
-    'termcode': 2222,
-  },
-  {
     'name': 'Intro Software Eng',
     'refnum': 50444,
     'section': '01',
@@ -114,7 +101,7 @@ exports.courses = [
         },
       },
     ],
-    'termcode': 2224,
+    'termcode': 2222,
   },
   {
     'name': 'Intro Print/Draw',
