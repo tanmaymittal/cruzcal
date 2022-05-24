@@ -52,6 +52,10 @@ app.use(
 
 // Routes
 
+process.env.API_VERSION = 0.1;
+app.get('/api/version/latest',
+  (_, res) => res.type('text/plain').send(process.env.API_VERSION));
+
 // Authentication
 app.get('/api/auth/check', auth.check, (_, res) => res.sendStatus(200));
 app.get('/api/auth/google', passport.authenticate(auth.googleStrategy));
@@ -62,9 +66,18 @@ app.get('/api/auth/google/redirect',
     failureMessage: true,
   }),
 );
+app.get('/api/auth/google/calendar',
+  passport.authenticate(auth.googleCalendarStrategy));
+app.get('/api/auth/google/calendar/redirect',
+  passport.authenticate(auth.googleCalendarStrategy, {
+    successRedirect: '/',
+    failureRedirect: '/api/auth/google/calendar',
+    failureMessage: true,
+  }),
+);
 
 // User management
-app.get('/api/user', auth.check, auth.getUser);
+app.get('/api/user', auth.loggedIn, auth.getUser);
 app.post('/api/logout', auth.logOut);
 
 // Course selection

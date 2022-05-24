@@ -65,11 +65,16 @@ const coursesToEvents = (termData, courseData) => {
   const events = [];
   for (const course of courseData) {
     for (const {location, recurrence} of course.lectures) {
+      if (recurrence === null) continue;
+
       const formattedStartTime = formatTime(recurrence.time.start);
       const formattedEndTime = formatTime(recurrence.time.end);
+
       const formattedStartDate = formatDate(termDate.start, 'number');
       const formattedEndDate = formatDate(termDate.end, 'string');
+
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+
       events.push({
         title: course.name,
         geo: {lat: 37.0, lon: -122.06}, // UCSC

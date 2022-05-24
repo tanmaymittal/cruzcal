@@ -1,28 +1,22 @@
-import { useAtomValue } from 'jotai';
+import { useAtom, useAtomValue } from 'jotai';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 
 import ClientOnly from '../client-only/ClientOnly';
 
-import { CalendarType, fetchCalendar, setupGoogleAuth } from './utilities';
+import { CalendarType, fetchCalendar } from './utilities';
 
 import { scheduleSelectionsAtom } from '../../atoms/course-selector';
-import { userAuthenticatedAtom } from 'apps/cruzcal/atoms/user';
+import { userAuthenticatedAtom } from '../../atoms/user';
 
 const SubmitButton = ({type}: {type: CalendarType}) => {
-  const {term, courses} = useAtomValue(scheduleSelectionsAtom);
-  const userAuthenticated = useAtomValue(userAuthenticatedAtom);
+  const schedule = useAtomValue(scheduleSelectionsAtom);
+  const [authenticated, checkAuthenticated] = useAtom(userAuthenticatedAtom);
 
   return (
     <button
-      className='flex gap-3 align-middle p-1 rounded-lg outline outline-1'
-      onClick={() => {
-        // Must setup auth window outside of async fn for Safari
-        if (type === 'google' && !userAuthenticated) {
-          setupGoogleAuth();
-        }
-        fetchCalendar(type, term, courses)
-      }}
+      className={`flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1 ${type == 'google' ? 'capitalize' : 'uppercase'}`}
+      onClick={() => fetchCalendar(type, schedule, authenticated, checkAuthenticated)}
       type="submit"
     >
       <div>{type}</div>

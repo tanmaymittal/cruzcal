@@ -3,17 +3,17 @@ import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Suspense } from 'react';
 
-import { DefaultSelectList } from '../select-list/select-list';
+import { DefaultComboboxSelect } from '../combobox-select/combobox-select';
 import CourseSelection from './CourseSelection';
 import {TermFilter} from './CSFilters';  
 import WarningDialog from '../warning-dialog/warning-dialog';
 import Submit from '../submit/Submit';
 import ClientOnly from '../client-only/ClientOnly';
-import InfoBox from '../info-box/info-box';
 
 import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/course-selector';
 import selectedTermAtom from '../../atoms/selected-term';
 import { TermInfo } from 'apps/cruzcal/atoms/terms';
+import OnlineClassesDialog from '../online-classes-dialog/online-classes-dialog';
 
 const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
@@ -30,10 +30,13 @@ const CourseSelectionListAsync = () => {
   return (
     <div>
       <div className="mb-5">
+        <OnlineClassesDialog />
+      </div>
+      <div className="mb-5">
         <WarningDialog />
       </div>
       <div className="mb-5">
-        <Suspense fallback={<DefaultSelectList/>}>
+        <Suspense fallback={<DefaultComboboxSelect/>}>
           <TermFilter selected={selectedTerm} setSelected={setSelectedTerm}/>
         </Suspense>
       </div>
@@ -56,9 +59,6 @@ const CourseSelectionListAsync = () => {
           <Submit type='json'/>
           <Submit type='ics'/>
           <Submit type='google'/>
-        </div>
-        <div className='flex justify-center gap-x-3' style={{color: 'white'}}>
-          <InfoBox />
         </div>
       </div>
     </div>
