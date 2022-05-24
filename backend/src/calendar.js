@@ -104,6 +104,8 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
   const events = [];
   for (const course of courseData) {
     for (const {location, recurrence} of course.lectures) {
+      if (recurrence === null) continue;
+
       const startTime = recurrence.time.start;
       const endTime = recurrence.time.end;
       const formattedStartDate = formatDate(termDate.start, 'number');
