@@ -53,11 +53,8 @@ const createOAuth2Client = (token) => {
 };
 
 const generateNameForCalendarId = (termData, coursesData) => {
-  let calendarId = `${termData.name}: `;
-  coursesData.forEach((c) => {
-    calendarId += `${c.name}, `;
-  });
-  return calendarId.substring(0, calendarId.length - 2);
+  const courseNameList = coursesData.map(({name}) => name).join(', ');
+  return `${termData.name}: ${courseNameList}`;
 };
 
 const coursesToEvents = (termData, courseData) => {
@@ -103,21 +100,20 @@ const coursesToEvents = (termData, courseData) => {
 };
 
 const coursesToEventsGoogleApi = (termData, courseData) => {
-  console.log('termData', termData);
-  console.log('courseData', courseData[0].lectures[0]);
-  const termDates = termData.date;
-  const courseEvents = courseData
-    .map((c) => {
-      const recurrence = c.lectures[0].recurrence;
+  const termDate = termData.date;
+  const events = [];
+  for (const course of courseData) {
+    for (const {location, recurrence} of course.lectures) {
+      if (recurrence === null) continue;
+
       const startTime = recurrence.time.start;
       const endTime = recurrence.time.end;
-      const formattedStartDate = formatDate(termDates.start, 'number');
-      const formattedEndDate = formatDate(termDates.end, 'string');
+      const formattedStartDate = formatDate(termDate.start, 'number');
+      const formattedEndDate = formatDate(termDate.end, 'string');
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
-      console.log('initialDate', initialDate);
       const formattedInitialDate = formatInitialDate(initialDate);
-      return {
-        summary: c.name,
+      events.push({
+        summary: course.name,
         start: {
           dateTime: `${formattedInitialDate}T${startTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
@@ -126,14 +122,14 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
           dateTime: `${formattedInitialDate}T${endTime}:00-07:00`,
           timeZone: 'America/Los_Angeles',
         },
-        location: c.lectures[0].location ? c.lectures[0].location : '',
+        location,
         recurrence: [
           `RRULE:${createRecurrenceRule(recurrence.days, formattedEndDate)}`,
         ],
-      };
-    });
-
-  return courseEvents;
+      });
+    }
+  }
+  return events;
 };
 
 const formatTime = (time) => {
@@ -178,25 +174,24 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     'Friday',
     'Saturday',
   ];
-  const courseDays = courseTimes;
-  const courseDaysIdx = courseDays.map((d) => days.indexOf(d));
 
   const termStartDate = new Date(
     formattedStartDate.year,
-    formattedStartDate.month - 1,
+    formattedStartDate.month - 1, // 0-based months
     formattedStartDate.date,
   );
 
-  console.log('termStartDate', termStartDate);
+  const courseDaysIdx = courseTimes.map((d) => days.indexOf(d));
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
+
   termStartDate.setDate(termStartDate.getDate() + dayDifference);
 
-  return [
-    termStartDate.getFullYear(),
-    termStartDate.getMonth() + 1,
-    termStartDate.getDate(),
-  ];
+  return {
+    year: termStartDate.getFullYear(),
+    month: termStartDate.getMonth() + 1, // reset to 1-based months
+    date: termStartDate.getDate(),
+  };
 };
 
 const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {

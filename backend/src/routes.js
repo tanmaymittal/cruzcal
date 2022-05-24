@@ -57,9 +57,6 @@ exports.genSchedule = async (req, res, next) => {
 };
 
 exports.verifySchedule = async (req, res, next) => {
-  if (typeof req.query.courseIDs === 'string') {
-    req.query.courseIDs = [req.query.courseIDs];
-  }
   try {
     const {termCode, courseIDs} = req.query;
     const term = await findTerm(termCode);
@@ -83,7 +80,7 @@ exports.genICS = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     const downloadName = 'calendar.ics';
-    const icsData = generateIcsData(term, courses);
+    const icsData = generateIcsData(term, courses) || '';
     await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
     next(error);
@@ -94,7 +91,7 @@ exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     addGoogleCalApiEvents(req.user.creds.token, term, courses);
-    return res.sendStatus(200);
+    return res.status(200).json({term, courses});
   } catch (error) {
     next(error);
   }
