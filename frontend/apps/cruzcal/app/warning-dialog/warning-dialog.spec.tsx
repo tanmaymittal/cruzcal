@@ -3,7 +3,6 @@ import { fireEvent, render, waitFor } from '@testing-library/react'
 import { unmountComponentAtNode } from "react-dom";
 import { Provider, useSetAtom } from 'jotai';
 
-
 import WarningDialog from './warning-dialog';
 
 import { courseSelectionsAtom } from '../../atoms/course-selector';
