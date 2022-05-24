@@ -172,25 +172,24 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
     'Friday',
     'Saturday',
   ];
-  const courseDays = courseTimes;
-  const courseDaysIdx = courseDays.map((d) => days.indexOf(d));
 
   const termStartDate = new Date(
     formattedStartDate.year,
-    formattedStartDate.month - 1,
+    formattedStartDate.month - 1, // 0-based months
     formattedStartDate.date,
   );
 
-  console.log('termStartDate', termStartDate);
+  const courseDaysIdx = courseTimes.map((d) => days.indexOf(d));
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
+
   termStartDate.setDate(termStartDate.getDate() + dayDifference);
 
-  return [
-    termStartDate.getFullYear(),
-    termStartDate.getMonth() + 1,
-    termStartDate.getDate(),
-  ];
+  return {
+    year: termStartDate.getFullYear(),
+    month: termStartDate.getMonth() + 1, // reset to 1-based months
+    date: termStartDate.getDate(),
+  };
 };
 
 const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
