@@ -173,3 +173,58 @@ exports.courses = [
     'termcode': 2224,
   },
 ];
+
+exports.coursesData = [
+  {
+    'name': 'Math Methods II',
+    'refnum': 51766,
+    'section': '01',
+    'subject': 'AM',
+    'coursenum': '20',
+    'professor': [
+      'Gong,Q.',
+    ],
+    'lectures': [
+      {
+        'location': 'Remote Instruction',
+        'recurrence': {
+          'days': [
+            'Tuesday',
+            'Thursday',
+          ],
+          'time': {
+            'end': '13:15',
+            'start': '11:40',
+          },
+        },
+      },
+    ],
+    'termcode': 2222,
+  },
+  {
+    'name': 'SOE Calculus III',
+    'refnum': 52295,
+    'section': '01',
+    'subject': 'AM',
+    'coursenum': '30',
+    'professor': [
+      'Lee,D.',
+    ],
+    'lectures': [
+      {
+        'location': 'Soc Sci 2 075',
+        'recurrence': {
+          'days': [
+            'Tuesday',
+            'Thursday',
+          ],
+          'time': {
+            'end': '11:25',
+            'start': '09:50',
+          },
+        },
+      },
+    ],
+    'termcode': 2222,
+  },
+];
