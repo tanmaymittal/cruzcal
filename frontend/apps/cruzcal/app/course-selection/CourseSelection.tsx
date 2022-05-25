@@ -39,7 +39,7 @@ export const CourseSelection = ({ courseAtom, remove }: CourseSelectionInterface
         />
       </Provider>
       {multipleCourseSelections && (
-        <button className='text-white' onClick={remove}>
+        <button aria-label='delete-course' className='text-white' onClick={remove}>
           <FontAwesomeIcon icon={faTrashAlt} />
         </button>
       )}
