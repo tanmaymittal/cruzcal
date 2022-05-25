@@ -23,7 +23,86 @@ afterEach(() => {
 
 describe('WarningDialog', () => {
   it('No conflicting classes', async () => {
-    const updatedCourses: CourseSelector[] = [];
+    const updatedCourses: CourseSelector[] = [
+      // Course 1
+      {
+        "term": {
+          "code": 2224,
+          "name": "2022 Summer Quarter",
+          "date": {
+            "end": "08/26/22",
+            "start": "07/25/22",
+          }
+
+        },
+        "subject": {
+          "name": "ANTH",
+        },
+
+        "course": {
+          "name": "Intr Culturl Anthro",
+          "professor": [
+            "Evans,D.N."
+          ],
+          "section": "01",
+          "coursenum": "2",
+          "courseID": 70299,
+          "lectures": [{
+            "location": "Engineer 2 194",
+            "recurrence": {
+              "days": [
+                "Tuesday",
+                "Thursday"
+              ],
+              "time": {
+                "start": "13:00",
+                "end": "16:30",
+              }
+            }
+          }],
+        },
+      },
+
+      // Course 2
+      {
+        "term": {
+          "code": 2224,
+          "name": "2022 Summer Quarter",
+          "date": {
+            "end": "08/26/22",
+            "start": "07/25/22",
+          }
+
+        },
+        "subject": {
+          "name": "AM",
+        },
+
+        "course": {
+          "name": "Math Methods I",
+          "professor": [
+            "Katznelson,J.R."
+          ],
+          "section": "01",
+          "coursenum": "10",
+          "courseID": 70299,
+          "lectures": [{
+            "location": "Engineer 2 192",
+            "recurrence": {
+              "days": [
+                "Monday",
+                "Wednesday",
+                "Friday"
+              ],
+              "time": {
+                "end": "11:30",
+                "start": "09:00"
+              }
+            }
+          }],
+        },
+      },
+    ];
 
     const Updater = () => {
       const setCSelections = useSetAtom(courseSelectionsAtom);
