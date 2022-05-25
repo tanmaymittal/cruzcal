@@ -24,9 +24,7 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
       'time_zone': 'America/Los_Angeles',
     },
   });
-  console.log('courseEvents', courseEvents);
   courseEvents.forEach((event) => {
-    console.log('google event', event);
     calendar.events.insert({
       calendarId: calendarResponse.data.id,
       resource: event,
@@ -38,6 +36,7 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
       console.log('Event created: %s', event.data.htmlLink);
     });
   });
+  return courseEvents;
 };
 
 // Helpers
@@ -106,15 +105,12 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
   for (const course of courseData) {
     for (const {location, recurrence} of course.lectures) {
       if (recurrence === null) continue;
-
       const startTime = recurrence.time.start;
       const endTime = recurrence.time.end;
       const formattedStartDate = formatDate(termDate.start, 'number');
       const formattedEndDate = formatDate(termDate.end, 'string');
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
-      console.log('initialDate', initialDate);
       const formattedInitialDate = formatInitialDate(initialDate);
-      console.log('formattedInitialDate', formattedInitialDate);
       events.push({
         summary: course.name,
         start: {
@@ -221,4 +217,5 @@ module.exports = {
    */
   generateIcsData,
   addGoogleCalApiEvents,
+  generateNameForCalendarId,
 };

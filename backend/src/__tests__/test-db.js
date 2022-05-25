@@ -1,4 +1,4 @@
-require('dotenv').config();
+// require('dotenv').config();
 
 // Set to test database
 process.env.POSTGRES_DB = 'cruzcal-test';

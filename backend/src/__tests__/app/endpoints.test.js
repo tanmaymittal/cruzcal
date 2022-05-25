@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+require('dotenv').config();
 const supertest = require('supertest');
 const http = require('http');
 const {db, addTerm, addCourse} = require('../test-db');
