@@ -24,6 +24,7 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
       'time_zone': 'America/Los_Angeles',
     },
   });
+  console.log('courseEvents', courseEvents);
   courseEvents.forEach((event) => {
     console.log('google event', event);
     calendar.events.insert({
@@ -111,7 +112,9 @@ const coursesToEventsGoogleApi = (termData, courseData) => {
       const formattedStartDate = formatDate(termDate.start, 'number');
       const formattedEndDate = formatDate(termDate.end, 'string');
       const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+      console.log('initialDate', initialDate);
       const formattedInitialDate = formatInitialDate(initialDate);
+      console.log('formattedInitialDate', formattedInitialDate);
       events.push({
         summary: course.name,
         start: {
@@ -152,16 +155,16 @@ const formatDate = (dateString, formatType) => {
   };
 };
 
-const formatInitialDate = (initialDateArr) => {
-  let month = String(initialDateArr[1]);
-  let day = String(initialDateArr[2]);
+const formatInitialDate = (initialDateObj) => {
+  let month = String(initialDateObj.month);
+  let day = String(initialDateObj.date);
   if (month.length < 2) {
     month = '0' + month;
   }
   if (day.length < 2) {
     day = '0' + day;
   }
-  return `${initialDateArr[0]}-${month}-${day}`;
+  return `${initialDateObj.year}-${month}-${day}`;
 };
 
 const getInitialDate = (courseTimes, formattedStartDate) => {
