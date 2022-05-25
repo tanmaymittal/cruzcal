@@ -1,6 +1,5 @@
 import React from 'react';
-import { render } from '@testing-library/react';
-import { act } from 'react-dom/test-utils';
+import { fireEvent, render, waitFor } from '@testing-library/react'
 import { unmountComponentAtNode } from "react-dom";
 import { Provider, useSetAtom } from 'jotai';
 
@@ -10,7 +9,6 @@ import { courseSelectionsAtom } from '../../atoms/course-selector';
 import { CourseSelector } from '../../atoms/course-selector';
 
 let container = null;
-const setCSelections = useSetAtom(courseSelectionsAtom);
 
 beforeEach(() => {
   container = document.createElement("div");
@@ -24,18 +22,7 @@ afterEach(() => {
 });
 
 describe('WarningDialog', () => {
-  it('should render successfully', async () => {
-    // test 1: the warning dialog should NOT appear
-    act(() => {
-      render(
-        <Provider>
-          <WarningDialog />
-        </Provider>, container);
-    })
-    expect(container).toBeTruthy();
-
-    // add another test to scan the document to ensure that the warning component is not on the document
-
+  it('No conflicting classes', async () => {
     const updatedCourses: CourseSelector[] = [
       // Course 1
       {
@@ -54,22 +41,134 @@ describe('WarningDialog', () => {
 
         "course": {
           "name": "Intr Culturl Anthro",
-          "professor": "Evans,D.N.",
+          "professor": [
+            "Evans,D.N."
+          ],
+          "section": "01",
           "coursenum": "2",
           "courseID": 70299,
           "lectures": [{
             "location": "Engineer 2 194",
-            "times": [{
-              "day": "Tuesday",
-              "start": "13:00",
-              "end": "16:30",
-            },
-            {
-              "day": "Thursday",
-              "start": "13:00",
-              "end": "16:30",
-            }]
-          }]
+            "recurrence": {
+              "days": [
+                "Tuesday",
+                "Thursday"
+              ],
+              "time": {
+                "start": "13:00",
+                "end": "16:30",
+              }
+            }
+          }],
+        },
+      },
+
+      // Course 2
+      {
+        "term": {
+          "code": 2224,
+          "name": "2022 Summer Quarter",
+          "date": {
+            "end": "08/26/22",
+            "start": "07/25/22",
+          }
+
+        },
+        "subject": {
+          "name": "AM",
+        },
+
+        "course": {
+          "name": "Math Methods I",
+          "professor": [
+            "Katznelson,J.R."
+          ],
+          "section": "01",
+          "coursenum": "10",
+          "courseID": 70299,
+          "lectures": [{
+            "location": "Engineer 2 192",
+            "recurrence": {
+              "days": [
+                "Monday",
+                "Wednesday",
+                "Friday"
+              ],
+              "time": {
+                "end": "11:30",
+                "start": "09:00"
+              }
+            }
+          }],
+        },
+      },
+    ];
+
+    const Updater = () => {
+      const setCSelections = useSetAtom(courseSelectionsAtom);
+      return (
+        <>
+          <button onClick={() => setCSelections(updatedCourses)}>
+            Update Courses
+          </button>
+        </>
+      )
+    }
+
+    const { findByText, getByText } = render(
+      <Provider>
+        <WarningDialog />
+        <Updater />
+      </Provider>,
+      container
+    );
+
+    expect(container).toBeTruthy();
+    await waitFor(() => {
+      findByText('See warnings')
+    });
+    expect(container).not.toContain("See warnings");
+
+  });
+
+  it('two conflicting classes', async () => {
+    const updatedCourses: CourseSelector[] = [
+      // Course 1
+      {
+        "term": {
+          "code": 2224,
+          "name": "2022 Summer Quarter",
+          "date": {
+            "end": "08/26/22",
+            "start": "07/25/22",
+          }
+
+        },
+        "subject": {
+          "name": "ANTH",
+        },
+
+        "course": {
+          "name": "Intr Culturl Anthro",
+          "professor": [
+            "Evans,D.N."
+          ],
+          "section": "01",
+          "coursenum": "2",
+          "courseID": 70299,
+          "lectures": [{
+            "location": "Engineer 2 194",
+            "recurrence": {
+              "days": [
+                "Tuesday",
+                "Thursday"
+              ],
+              "time": {
+                "start": "13:00",
+                "end": "16:30",
+              }
+            }
+          }],
         },
       },
 
@@ -90,38 +189,55 @@ describe('WarningDialog', () => {
 
         "course": {
           "name": "Math Methods II",
-          "professor": "str",
-          "coursenum": "str",
-          "courseID": 70312,
+          "professor": [
+            "Lu,L.K."
+          ],
+          "section": "01",
+          "coursenum": "20",
+          "courseID": 70299,
           "lectures": [{
             "location": "Engineer 2 192",
-            "times": [{
-              "day": "Tuesday",
-              "start": "13:00",
-              "end": "16:30",
-            },
-            {
-              "day": "Thursday",
-              "start": "13:00",
-              "end": "16:30",
-            }]
-          }]
+            "recurrence": {
+              "days": [
+                "Tuesday",
+                "Thursday"
+              ],
+              "time": {
+                "start": "13:00",
+                "end": "16:30",
+              }
+            }
+          }],
         },
       },
     ];
 
-    setCSelections(updatedCourses);
+    const Updater = () => {
+      const setCSelections = useSetAtom(courseSelectionsAtom);
+      return (
+        <>
+          <button onClick={() => setCSelections(updatedCourses)}>
+            Update Courses
+          </button>
+        </>
+      )
+    }
 
-    // test 2: the warning dialog should appear: conflicts AM 2 & ANTHRO intro
-    act(() => {
-      render(
-        <Provider>
-          <WarningDialog />
-        </Provider>, container);
-    })
+    const { findByText, getByText } = render(
+      <Provider>
+        <WarningDialog />
+        <Updater />
+      </Provider>,
+      container
+    );
 
-    // validate that the warningDialog has the two conflicting tests in it
     expect(container).toBeTruthy();
-    // check data that I expect is here
+
+    fireEvent.click(getByText('Update Courses'))
+    await waitFor(() => {
+      getByText('See warnings')
+    });
+
+    expect(container).toBeTruthy();
   });
 });
