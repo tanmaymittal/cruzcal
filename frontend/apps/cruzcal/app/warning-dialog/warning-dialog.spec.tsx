@@ -22,6 +22,36 @@ afterEach(() => {
 });
 
 describe('WarningDialog', () => {
+  it('No conflicting classes', async () => {
+    const updatedCourses: CourseSelector[] = [];
+
+    const Updater = () => {
+      const setCSelections = useSetAtom(courseSelectionsAtom);
+      return (
+        <>
+          <button onClick={() => setCSelections(updatedCourses)}>
+            Update Courses
+          </button>
+        </>
+      )
+    }
+
+    const { findByText, getByText } = render(
+      <Provider>
+        <WarningDialog />
+        <Updater />
+      </Provider>,
+      container
+    );
+
+    expect(container).toBeTruthy();
+    await waitFor(() => {
+      findByText('See warnings')
+    });
+    expect(container).not.toContain("See warnings");
+
+  });
+
   it('two conflicting classes', async () => {
     const updatedCourses: CourseSelector[] = [
       // Course 1
