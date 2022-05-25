@@ -3,51 +3,35 @@ import { CourseSelector } from "../atoms/course-selector";
 const terms = [
   {
     code: 2224,
-    start: '2022-07-25',
-    end: '2022-08-26',
     name: '2022 Summer Quarter',
+    date: {
+      start: '2022-07-25',
+      end: '2022-08-26',
+    },
   },
   {
     code: 2222,
-    start: '2022-03-28',
-    end: '2022-06-03',
     name: '2022 Spring Quarter',
+    date: {
+      start: '2022-03-28',
+      end: '2022-06-03',
+    },
   },
   {
     code: 2220,
-    start: '2022-01-03',
-    end: '2022-03-11',
     name: '2022 Winter Quarter',
+    date: {
+      start: '2022-01-03',
+      end: '2022-03-11',
+    },
   },
   {
     code: 2218,
-    start: '2021-09-23',
-    end: '2021-12-03',
     name: '2021 Fall Quarter',
-  },
-  {
-    code: 2214,
-    start: '2021-07-26',
-    end: '2021-08-27',
-    name: '2021 Summer Quarter',
-  },
-  {
-    code: 2212,
-    start: '2021-03-29',
-    end: '2021-06-04',
-    name: '2021 Spring Quarter',
-  },
-  {
-    code: 2210,
-    start: '2021-01-04',
-    end: '2021-03-12',
-    name: '2021 Winter Quarter',
-  },
-  {
-    code: 2208,
-    start: '2020-10-01',
-    end: '2020-12-11',
-    name: '2020 Fall Quarter',
+    date: {
+      start: '2021-09-23',
+      end: '2021-12-03',
+    },
   },
 ];
 
