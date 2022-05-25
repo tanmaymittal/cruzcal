@@ -1,10 +1,10 @@
 import { render } from '@testing-library/react';
 
-import ComboboxSelect from './combobox-select';
+import ComboboxSelect, { DefaultComboboxSelect } from './combobox-select';
 
 describe('ComboboxSelect', () => {
   it('should render successfully', () => {
-    const { baseElement } = render(<ComboboxSelect />);
+    const { baseElement } = render(<DefaultComboboxSelect />);
     expect(baseElement).toBeTruthy();
   });
 });
