@@ -1,6 +1,13 @@
 const ics = require('ics');
 const {google} = require('googleapis');
 
+const deleteCalendar = async (token, calendarId) => {
+  const oauth2Client = createOAuth2Client(token);
+  google.options({auth: oauth2Client});
+  const calendar = google.calendar('v3');
+  return calendar.calendars.delete({calendarId});
+};
+
 const generateIcsData = (termData, courseData) => {
   const {
     error,
@@ -10,33 +17,36 @@ const generateIcsData = (termData, courseData) => {
   return value;
 };
 
-
 const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   const oauth2Client = createOAuth2Client(token);
   const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
   google.options({auth: oauth2Client});
   const calendar = google.calendar('v3');
-  const candidateId = generateNameForCalendarId(termData, coursesData);
-  const calendarId = candidateId ? candidateId : 'primary';
+
+  const candidateSummary = genNameForCalendarSummary(termData, coursesData);
+  const calendarSummary = candidateSummary ? candidateSummary : 'primary';
+
   const calendarResponse = await calendar.calendars.insert({
     requestBody: {
-      'summary': calendarId,
+      'summary': calendarSummary,
       'time_zone': 'America/Los_Angeles',
     },
   });
+  const calendarId = calendarResponse.data.id;
+
   courseEvents.forEach((event) => {
     calendar.events.insert({
-      calendarId: calendarResponse.data.id,
+      calendarId,
       resource: event,
     }, function(err, event) {
       if (err) {
         console.log('Error contacting the Calendar service: ' + err);
         return;
       }
-      console.log('Event created: %s', event.data.htmlLink);
+      // console.log('Event created: %s', event.data.htmlLink);
     });
   });
-  return courseEvents;
+  return {calendarId, courseEvents};
 };
 
 // Helpers
@@ -52,7 +62,7 @@ const createOAuth2Client = (token) => {
   return oauth2Client;
 };
 
-const generateNameForCalendarId = (termData, coursesData) => {
+const genNameForCalendarSummary = (termData, coursesData) => {
   const courseNameList = coursesData.map(({name}) => name).join(', ');
   return `${termData.name}: ${courseNameList}`;
 };
@@ -217,5 +227,7 @@ module.exports = {
    */
   generateIcsData,
   addGoogleCalApiEvents,
-  generateNameForCalendarId,
+  genNameForCalendarSummary,
+  deleteCalendar,
+  formatDateString: formatInitialDate,
 };
