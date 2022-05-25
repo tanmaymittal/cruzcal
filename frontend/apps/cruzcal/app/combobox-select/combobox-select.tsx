@@ -6,7 +6,11 @@ import { SubjectInfo } from '../../atoms/subjects';;
 import { TermInfo } from '../../atoms/terms';
 import { CourseInfo } from '../../atoms/courses';
 
-export type Subject = SubjectInfo | TermInfo | CourseInfo;
+export type BaseSubject = {
+  name: string,
+};
+
+export type Subject = SubjectInfo | TermInfo | CourseInfo | BaseSubject;
 
 /* eslint-disable-next-line */
 export interface ComboboxSelectProps {
@@ -36,11 +40,12 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
         <div className="relative">
           <div className={`relative w-full cursor-default overflow-hidden rounded-lg bg-white text-left shadow-md sm:text-sm ${disabled ? 'bg-gray-400' : 'focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75 focus-visible:ring-offset-2 focus-visible:ring-offset-teal-300'}`}>
             <Combobox.Input
+              aria-label={`combobox-input-${listName}`}
               className="w-full truncate border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
               displayValue={() => selected ? selected.name : `Select ${listName}...`}
               onChange={(event) => setQuery(event.target.value)}
             />
-            <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-2">
+            <Combobox.Button aria-label={`combobox-dropdown-${listName}`} className="absolute inset-y-0 right-0 flex items-center pr-2">
               <SelectorIcon
                 className="h-5 w-5 text-gray-400"
                 aria-hidden="true"
@@ -54,7 +59,10 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
             leaveTo="opacity-0"
             afterLeave={() => setQuery('')}
           >
-            <Combobox.Options className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10">
+            <Combobox.Options
+              aria-label={`combobox-options-${listName}`}
+              className="absolute mt-1 max-h-60 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm z-10"
+            >
               {filteredOptions.length === 0 && query !== '' ? (
                 <div className="relative cursor-default select-none py-2 px-4 text-gray-700">
                   Nothing found.
@@ -63,6 +71,7 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
                 filteredOptions.map((option, optionId) => (
                   <Combobox.Option
                     key={optionId}
+                    aria-label={`combobox-option-${listName}`}
                     className={({ active }) =>
                       `relative cursor-default select-none py-2 pl-10 pr-4 ${
                         active ? 'bg-teal-600 text-white' : 'text-gray-900'
