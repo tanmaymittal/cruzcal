@@ -14,7 +14,7 @@ export const Mobile = () => {
   return (
     <div className="container mx-auto p-3">
       <Tab.Group>
-        <Tab.List className={'mb-2 flex justify-around gap-1'}>
+        <Tab.List className={'mb-2 flex justify-around gap-4'}>
           <Tab as={Fragment}>
             {({ selected }) => (
               <button
