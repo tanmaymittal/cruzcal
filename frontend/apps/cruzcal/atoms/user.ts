@@ -5,7 +5,6 @@ import { server } from '../config';
 
 export interface UserSession {
   displayName: string,
-  email: string
 };
 
 export const storageUserAtom = atomWithStorage('user', null as UserSession);
@@ -16,7 +15,6 @@ export const fetchUserAtom = atomWithQuery((get) => ({
     if (storageUser !== null) return storageUser;
     const res = await fetch(`${server}/api/user`);
     const user = res.status === 200 ? await res.json() : null;
-    // console.log(user);
     return user;
   },
 }));
