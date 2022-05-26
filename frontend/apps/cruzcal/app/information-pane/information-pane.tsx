@@ -1,6 +1,6 @@
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
 import InfoBox from '../info-box/info-box';
 
@@ -8,27 +8,25 @@ import InfoBox from '../info-box/info-box';
 export interface InformationPaneProps {}
 
 export const InformationPane = () => {
-  let [isOpen, setIsOpen] = useState(false)
+  let [isOpen, setIsOpen] = useState(false);
 
   function closeModal() {
-    setIsOpen(false)
+    setIsOpen(false);
   }
 
   function openModal() {
-    setIsOpen(true)
+    setIsOpen(true);
   }
 
   return (
     <>
-      <div className="flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="rounded-md bg-opacity-20 text-2xl font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          <FontAwesomeIcon icon={faCircleQuestion} />
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={openModal}
+        className="rounded-md bg-opacity-20 text-2xl font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+      >
+        <FontAwesomeIcon icon={faCircleQuestion} />
+      </button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog as="div" className="relative z-10" onClose={closeModal}>
@@ -64,15 +62,20 @@ export const InformationPane = () => {
                   </Dialog.Title>
                   <div className="mt-2">
                     <p>
-                      You can login with your UCSC credentials to associate your account. To add classes to your schedule,
+                      You can login with your UCSC credentials to associate your
+                      account. To add classes to your schedule,
                     </p>
-                    <ol className='list-decimal ml-4 text-gray-600'>
-                      <li>Select the intended term. The subject dropdown will populate with the respective courses available for that term</li>
+                    <ol className="ml-4 list-decimal text-gray-600">
+                      <li>
+                        Select the intended term. The subject dropdown will
+                        populate with the respective courses available for that
+                        term
+                      </li>
                       <li>Select a subject</li>
                       <li>Select your desired course number</li>
                     </ol>
                   </div>
-                  <div className='mt-4'>
+                  <div className="mt-4">
                     <InfoBox />
                   </div>
                 </Dialog.Panel>
@@ -82,7 +85,7 @@ export const InformationPane = () => {
         </Dialog>
       </Transition>
     </>
-  )
-}
+  );
+};
 
 export default InformationPane;
