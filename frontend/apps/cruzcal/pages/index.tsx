@@ -19,10 +19,10 @@ export function Index() {
   return (
     <>
       <Header />
-      <div className='block md:hidden'>
+      <div className='block lg:hidden'>
         <Mobile />
       </div>
-      <div className='hidden md:block'>
+      <div className='hidden lg:block'>
         <Desktop />
       </div>
       <Footer />
