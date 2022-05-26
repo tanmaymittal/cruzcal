@@ -72,7 +72,7 @@ export const WarningDialog = () => {
                     </p>
                       {warnings.map((warning) => {
                         return (
-                          <p key={hash(warning)}>{warning.course.name}</p>
+                          <p key={hash(warning)}>{warning.subject.name} {warning.course.coursenum} - {warning.course.section}: {warning.course.name}</p>
                         );
                       })}
                   </div>
