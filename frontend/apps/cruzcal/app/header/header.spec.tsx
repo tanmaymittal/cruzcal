@@ -1,7 +1,7 @@
 import { render } from '@testing-library/react';
 import { unmountComponentAtNode } from "react-dom";
 
-import InfoBox from './info-box';
+import Header from './header';
 
 let container = null;
 
@@ -16,15 +16,16 @@ afterEach(() => {
   container = null;
 });
 
-describe('InfoBox', () => {
-  it('should render successfully', async () => {
+describe('Header', () => {
+  it('should render successfully', () => {
     const { findByText, getByText } = render(
-      <InfoBox />,
+      <Header />,
       container
     );
 
     expect(container).toBeTruthy();
-    await findByText('How do I use this app?');
-    await findByText('Term Selection: Be careful!');
+
+    getByText('CruzCal');
+    getByText('All your classes. One calendar file.');
   });
 });
