@@ -125,9 +125,9 @@ describe('WarningDialog', () => {
 
     expect(container).toBeTruthy();
     await waitFor(() => {
-      findByText('See warnings')
+      findByText('See schedule conflicts')
     });
-    expect(container).not.toContain("See warnings");
+    expect(container).not.toContain("See schedule conflicts");
 
   });
 
@@ -235,7 +235,7 @@ describe('WarningDialog', () => {
 
     fireEvent.click(getByText('Update Courses'))
     await waitFor(() => {
-      getByText('See warnings')
+      getByText('See schedule conflicts')
     });
 
     expect(container).toBeTruthy();

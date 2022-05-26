@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react'
 import { Dialog, Transition } from '@headlessui/react'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+
 import InfoBox from '../info-box/info-box';
 
 /* eslint-disable-next-line */
