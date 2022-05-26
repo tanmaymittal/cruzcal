@@ -2,18 +2,12 @@
 import { useUpdateAtom } from 'jotai/utils';
 import { useEffect } from 'react';
 
-import CourseSelectionList from '../app/course-selection/CourseSelectionList';
+import { versionAtom } from '../atoms/version';
+
 import Header from '../app/header/header';
 import Footer from '../app/footer/footer';
-import { versionAtom } from '../atoms/version';
-import dynamic from 'next/dynamic'
 import Mobile from './mobile';
 import Desktop from './desktop';
-
-const Calendar = dynamic(
-  () => import('../app/calendar-view/calendar-view'),
-  { ssr: false}
-)
 
 export function Index() {
   const dispatchVersion = useUpdateAtom(versionAtom);
@@ -25,8 +19,12 @@ export function Index() {
   return (
     <>
       <Header />
-      <Mobile />
-      <Desktop />
+      <div className='block md:hidden'>
+        <Mobile />
+      </div>
+      <div className='hidden md:block'>
+        <Desktop />
+      </div>
       <Footer />
     </>
   );
