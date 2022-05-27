@@ -10,7 +10,7 @@ import { courseSelectionsAtom, CourseSelector } from "../../atoms/course-selecto
 import selectedTermAtom from "../../atoms/selected-term";
 import selectedSubjectAtom from "../../atoms/selected-subject";
 import selectedCourseAtom from "../../atoms/selected-course";
-import { atom, useAtom } from "jotai";
+import { atom } from "jotai";
 
 export const SubjectFilter = ({selection, setSelection}) => {
   const subjects = useAtomValue(subjectsAtom);
