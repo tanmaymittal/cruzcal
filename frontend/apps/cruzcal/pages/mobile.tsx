@@ -19,7 +19,7 @@ export const Mobile = () => {
             {({ selected }) => (
               <button
                 className={`w-full rounded-lg bg-white py-2 text-lg ${
-                  selected ? 'bg-zinc-700 text-white' : 'bg-white text-black'
+                  selected ? 'bg-blue-600 text-white' : 'bg-white text-black'
                 }`}
               >
                 Calendar
@@ -30,7 +30,7 @@ export const Mobile = () => {
             {({ selected }) => (
               <button
                 className={`w-full rounded-lg bg-white py-2 text-lg ${
-                  selected ? 'bg-zinc-700 text-white' : 'bg-white text-black'
+                  selected ? 'bg-blue-600 text-white' : 'bg-white text-black'
                 }`}
               >
                 Add Classes
