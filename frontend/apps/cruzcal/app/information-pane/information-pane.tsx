@@ -23,6 +23,7 @@ export const InformationPane = () => {
     <>
       <div className="flex items-center justify-center">
         <button
+          aria-label="info-button"
           type="button"
           onClick={openModal}
           className="rounded-md bg-opacity-20 text-2xl font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
@@ -56,7 +57,7 @@ export const InformationPane = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel aria-label="information-pane" className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
                     className="text-lg font-medium leading-6 text-gray-900"
