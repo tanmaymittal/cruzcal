@@ -6,11 +6,11 @@ import ClientOnly from '../client-only/ClientOnly';
 
 import { CalendarType, fetchCalendar } from './utilities';
 
-import { scheduleSelectionsAtom } from '../../atoms/course-selector';
+import { scheduleSelectionAtom } from '../../atoms/course-selector';
 import { userAuthenticatedAtom } from '../../atoms/user';
 
 const SubmitButton = ({type}: {type: CalendarType}) => {
-  const schedule = useAtomValue(scheduleSelectionsAtom);
+  const schedule = useAtomValue(scheduleSelectionAtom);
   const [authenticated, checkAuthenticated] = useAtom(userAuthenticatedAtom);
 
   return (

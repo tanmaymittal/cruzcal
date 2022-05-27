@@ -23,6 +23,14 @@ const initialScheduleSelections = {
   courses: [{...defaultCourseSelection}]
 }
 
+export const fetchSchedule = async (scheduleQuery) => {
+  const path = `${server}/api/calendar/json${scheduleQuery}`;
+  const res = await fetch(path);
+
+  if (res.status !== 200) throw res;
+  else return await res.json();
+} 
+
 export const courseSelectionsStorageAtom = atomWithStorage('course-selector', [{...defaultCourseSelection}]);
 export const courseSelectionsAtom = atom(
   (get) => get(courseSelectionsStorageAtom),
@@ -30,44 +38,56 @@ export const courseSelectionsAtom = atom(
     set(courseSelectionsStorageAtom, courseSelections);
   },
 );
-courseSelectionsAtom.onMount = ((setAtom) => {
-  console.log(location.search);
-})
+
 export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
 
 export const multipleCourseSelectionsAtom = atom((get) => get(courseSelectionAtomsAtom).length > 1);
 
-export const generateScheduleURI = (term: TermInfo, courses: CourseInfo[]) => {
+export const generateScheduleQuery = (term: TermInfo, courses: CourseInfo[]) => {
   const completedCourses = courses.filter((course) => course?.courseID != null);
 
   if (term == null) {
     throw new Error(`Course selection incomplete`);
   } else if (completedCourses.length === 0) {
-    throw new Error('No courses selected');
+    return ''; // no schedule query
   }
 
   const termCodeStr = `termCode=${encodeURIComponent(term.code)}`;
   const courseIDsStr = completedCourses
     .map((course) => `courseIDs=${encodeURIComponent(course.courseID)}`)
     .join('&');
-  return `${location.pathname}?${termCodeStr}&${courseIDsStr}`;
+  return `?${termCodeStr}&${courseIDsStr}`;
 };
 
-export const scheduleSelectionsAtom = atom(
+export const scheduleSelectionAtom = atom(
   (get) => {
     const term = get(selectedTermAtom);
     const courseSelections = get(courseSelectionsAtom);
     try {
       const courses = courseSelections.map(({course}) => course);
-      const scheduleURI = generateScheduleURI(term, courses);
-      history.pushState(null, '', scheduleURI);
+      const scheduleURI = generateScheduleQuery(term, courses);
+      history.pushState(null, '', `${location.pathname}${scheduleURI}`);
     } catch (error) {
       console.log(error.message);
     }
     return {term, courses: courseSelections};
-  }, (get, set, newTermAndCS: {term: TermInfo, courses: CourseSelector[]}) => {
-    // const {term, courses} = newTermAndCS;
-    // history.pushState(newTermAndCS, "Schedule Selection", generateScheduleQuery('', term, courses.map(({course}) => course)));
-    // set(scheduleHashAtom, newTermAndCS);
+  }, (get, set, newSchedule: {term: TermInfo, courses: CourseSelector[]}) => {
+    // console.log(newSchedule.term);
+    // console.log(newSchedule.courses.length);
+    // set(selectedTermAtom, newSchedule.term);
+    // set(courseSelectionsAtom, newSchedule.courses);
   });
+
+  // scheduleSelectionAtom.onMount = (setScheduleSelection) => {
+  //   const query = new URLSearchParams(location.search);
+  //   if (query.get('termCode') !== null && query.getAll('courseIDs').length > 0) {
+  //     fetchSchedule(location.search)
+  //       .then((schedule) => {
+  //         // console.log(schedule);
+  //         setScheduleSelection(schedule); 
+  //       })
+  //       .catch(console.error);
+  //   }
+  // }
+
 
