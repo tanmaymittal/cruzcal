@@ -1,21 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { unmountComponentAtNode } from "react-dom";
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import InformationPane from './information-pane';
-
-let container = null;
-
-beforeEach(() => {
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
 
 describe('InformationPane', () => {
   // checks that the component actually renders
@@ -27,10 +13,7 @@ describe('InformationPane', () => {
   // checks that the correct icon appears on the screen
   it('question mark icon appears', async () => {
     render(<InformationPane />);
-
-    await waitFor(() => {
-      expect(screen.findByRole('faCircleQuestion', {name: /faCircleQuestion/i}));
-    });
+    await screen.findByRole('button', {name: /info-button/i});
   });
 
   // checks when user clicks on the `?` icon => the information pane modal should appear
@@ -39,12 +22,9 @@ describe('InformationPane', () => {
     render(<InformationPane />);
     const qButton = await screen.findByRole('button', {name: /info-button/i});
 
-    await waitFor(() => {
-      expect(user.click(qButton));
-      expect(screen.findByRole('combobox', {name: /information-pane/i}));
-      expect(screen.findByText("How do I use this app?"));
-      expect(screen.findByText("Warning: Term Selection"));
-    });
+    await user.click(qButton);
+    await screen.findByLabelText(/information-pane/i);
+    await screen.findByText(/How do I use this app\?/);
+    await screen.findByText(/Warning: Term Selection/);
   });
-
 });

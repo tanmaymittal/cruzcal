@@ -1,21 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import { unmountComponentAtNode } from "react-dom";
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import InfoBox from './info-box';
-
-let container = null;
-
-beforeEach(() => {
-  container = document.createElement("div");
-  document.body.appendChild(container);
-});
-
-afterEach(() => {
-  unmountComponentAtNode(container);
-  container.remove();
-  container = null;
-});
 
 describe('InfoBox', () => {
   // checks that the component actually renders
@@ -29,12 +15,7 @@ describe('InfoBox', () => {
     const user = userEvent.setup();
     render(<InfoBox />);
     const wButton = await screen.findByRole('button', {name: /warning-button/i});
-
-    // check that once user selects the drop down, verify that the panel comes up
-    await waitFor(() => {
-      expect(screen.findByRole('wButton', {name: /warning-button/i}));
-      expect(user.click(wButton));
-      expect(screen.findByText("After selecting course"));
-    });
+    await user.click(wButton);
+    await screen.findByText(/After selecting course/);
   });
 });
