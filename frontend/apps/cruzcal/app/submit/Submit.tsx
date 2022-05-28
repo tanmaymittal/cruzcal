@@ -15,7 +15,7 @@ const SubmitButton = ({type}: {type: CalendarType}) => {
 
   return (
     <button
-      className={`flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1 ${type == 'google' ? 'capitalize' : 'uppercase'}`}
+      className={`flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1 ${type === 'google' ? 'capitalize' : 'uppercase'}`}
       onClick={() => fetchCalendar(type, schedule, authenticated, checkAuthenticated)}
       type="submit"
     >
