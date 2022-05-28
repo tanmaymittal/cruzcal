@@ -1,6 +1,5 @@
 import { defaultScheduleSelection, scheduleSelectionAtom } from "apps/cruzcal/atoms/course-selector";
 import { fetchSchedule } from "apps/cruzcal/atoms/share-link";
-import { server } from "apps/cruzcal/config";
 import { useUpdateAtom } from "jotai/utils";
 import { useEffect, useRef, useState } from "react";
 
@@ -9,28 +8,37 @@ export const ImportLink = () => {
   const inputLink = useRef(null);
   const setScheduleSelection = useUpdateAtom(scheduleSelectionAtom);
 
-  const updateState = (searchParams: URLSearchParams) => {
-    if (searchParams.has('termCode') && searchParams.has('courseIDs')) {
-      fetchSchedule(`?${searchParams}`)
-        .then(setScheduleSelection)
-        .catch(console.error);
-    } else if (`${searchParams}` === '') {
+  const updateSchedule = async (scheduleQuery: string) => {
+    try {
+      const schedule = await fetchSchedule(scheduleQuery);
+      setScheduleSelection(schedule);
+    } catch (error) {
+      // State couldn't be updated
+      console.error(error);
       setScheduleSelection(defaultScheduleSelection);
-    } else {
-      history.replaceState(null, '', `${server}/`);
     }
   }
 
   useEffect(() => {
-    const searchParams = new URLSearchParams(location.search);
-    updateState(searchParams);
-  }, [location.search]);
+    // Update schedule on window.back press
+    window.onpopstate = function(event) {
+      if (event.state.hasOwnProperty('search')) updateSchedule(event.state.search);
+      else {
+        const queryStart = event.state.url.indexOf('?');
+        const search = event.state.url.substring(queryStart);
+        updateSchedule(search);
+      }
+    }
+
+    // Update state on first render
+    const {search} = new URL(location.href);
+    updateSchedule(search);
+  }, []);
 
   const importLink = async (link: string) => {
     try {
       const url = new URL(link);
-      updateState(url.searchParams);
-      // setSearchParams(url.search);
+      updateSchedule(url.search);
 
       // Reset import input
       inputLink.current.value = '';

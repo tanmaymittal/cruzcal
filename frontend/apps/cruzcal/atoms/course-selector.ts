@@ -28,10 +28,18 @@ export const courseSelectionsAtom = atom(
   (get) => get(courseSelectionsStorageAtom),
   (get, set, courseSelections: CourseSelector[]) => {
     set(courseSelectionsStorageAtom, courseSelections);
-    const term = get(selectedTermAtom);
-    const url = generateScheduleURI({term, courses: courseSelections});
-    console.log(url);
-    history.pushState(null, '', url);
+
+    try {
+      const term = get(selectedTermAtom);
+      const uri = generateScheduleURI({term, courses: courseSelections});
+      // Don't push url history if unchanged
+      if (uri !== location?.href) {
+        const {search} = new URL(uri);
+        history.pushState({search}, '', uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 );
 
