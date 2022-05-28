@@ -43,30 +43,8 @@ describe('InformationPane', () => {
       expect(user.click(qButton));
       expect(screen.findByRole('combobox', {name: /information-pane/i}));
       expect(screen.findByText("How do I use this app?"));
-    });
-  });
-
-  // checks when user clicks on the `?` icon => the information pane modal should appear
-  // user then clicks on the warning dialog button => warning dialog expands
-  it('user clicks on ? icon', async () => {
-    const user = userEvent.setup();
-    render(<InformationPane />);
-    const qButton = await screen.findByRole('button', {name: /info-button/i});
-
-    await waitFor(() => {
-      expect(user.click(qButton));
-      expect(screen.findByRole('combobox', {name: /information-pane/i}));
-      expect(screen.findByText("How do I use this app?"));
       expect(screen.findByText("Warning: Term Selection"));
     });
-
-    // const wButton = await screen.findByRole('Disclosure.Button', {name: /warning-button/i});
-
-    // // await waitFor(() => {
-    // //   expect(user.click(wButton));
-    // //   // expect(screen.findByText("Warning: Term Selection"));
-    // //   // expect(screen.findByText("Warning: Term Selection"));
-    // // });
   });
 
 });
