@@ -230,8 +230,7 @@ describe('GET /api/calendar/json', () => {
     await request
       .get(JSONRequestNoTimes)
       .expect('Content-Type', /json/)
-      .expect(400)
-      .expect((res) => expect(res.body.message).toBe('No meeting times'));
+      .expect(200);
   });
   test('validate structure of single course schedule', async () => {
     await request
@@ -308,8 +307,7 @@ END:VCALENDAR
   test('course has no meeting times (404)', async () => {
     await request
       .get(ICSRequestNoTimes)
-      .expect(400)
-      .expect((res) => expect(res.body.message).toBe('No meeting times'));
+      .expect(200);
   });
   test('responds with text/calendar data', async () => {
     await request
