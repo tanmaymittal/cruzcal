@@ -1,23 +1,41 @@
-import { useRef, useState } from "react";
-
-import {
-  useSearchParams
-} from 'react-router-dom';
+import { defaultScheduleSelection, scheduleSelectionAtom } from "apps/cruzcal/atoms/course-selector";
+import { fetchSchedule } from "apps/cruzcal/atoms/share-link";
+import { server } from "apps/cruzcal/config";
+import { useUpdateAtom } from "jotai/utils";
+import { useEffect, useRef, useState } from "react";
 
 export const ImportLink = () => {
   const [link, setLink] = useState('');
   const inputLink = useRef(null);
-  const [, setSearchParams] = useSearchParams();
+  const setScheduleSelection = useUpdateAtom(scheduleSelectionAtom);
+
+  const updateState = (searchParams: URLSearchParams) => {
+    if (searchParams.has('termCode') && searchParams.has('courseIDs')) {
+      fetchSchedule(`?${searchParams}`)
+        .then(setScheduleSelection)
+        .catch(console.error);
+    } else if (`${searchParams}` === '') {
+      setScheduleSelection(defaultScheduleSelection);
+    } else {
+      history.replaceState(null, '', `${server}/`);
+    }
+  }
+
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    updateState(searchParams);
+  }, [location.search]);
 
   const importLink = async (link: string) => {
     try {
       const url = new URL(link);
-      setSearchParams(url.search);
+      updateState(url.searchParams);
+      // setSearchParams(url.search);
 
       // Reset import input
       inputLink.current.value = '';
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 

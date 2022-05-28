@@ -2,7 +2,7 @@ import { atom } from "jotai";
 import { atomWithStorage, splitAtom } from "jotai/utils";
 import { CourseInfo } from "./courses";
 import selectedTermAtom from "./selected-term";
-import shareLinkAtom, { fetchSchedule } from "./share-link";
+import { CourseSchedule, generateScheduleURI } from "./share-link";
 import { SubjectInfo } from "./subjects";
 import { TermInfo } from "./terms";
 
@@ -18,7 +18,7 @@ export const defaultCourseSelection: CourseSelector = {
   subject: null,
 };
 
-const initialScheduleSelections = {
+export const defaultScheduleSelection = {
   term: null,
   courses: [{...defaultCourseSelection}]
 }
@@ -28,6 +28,10 @@ export const courseSelectionsAtom = atom(
   (get) => get(courseSelectionsStorageAtom),
   (get, set, courseSelections: CourseSelector[]) => {
     set(courseSelectionsStorageAtom, courseSelections);
+    const term = get(selectedTermAtom);
+    const url = generateScheduleURI({term, courses: courseSelections});
+    console.log(url);
+    history.pushState(null, '', url);
   },
 );
 
@@ -36,11 +40,11 @@ export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
 export const multipleCourseSelectionsAtom = atom((get) => get(courseSelectionAtomsAtom).length > 1);
 
 export const scheduleSelectionAtom = atom(
-  (get) => {
-    const term = get(selectedTermAtom);
-    const courseSelections = get(courseSelectionsAtom);
-    return {term, courses: courseSelections};
-  }, (get, set, newSchedule: {term: TermInfo, courses: CourseSelector[]}) => {
+  (get) => ({
+    term: get(selectedTermAtom),
+    courses: get(courseSelectionsAtom)
+  }),
+  (get, set, newSchedule: CourseSchedule) => {
     set(selectedTermAtom, newSchedule.term);
     set(courseSelectionsAtom, newSchedule.courses);
   });

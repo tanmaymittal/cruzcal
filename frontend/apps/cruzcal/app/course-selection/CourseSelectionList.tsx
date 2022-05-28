@@ -1,8 +1,8 @@
-import { PrimitiveAtom, useAtom, useAtomValue } from 'jotai';
+import { PrimitiveAtom, useAtom } from 'jotai';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { BrowserRouter } from "react-router-dom";
-import { Suspense, useEffect } from 'react';
+import { Suspense } from 'react';
 
 import { DefaultComboboxSelect } from '../combobox-select/combobox-select';
 import CourseSelection from './CourseSelection';
@@ -18,32 +18,12 @@ import OnlineClassesDialog from '../online-classes-dialog/online-classes-dialog'
 import { CopyLink } from '../copy-link/CopyLink';
 import ImportLink from '../copy-link/ImportLink';
 
-import {
-  useSearchParams,
-} from "react-router-dom";
-import { useUpdateAtom } from 'jotai/utils';
-import { CourseSchedule, fetchSchedule } from 'apps/cruzcal/atoms/share-link';
-
 const CourseSelectionListAsync = () => {
   const [courseListAtoms, dispatch] = useAtom(courseSelectionAtomsAtom);
   const [selectedTerm, setSelectedTerm] = useAtom(selectedTermAtom as PrimitiveAtom<TermInfo>);
-  const setScheduleSelection = useUpdateAtom(scheduleSelectionAtom);
-  const [searchParams] = useSearchParams();
-  const scheduleSelection = useAtomValue(scheduleSelectionAtom);
 
   const addCourse = () => dispatch({ type: "insert", value: {...defaultCourseSelection, term: selectedTerm} });
   const removeCourse = (courseAtom) => dispatch({ type: "remove", atom: courseAtom });
-
-  useEffect(() => {
-    if (searchParams.has('termCode') && searchParams.has('courseIDs')) {
-      fetchSchedule(`?${searchParams}`)
-        .then((schedule: CourseSchedule) => {
-          setScheduleSelection(schedule); 
-        })
-        .catch(console.error);
-    }
-    console.log(`?${searchParams}`);
-  }, [searchParams]);
 
   return (
     <div>

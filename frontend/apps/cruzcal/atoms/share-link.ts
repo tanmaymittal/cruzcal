@@ -32,11 +32,9 @@ export const generateScheduleURI = ({term, courses}: CourseSchedule) => {
     .map(({course}) => course?.courseID)
     .filter((id) => id != null);
 
-  if (term == null) {
-    throw new Error(`Course selection incomplete`);
-  } else if (completedCourseIDs.length === 0) {
+  if (term == null || completedCourseIDs.length === 0) {
     return `${server}/`; // no schedule query
-  }
+  } 
 
   const termCodeStr = `termCode=${encodeURIComponent(term.code)}`;
   const courseIDsStr = completedCourseIDs
@@ -47,16 +45,7 @@ export const generateScheduleURI = ({term, courses}: CourseSchedule) => {
 
 
 export const shareLinkAtom = atom(
-  (get) => {
-    const {term, courses} = get(scheduleSelectionAtom);
-    try {
-      const scheduleURI = generateScheduleURI({term, courses});
-      return scheduleURI;
-    } catch (error) {
-      console.log(error.message);
-    }
-    return server;
-  }
+  (get) => generateScheduleURI(get(scheduleSelectionAtom))
 )
 
 
