@@ -1,6 +1,6 @@
 import { atom } from "jotai";
 import { server } from "../config";
-import { CourseSelector, scheduleSelectionAtom } from "./course-selector";
+import { CourseSelector, defaultCourseSelection, defaultScheduleSelection, scheduleSelectionAtom } from "./course-selector";
 import { CourseInfo } from "./courses";
 import { TermInfo } from "./terms";
 
@@ -9,13 +9,12 @@ export interface CourseSchedule {
   courses: CourseSelector[];
 };
 
-export const fetchSchedule = async (scheduleQuery) => {
-  const path = `${server}/api/calendar/json${scheduleQuery}`;
-  const res = await fetch(path);
-
-  if (res.status !== 200) throw res;
-  else {
-    const {term, courses} = await res.json();
+const toScheduleSelection = (term: TermInfo, courses: CourseInfo[]) => {
+  if (courses.length === 0) {
+    // If no courses, set default course selection
+    return {term, courses: [{...defaultCourseSelection, term}]}
+  } else {
+    // Otherwise, map CourseInfo to CourseSelector
     return {
       term,
       courses: courses.map((course: CourseInfo) => ({
@@ -27,20 +26,54 @@ export const fetchSchedule = async (scheduleQuery) => {
   }
 }
 
+export const fetchSchedule = async (scheduleQuery) => {
+  const searchParams = new URLSearchParams(scheduleQuery);
+
+  // If no query parameters, return default
+  if (!searchParams.has('termCode')) {
+    return defaultScheduleSelection;
+  }
+
+  const path = `${server}/api/schedule/cruzcal`;
+  const res = await fetch(path, {
+    method: 'post',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      termCode: parseInt(searchParams.get('termCode')),
+      courseIDs: searchParams.getAll('courseIDs')
+    })
+  });
+
+  if (res.status !== 201) throw res;
+  else {
+    const {term, courses} = await res.json();
+    return toScheduleSelection(term, courses);
+  }
+}
+
 export const generateScheduleQuery = ({term, courses}: CourseSchedule) => {
   const completedCourseIDs = courses
     .map(({course}) => course?.courseID)
     .filter((id) => id != null);
 
-  if (term == null || completedCourseIDs.length === 0) {
-    return ``; // no schedule query
+  // If no term, can't setup course selector
+  if (term == null) return ``;
+
+  const termCode = `termCode=${encodeURIComponent(term.code)}`;
+
+  // If no courses, can only setup term
+  if (completedCourseIDs.length === 0) {
+    return `?${termCode}`; // no schedule query
   } 
 
-  const termCodeStr = `termCode=${encodeURIComponent(term.code)}`;
-  const courseIDsStr = completedCourseIDs
+  const courseIDs = completedCourseIDs
     .map((courseID) => `courseIDs=${encodeURIComponent(courseID)}`)
     .join('&');
-  return `?${termCodeStr}&${courseIDsStr}`;
+  
+  // Term and courses query
+  return `?${termCode}&${courseIDs}`;
 };
 
 export const generateScheduleURI = (schedule: CourseSchedule) => 
