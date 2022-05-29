@@ -1,4 +1,12 @@
 const ics = require('ics');
+const {google} = require('googleapis');
+
+const deleteCalendar = async (token, calendarId) => {
+  const oauth2Client = createOAuth2Client(token);
+  google.options({auth: oauth2Client});
+  const calendar = google.calendar('v3');
+  return calendar.calendars.delete({calendarId});
+};
 
 const generateIcsData = (termData, courseData) => {
   const {
@@ -9,7 +17,56 @@ const generateIcsData = (termData, courseData) => {
   return value;
 };
 
+const addGoogleCalApiEvents = async (token, termData, coursesData) => {
+  const oauth2Client = createOAuth2Client(token);
+  const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
+  google.options({auth: oauth2Client});
+  const calendar = google.calendar('v3');
+
+  const candidateSummary = genNameForCalendarSummary(termData, coursesData);
+  const calendarSummary = candidateSummary ? candidateSummary : 'primary';
+
+  const calendarResponse = await calendar.calendars.insert({
+    requestBody: {
+      'summary': calendarSummary,
+      'time_zone': 'America/Los_Angeles',
+    },
+  });
+  const calendarId = calendarResponse.data.id;
+
+  courseEvents.forEach((event) => {
+    calendar.events.insert({
+      calendarId,
+      resource: event,
+    }, function(err, event) {
+      if (err) {
+        console.log('Error contacting the Calendar service: ' + err);
+        return;
+      }
+      // console.log('Event created: %s', event.data.htmlLink);
+    });
+  });
+  return {calendarId, courseEvents};
+};
+
 // Helpers
+const createOAuth2Client = (token) => {
+  const oauth2Client = new google.auth.OAuth2(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    '/api/auth/google/redirect',
+  );
+  oauth2Client.credentials = {
+    access_token: token,
+  };
+  return oauth2Client;
+};
+
+const genNameForCalendarSummary = (termData, coursesData) => {
+  const courseNameList = coursesData.map(({name}) => name).join(', ');
+  return `${termData.name}: ${courseNameList}`;
+};
+
 const coursesToEvents = (termData, courseData) => {
   const termDate = termData.date;
   const events = [];
@@ -52,6 +109,38 @@ const coursesToEvents = (termData, courseData) => {
   return events;
 };
 
+const coursesToEventsGoogleApi = (termData, courseData) => {
+  const termDate = termData.date;
+  const events = [];
+  for (const course of courseData) {
+    for (const {location, recurrence} of course.lectures) {
+      if (recurrence === null) continue;
+      const startTime = recurrence.time.start;
+      const endTime = recurrence.time.end;
+      const formattedStartDate = formatDate(termDate.start, 'number');
+      const formattedEndDate = formatDate(termDate.end, 'string');
+      const initialDate = getInitialDate(recurrence.days, formattedStartDate);
+      const formattedInitialDate = formatInitialDate(initialDate);
+      events.push({
+        summary: course.name,
+        start: {
+          dateTime: `${formattedInitialDate}T${startTime}:00-07:00`,
+          timeZone: 'America/Los_Angeles',
+        },
+        end: {
+          dateTime: `${formattedInitialDate}T${endTime}:00-07:00`,
+          timeZone: 'America/Los_Angeles',
+        },
+        location,
+        recurrence: [
+          `RRULE:${createRecurrenceRule(recurrence.days, formattedEndDate)}`,
+        ],
+      });
+    }
+  }
+  return events;
+};
+
 const formatTime = (time) => {
   const [hour, minute] = time.split(':');
   return {
@@ -70,6 +159,18 @@ const formatDate = (dateString, formatType) => {
     month: Number(month),
     date: Number(date),
   };
+};
+
+const formatInitialDate = (initialDateObj) => {
+  let month = String(initialDateObj.month);
+  let day = String(initialDateObj.date);
+  if (month.length < 2) {
+    month = '0' + month;
+  }
+  if (day.length < 2) {
+    day = '0' + day;
+  }
+  return `${initialDateObj.year}-${month}-${day}`;
 };
 
 const getInitialDate = (courseTimes, formattedStartDate) => {
@@ -93,13 +194,12 @@ const getInitialDate = (courseTimes, formattedStartDate) => {
   const termStartDateIdx = termStartDate.getDay();
   const dayDifference = calculateDayDifference(courseDaysIdx, termStartDateIdx);
 
-  const initialDate = new Date(termStartDate);
-  initialDate.setDate(termStartDate.getDate() + dayDifference);
+  termStartDate.setDate(termStartDate.getDate() + dayDifference);
 
   return {
-    year: initialDate.getFullYear(),
-    month: initialDate.getMonth() + 1, // reset to 1-based months
-    date: initialDate.getDate(),
+    year: termStartDate.getFullYear(),
+    month: termStartDate.getMonth() + 1, // reset to 1-based months
+    date: termStartDate.getDate(),
   };
 };
 
@@ -107,7 +207,7 @@ const calculateDayDifference = (courseDaysIdx, termStartDateIdx) => {
   // find the day closest to termStartDateIdx that is >= to it
   const closestIdx = courseDaysIdx.filter((idx) => idx >= termStartDateIdx)[0];
   if (!closestIdx) {
-    return (courseDaysIdx[0] + 7) - termStartDateIdx;
+    return (7 - termStartDateIdx) + courseDaysIdx[0];
   }
   return closestIdx - termStartDateIdx;
 };
@@ -126,4 +226,8 @@ module.exports = {
    * @return {string} - newly created ics file
    */
   generateIcsData,
+  addGoogleCalApiEvents,
+  genNameForCalendarSummary,
+  deleteCalendar,
+  formatDateString: formatInitialDate,
 };
