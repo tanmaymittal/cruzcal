@@ -54,10 +54,16 @@ export function CalendarView(props: CalendarViewProps) {
   const selectedTerm = useAtomValue(selectedTermAtom)
 
   useEffect(() => {
-    const startDate = moment(selectedTerm.date.start, 'YYYY-MM-DD').format('MMM YYYY')
-    const endDate = moment(selectedTerm.date.end, 'YYYY-MM-DD').format('MMM YYYY')
+    let startDate = "Start Date"
+    let endDate = "End Date"
     const titles = document.getElementsByClassName('fc-toolbar-title')
-
+    
+    // Check if a term was saved in local storage
+    if (selectedTerm != null) {
+      startDate = moment(selectedTerm.date.start, 'YYYY-MM-DD').format('MMM YYYY')
+      endDate = moment(selectedTerm.date.end, 'YYYY-MM-DD').format('MMM YYYY')
+    }
+    
     for (let i = 0; i < titles.length; i++) {
       titles[i].innerHTML = startDate + ' - ' + endDate
     }
