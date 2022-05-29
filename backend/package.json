@@ -4,12 +4,12 @@
   "description": "CruzCal lets users select their Class and produce calendar files based on the class events they can import to their preferred calendar.",
   "author": "CruzCal Developers",
   "devDependencies": {
+    "nodemon": "*",
     "dotenv": "*",
     "eslint": "*",
     "eslint-config-google": "*",
     "http": "*",
     "jest": "^28.1.0",
-    "nodemon": "*",
     "supertest": "^6.2.3"
   },
   "dependencies": {

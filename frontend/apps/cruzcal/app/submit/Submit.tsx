@@ -6,16 +6,16 @@ import ClientOnly from '../client-only/ClientOnly';
 
 import { CalendarType, fetchCalendar } from './utilities';
 
-import { scheduleSelectionAtom } from '../../atoms/course-selector';
+import { scheduleSelectionsAtom } from '../../atoms/course-selector';
 import { userAuthenticatedAtom } from '../../atoms/user';
 
 const SubmitButton = ({type}: {type: CalendarType}) => {
-  const schedule = useAtomValue(scheduleSelectionAtom);
+  const schedule = useAtomValue(scheduleSelectionsAtom);
   const [authenticated, checkAuthenticated] = useAtom(userAuthenticatedAtom);
 
   return (
     <button
-      className={`flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1 ${type === 'google' ? 'capitalize' : 'uppercase'}`}
+      className={`flex gap-3 align-middle px-3 py-1 rounded-lg outline outline-1 ${type == 'google' ? 'capitalize' : 'uppercase'}`}
       onClick={() => fetchCalendar(type, schedule, authenticated, checkAuthenticated)}
       type="submit"
     >
