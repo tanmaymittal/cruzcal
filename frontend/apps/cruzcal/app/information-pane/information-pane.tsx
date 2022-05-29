@@ -23,7 +23,7 @@ export const InformationPane = () => {
       <button
         type="button"
         onClick={openModal}
-        className="rounded-md bg-opacity-20 text-2xl font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="rounded-md bg-opacity-20 text-2xl text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
       >
         <FontAwesomeIcon icon={faCircleQuestion} />
       </button>
@@ -56,7 +56,7 @@ export const InformationPane = () => {
                 <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg leading-6 text-gray-900"
                   >
                     How do I use this app?
                   </Dialog.Title>
