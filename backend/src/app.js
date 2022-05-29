@@ -104,3 +104,4 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+// http://localhost:4200/api/calendar/google?termCode=2222&courseIDs=50005

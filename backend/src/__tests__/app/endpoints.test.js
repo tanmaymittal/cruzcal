@@ -1,4 +1,5 @@
 /* eslint-disable max-len */
+require('dotenv').config();
 const supertest = require('supertest');
 const http = require('http');
 const {db, addTerm, addCourse} = require('../test-db');
@@ -230,7 +231,18 @@ describe('GET /api/calendar/json', () => {
     await request
       .get(JSONRequestNoTimes)
       .expect('Content-Type', /json/)
-      .expect(200);
+      .expect(200)
+      .expect((res) => {
+        expect(res.body).toHaveProperty('courses');
+        expect(res.body.courses).toBeInstanceOf(Array);
+        for (const course of res.body.courses) {
+          expect(course).toHaveProperty('lectures');
+          expect(course.lectures).toBeInstanceOf(Array);
+          course.lectures.forEach(({recurrence}) => {
+            expect(recurrence).toBe(null);
+          });
+        }
+      });
   });
   test('validate structure of single course schedule', async () => {
     await request

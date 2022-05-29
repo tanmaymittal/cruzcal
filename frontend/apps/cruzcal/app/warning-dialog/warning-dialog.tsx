@@ -30,7 +30,7 @@ export const WarningDialog = () => {
           onClick={openModal}
           className="w-full rounded-md bg-rose-500 bg-opacity-100 px-4 py-2 text-sm font-bold text-black hover:bg-opacity-40 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
         >
-          See warnings
+          Class Conflicts Exists
         </button>
       </div>
 
@@ -72,7 +72,7 @@ export const WarningDialog = () => {
                     </p>
                       {warnings.map((warning) => {
                         return (
-                          <p key={hash(warning)}>{warning.course.name}</p>
+                          <p key={hash(warning)}>{warning.subject.name} {warning.course.coursenum} - {warning.course.section}: {warning.course.name}</p>
                         );
                       })}
                   </div>

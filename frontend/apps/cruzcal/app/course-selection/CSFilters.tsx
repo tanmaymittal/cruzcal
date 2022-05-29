@@ -99,3 +99,5 @@ export const CSFilters = ({courseSelection, setCourseSelection}) => {
     </div>
   );
 };
+
+export default CSFilters;

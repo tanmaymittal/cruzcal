@@ -1,7 +1,9 @@
+require('dotenv').config();
 const supertest = require('supertest');
 const http = require('http');
 require('../test-db');
 const app = require('../../app');
+
 
 let server; let request;
 
