@@ -1,7 +1,8 @@
 import { atom } from "jotai";
-import { atomWithHash, atomWithStorage, splitAtom } from "jotai/utils";
+import { atomWithStorage, splitAtom } from "jotai/utils";
 import { CourseInfo } from "./courses";
 import selectedTermAtom from "./selected-term";
+import { CourseSchedule, generateScheduleURI } from "./share-link";
 import { SubjectInfo } from "./subjects";
 import { TermInfo } from "./terms";
 
@@ -17,7 +18,7 @@ export const defaultCourseSelection: CourseSelector = {
   subject: null,
 };
 
-const initialScheduleSelections = {
+export const defaultScheduleSelection = {
   term: null,
   courses: [{...defaultCourseSelection}]
 }
@@ -25,35 +26,35 @@ const initialScheduleSelections = {
 export const courseSelectionsStorageAtom = atomWithStorage('course-selector', [{...defaultCourseSelection}]);
 export const courseSelectionsAtom = atom(
   (get) => get(courseSelectionsStorageAtom),
-  (get, set, courseSelections) => {
+  (get, set, courseSelections: CourseSelector[]) => {
     set(courseSelectionsStorageAtom, courseSelections);
-    // set(scheduleSelectionsAtom, {...get(scheduleSelectionsAtom), courses: courseSelections});
+
+    try {
+      const term = get(selectedTermAtom);
+      const uri = generateScheduleURI({term, courses: courseSelections});
+      // Don't push url history if unchanged
+      if (uri !== location?.href) {
+        const {search} = new URL(uri);
+        history.pushState({search}, '', uri);
+      }
+    } catch (error) {
+      console.log(error);
+    }
   },
 );
+
 export const courseSelectionAtomsAtom = splitAtom(courseSelectionsAtom);
 
 export const multipleCourseSelectionsAtom = atom((get) => get(courseSelectionAtomsAtom).length > 1);
 
-// export const scheduleHashAtom = atomWithHash('schedule', initialScheduleSelections, {
-//   replaceState: true,
-// });
-
-// export const generateScheduleQuery = (type: string, term: TermInfo, courses: CourseInfo[]) => {
-//   const termCodeStr = term === null ? '' : `termCode=${encodeURIComponent(term.code)}`;
-//   const courseIDsStr = courses
-//     .map((course) => course === null ? '' : `courseIDs=${encodeURIComponent(course.courseID)}`)
-//     .join('&');
-//   console.log(courseIDsStr);
-//   return `?${termCodeStr}${courseIDsStr}`;
-// };
-
-export const scheduleSelectionsAtom = atom(
+export const scheduleSelectionAtom = atom(
   (get) => ({
     term: get(selectedTermAtom),
     courses: get(courseSelectionsAtom)
-  }), (get, set, newTermAndCS: {term: TermInfo, courses: CourseSelector[]}) => {
-    // const {term, courses} = newTermAndCS;
-    // history.pushState(newTermAndCS, "Schedule Selection", generateScheduleQuery('', term, courses.map(({course}) => course)));
-    // set(scheduleHashAtom, newTermAndCS);
+  }),
+  (get, set, newSchedule: CourseSchedule) => {
+    set(selectedTermAtom, newSchedule.term);
+    set(courseSelectionsAtom, newSchedule.courses);
   });
+
 

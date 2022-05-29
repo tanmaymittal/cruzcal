@@ -52,7 +52,7 @@ app.use(
 
 // Routes
 
-process.env.API_VERSION = 0.1;
+process.env.API_VERSION = 0.2;
 app.get('/api/version/latest',
   (_, res) => res.type('text/plain').send(process.env.API_VERSION));
 
