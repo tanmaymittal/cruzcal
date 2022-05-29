@@ -2,13 +2,11 @@ import { FontAwesomeIcon,  } from "@fortawesome/react-fontawesome";
 import { faCopy } from '@fortawesome/free-regular-svg-icons';
 import shareLinkAtom from "../../atoms/share-link";
 import { useAtomValue } from "jotai";
-import { useRef, useState } from "react";
+import { useRef } from "react";
 
 import { Popover } from '@headlessui/react'
 
 export const CopyLink = () => {
-  const [open, setOpen] = useState(false);
-
   const shareLink = useAtomValue(shareLinkAtom);
   const inputText = useRef(null);
 
