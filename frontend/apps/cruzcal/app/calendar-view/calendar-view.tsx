@@ -56,11 +56,23 @@ export function CalendarView(props: CalendarViewProps) {
   useEffect(() => {
     let startDate = "Start Date"
     let endDate = "End Date"
+    // Get "Month" display on both mobile and desktop calendars
     const titles = document.getElementsByClassName('fc-toolbar-title')
     
     // Check if a term was saved in local storage
     if (selectedTerm != null) {
-      startDate = moment(selectedTerm.date.start, 'YYYY-MM-DD').format('MMM YYYY')
+      // Temporarily store the term's start date
+      let tempStartDate = moment(selectedTerm.date.start, 'YYYY-MM-DD')
+    
+      let startMonth = tempStartDate.month()
+
+      // Check if Summer term was selected and change the month back to June
+      console.log(selectedTerm.name)
+      if (startMonth == 6 && selectedTerm.name.includes("Summer")) {
+        tempStartDate.month(startMonth - 1)
+      }
+
+      startDate = tempStartDate.format('MMM YYYY')
       endDate = moment(selectedTerm.date.end, 'YYYY-MM-DD').format('MMM YYYY')
     }
     
