@@ -58,7 +58,7 @@ const CourseSelectionListAsync = () => {
           );
         })}
         <div className="flex justify-center mb-5">
-          <button className="text-4xl text-white" onClick={addCourse}>
+          <button aria-label='add-course' className="text-4xl text-white" onClick={addCourse}>
             <FontAwesomeIcon icon={faPlusSquare} />
           </button>
         </div>
