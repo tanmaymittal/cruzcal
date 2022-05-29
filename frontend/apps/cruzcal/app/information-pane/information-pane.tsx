@@ -63,7 +63,7 @@ export const InformationPane = () => {
                   <div className="mt-2">
                     <p>
                       You can login with your UCSC credentials to associate your
-                      account. To add classes to your schedule,
+                      account. To add courses to your schedule,
                     </p>
                     <ol className="ml-4 list-decimal text-gray-600">
                       <li>
