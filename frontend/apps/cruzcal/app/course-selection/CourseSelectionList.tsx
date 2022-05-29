@@ -1,7 +1,6 @@
 import { PrimitiveAtom, useAtom } from 'jotai';
 import { faPlusSquare } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { BrowserRouter } from "react-router-dom";
 import { Suspense } from 'react';
 
 import { DefaultComboboxSelect } from '../combobox-select/combobox-select';
@@ -15,7 +14,7 @@ import { courseSelectionAtomsAtom, defaultCourseSelection } from '../../atoms/co
 import selectedTermAtom from '../../atoms/selected-term';
 import { TermInfo } from 'apps/cruzcal/atoms/terms';
 import OnlineClassesDialog from '../online-classes-dialog/online-classes-dialog';
-import { CopyLink } from '../copy-link/CopyLink';
+import CopyLink from '../copy-link/CopyLink';
 import ImportLink from '../import-link/ImportLink';
 
 const CourseSelectionListAsync = () => {
@@ -81,9 +80,7 @@ const CourseSelectionListAsync = () => {
 export const CourseSelectionList = () => {
   return (
     <ClientOnly>
-      <BrowserRouter>
-        <CourseSelectionListAsync />
-      </BrowserRouter>
+      <CourseSelectionListAsync />
     </ClientOnly>
   );
 }

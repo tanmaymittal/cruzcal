@@ -5,7 +5,18 @@ import '@testing-library/jest-dom/extend-expect'
 import { server } from './mocks/server'
 
 beforeAll(() => {
-  server.listen()
+  server.listen();
+})
+
+beforeEach(() => {
+  // IntersectionObserver isn't available in test environment
+  const mockIntersectionObserver = jest.fn();
+  mockIntersectionObserver.mockReturnValue({
+    observe: () => null,
+    unobserve: () => null,
+    disconnect: () => null
+  });
+  window.IntersectionObserver = mockIntersectionObserver;
 })
 
 afterEach(() => {
