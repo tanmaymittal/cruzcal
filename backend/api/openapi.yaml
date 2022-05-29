@@ -470,6 +470,7 @@ components:
         - name
         - coursenum
         - section
+        - subject
         - courseID
         - lectures
         - professor
@@ -480,6 +481,8 @@ components:
           type: array
           items:
             type: string
+        subject:
+          type: string
         coursenum:
           type: string
         section:

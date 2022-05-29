@@ -11,6 +11,7 @@ export type Weekday = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'
 
 export interface CourseInfo {
   name:	string,
+  subject: string,
   professor: string[],
   coursenum: string,
   section: string,
