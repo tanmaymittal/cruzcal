@@ -14,9 +14,9 @@ export const CopyLink = () => {
     inputText.current.focus();
     inputText.current.select();
     navigator.clipboard.writeText(shareLink).then(() => {
-      console.log('copied:', shareLink);
+      // console.log('copied:', shareLink);
     }, () => {
-      console.log('failed to copy:', shareLink);
+      // console.log('failed to copy:', shareLink);
     });
   }
 

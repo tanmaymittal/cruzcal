@@ -21,7 +21,7 @@ export const termsQueryAtom = atomWithQuery(
         const terms = await res.json();
         return terms;
       } catch (error) {
-        console.log(error);
+        // console.log(error);
         return [];
       }
     }
