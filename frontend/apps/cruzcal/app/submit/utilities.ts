@@ -27,7 +27,9 @@ const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQuer
     checkAuth({ type: 'refetch' });
 
     const schedule = await res.json();
-    console.log(schedule);
+    const createdEvent = schedule.createdEvents.pop();
+    console.log('EVENT URL', createdEvent.request.responseURL);
+    window.open(createdEvent.request.responseURL, '_blank');
   } catch (error) {
     console.error(error);
   }
@@ -39,7 +41,9 @@ const submitGoogle = async (
   authenticated: boolean,
   checkAuth: Dispatch<AtomWithQueryAction>
 ) => {
-  if (authenticated) fetchGoogleCalendar(url, checkAuth);
+  if (authenticated) {
+    fetchGoogleCalendar(url, checkAuth);
+  }
   else {
     if (authWindow === null) {
       console.error('Auth window has not been created yet');

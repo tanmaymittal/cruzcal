@@ -20,8 +20,7 @@ const generateIcsData = (termData, courseData) => {
 const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   const oauth2Client = createOAuth2Client(token);
   const courseEvents = coursesToEventsGoogleApi(termData, coursesData);
-  google.options({auth: oauth2Client});
-  const calendar = google.calendar('v3');
+  const calendar = google.calendar({version: 'v3', auth: oauth2Client});
 
   const candidateSummary = genNameForCalendarSummary(termData, coursesData);
   const calendarSummary = candidateSummary ? candidateSummary : 'primary';
@@ -34,19 +33,15 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   });
   const calendarId = calendarResponse.data.id;
 
-  courseEvents.forEach((event) => {
-    calendar.events.insert({
+  const eventPromises = courseEvents.map((event) => {
+    return calendar.events.insert({
       calendarId,
       resource: event,
-    }, function(err, event) {
-      if (err) {
-        console.log('Error contacting the Calendar service: ' + err);
-        return;
-      }
-      // console.log('Event created: %s', event.data.htmlLink);
     });
   });
-  return {calendarId, courseEvents};
+
+  const createdEvents = await Promise.all(eventPromises);
+  return {calendarId, courseEvents, createdEvents};
 };
 
 // Helpers

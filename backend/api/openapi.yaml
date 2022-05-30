@@ -333,11 +333,11 @@ paths:
               type: string
       responses:
         '200':
-          description: Successfully returned location and schedule information.
+          description: Successfully returned location, schedule information, and redirection link.
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/JSONCalendar"
+                "$ref": "#/components/schemas/GoogleCalendarResponse"
         default:
           description: Error Response
           content:
@@ -518,6 +518,22 @@ components:
           type: array
           items:
             "$ref": "#/components/schemas/CourseInfo"
+    GoogleCalendarResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - term
+        - courses
+        - createdEvents
+      properties:
+        term:
+          "$ref": "#/components/schemas/TermInfo"
+        courses:
+          type: array
+          items:
+            "$ref": "#/components/schemas/CourseInfo"
+        createdEvents:
+          type: array
     CalendarResource:
       type: object
       additionalProperties: false

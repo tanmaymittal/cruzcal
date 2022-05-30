@@ -90,8 +90,9 @@ exports.genICS = async (req, res, next) => {
 exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
-    addGoogleCalApiEvents(req.user.creds.token, term, courses);
-    return res.status(200).json({term, courses});
+    const {createdEvents} = await addGoogleCalApiEvents(
+      req.user.creds.token, term, courses);
+    return res.status(200).json({term, courses, createdEvents});
   } catch (error) {
     next(error);
   }
