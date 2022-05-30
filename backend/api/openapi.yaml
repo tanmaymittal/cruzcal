@@ -335,15 +335,32 @@ paths:
         '200':
           description: Successfully returned location and schedule information.
           content:
-            application/json:
+            text/plain:
               schema:
-                "$ref": "#/components/schemas/JSONCalendar"
+                type: string
         default:
           description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
+  "/api/loading":
+    get:
+      description: Temporary loading page during redirects
+      responses:
+        '200':
+          description: Successful redirect
+          content:
+            text/plain:
+              schema:
+                type: string
+        default:
+          description: Error Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+
 
 security:
   - GoogleAuth: []

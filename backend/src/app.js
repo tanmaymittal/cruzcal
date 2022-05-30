@@ -70,11 +70,12 @@ app.get('/api/auth/google/calendar',
   passport.authenticate(auth.googleCalendarStrategy));
 app.get('/api/auth/google/calendar/redirect',
   passport.authenticate(auth.googleCalendarStrategy, {
-    successRedirect: '/',
+    successRedirect: '/api/loading',
     failureRedirect: '/api/auth/google/calendar',
     failureMessage: true,
   }),
 );
+app.get('/api/loading', (req, res) => res.send('Loading...'));
 
 // User management
 app.get('/api/user', auth.loggedIn, auth.getUser);

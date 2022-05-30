@@ -6,6 +6,7 @@ const {
   findCourse,
   formatTerm,
   formatCourse,
+  APIError,
 } = require('./utils');
 const {
   getAllTerms,
@@ -90,8 +91,14 @@ exports.genICS = async (req, res, next) => {
 exports.genGoogleCalendar = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
-    addGoogleCalApiEvents(req.user.creds.token, term, courses);
-    return res.status(200).json({term, courses});
+    const {token} = req.user.creds;
+    const {createdEvents} = await addGoogleCalApiEvents(token, term, courses);
+
+    if (createdEvents.length === 0) {
+      throw new APIError('No Google Calendar events created', 400, []);
+    }
+
+    res.status(200).json(createdEvents[0].data.htmlLink);
   } catch (error) {
     next(error);
   }

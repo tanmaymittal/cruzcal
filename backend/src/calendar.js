@@ -34,19 +34,15 @@ const addGoogleCalApiEvents = async (token, termData, coursesData) => {
   });
   const calendarId = calendarResponse.data.id;
 
-  courseEvents.forEach((event) => {
+  const eventPromises = courseEvents.map((event) => (
     calendar.events.insert({
       calendarId,
       resource: event,
-    }, function(err, event) {
-      if (err) {
-        console.log('Error contacting the Calendar service: ' + err);
-        return;
-      }
-      // console.log('Event created: %s', event.data.htmlLink);
-    });
-  });
-  return {calendarId, courseEvents};
+    })
+  ));
+
+  const createdEvents = await Promise.all(eventPromises);
+  return {calendarId, courseEvents, createdEvents};
 };
 
 // Helpers
