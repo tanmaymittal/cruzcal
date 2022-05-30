@@ -4,11 +4,14 @@
   "description": "Check out the [Figma](https://www.figma.com/file/nP5Z4Ugc0p9pnBaqNrtMS4/CruzCal?node-id=96%3A26 ) for the designs",
   "main": "index.js",
   "scripts": {
-    "start": "yarn initdb && yarn backend && yarn frontend",
+    "start": "concurrently \"yarn backend\" \"yarn frontend\"",
+    "test": "cd frontend && yarn test && cd ../backend && yarn test",
+    "initdb": "cd backend && yarn create-db && yarn init-db",
+    "dropdb": "cd backend && yarn drop-db",
     "backend": "cd backend && yarn start",
     "frontend": "cd frontend && yarn start",
-    "initdb": "cd backend && yarn init-db",
-    "test": "cd frontend && yarn test && cd ../backend && yarn test"
+    "postinstall": "yarn dropdb && yarn initdb",
+    "install": "cd frontend && yarn && cd ../backend && yarn"
   },
   "repository": {
     "type": "git",
@@ -27,5 +30,8 @@
   "bugs": {
     "url": "https://github.com/tanmaymittal/cruzcal/issues"
   },
-  "homepage": "https://github.com/tanmaymittal/cruzcal#readme"
+  "homepage": "https://github.com/tanmaymittal/cruzcal#readme",
+  "dependencies": {
+    "concurrently": "^7.2.1"
+  }
 }
