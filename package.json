@@ -1,0 +1,31 @@
+{
+  "name": "cruzcal",
+  "version": "1.0.0",
+  "description": "Check out the [Figma](https://www.figma.com/file/nP5Z4Ugc0p9pnBaqNrtMS4/CruzCal?node-id=96%3A26 ) for the designs",
+  "main": "index.js",
+  "scripts": {
+    "start": "yarn initdb && yarn backend && yarn frontend",
+    "backend": "cd backend && yarn start",
+    "frontend": "cd frontend && yarn start",
+    "initdb": "cd backend && yarn init-db",
+    "test": "cd frontend && yarn test && cd ../backend && yarn test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tanmaymittal/cruzcal.git"
+  },
+  "keywords": [
+    "calendar",
+    "ical",
+    "ics",
+    "google",
+    "json",
+    "ucsc"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tanmaymittal/cruzcal/issues"
+  },
+  "homepage": "https://github.com/tanmaymittal/cruzcal#readme"
+}
