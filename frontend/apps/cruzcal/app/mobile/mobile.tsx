@@ -3,6 +3,9 @@ import { Tab } from '@headlessui/react';
 import CourseSelectionList from '../course-selection/CourseSelectionList';
 import dynamic from 'next/dynamic';
 import { Fragment } from 'react';
+import { atomWithStorage } from 'jotai/utils';
+import { useAtom } from 'jotai';
+import ClientOnly from '../client-only/ClientOnly';
 
 export interface MobileProps {}
 
@@ -10,10 +13,13 @@ const Calendar = dynamic(() => import('../calendar-view/calendar-view'), {
   ssr: false,
 });
 
-export const Mobile = () => {
+const tabIndexAtom = atomWithStorage('mobile-view-tab', 0);
+
+export const MobileClientOnly = () => {
+  const [tabIndex, setTabIndex] = useAtom(tabIndexAtom);
   return (
     <div className="container mx-auto p-3">
-      <Tab.Group>
+      <Tab.Group defaultIndex={tabIndex} onChange={setTabIndex}>
         <Tab.List className={'mb-2 flex justify-around gap-4'}>
           <Tab as={Fragment}>
             {({ selected }) => (
@@ -57,5 +63,10 @@ export const Mobile = () => {
     </div>
   );
 };
+export const Mobile = () => (
+  <ClientOnly>
+    <MobileClientOnly/>
+  </ClientOnly>
+);
 
 export default Mobile;
