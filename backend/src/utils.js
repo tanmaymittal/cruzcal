@@ -65,9 +65,11 @@ exports.findCourse = async (termCode, courseID) => {
 };
 
 
+// Pre:
+// - term is a valid Term row
+// - courses is a valid CourseInfo row
 exports.generateScheduleURI = (type, term, courses) => {
-  const termCodeStr = term.code === null ?
-    '' : `termCode=${encodeURIComponent(term.code)}`;
+  const termCodeStr = `termCode=${encodeURIComponent(term.code)}`;
   const courseIDsStr = courses.reduce(
     (prev, curr) => `${prev}&courseIDs=${encodeURIComponent(curr.courseID)}`,
     '',

@@ -6,5 +6,6 @@ describe('SelectList', () => {
   it('should render successfully', () => {
     const { baseElement } = render(<DefaultSelectList/>);
     expect(baseElement).toBeTruthy();
+    
   });
 });

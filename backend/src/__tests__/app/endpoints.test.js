@@ -8,12 +8,18 @@ const {courses, terms} = require('../common');
 
 // Setup example objects for building mock inputs
 const termCode = 2222;
+
+const subjects = courses
+  .filter(({termcode}) => termcode === termCode)
+  .map(({subject}) => subject);
+
 const ids = courses
   .filter((({termcode, lectures}) => (
     termcode === termCode &&
     lectures.some(({recurrence}) => recurrence !== null)
   )))
   .map(({refnum}) => `${refnum}`);
+
 const courseNoMeetings = courses.find(({lectures}) => (
   lectures.every(({recurrence}) => recurrence === null)
 ));
@@ -41,17 +47,11 @@ afterAll(async () => {
 });
 
 
-test('Invalid endpoint', async () => {
-  await request.get('/api/hello/world').expect((res) => {
-    expect(res.status).not.toBe(200);
-  });
-});
-
 describe('GET /api/terms', () => {
-  test('responds with a 200 status code', async () => {
+  test('success 200', async () => {
     await request.get('/api/terms').expect(200);
   });
-  test('responds with JSON', async () => {
+  test('responds with JSON, check structure', async () => {
     await request
       .get('/api/terms')
       .expect('Content-Type', /json/)
@@ -69,15 +69,18 @@ describe('GET /api/terms', () => {
 });
 
 describe('GET /api/subjects', () => {
-  test('success with no parameters', async () => {
+  test('success 200 with no parameters', async () => {
     await request.get('/api/subjects').expect(200);
   });
   test('failure with invalid term', async () => {
     await request.get('/api/subjects?term=-1').expect(404);
   });
-  test('success with term', async () => {
+  test('failure with invalid term type', async () => {
+    await request.get('/api/subjects?term=a').expect(400);
+  });
+  test('success with valid term', async () => {
     await request
-      .get('/api/subjects?term=2222')
+      .get(`/api/subjects?term=${termCode}`)
       .expect(200)
       .expect('Content-Type', /json/)
       .expect((res) => {
@@ -90,9 +93,9 @@ describe('GET /api/subjects', () => {
 });
 
 describe('GET /api/courses', () => {
-  test('responds with a 200 status code', async () => {
+  test('success 200 with valid term and subject', async () => {
     await request
-      .get('/api/courses?term=2222&subject=CSE')
+      .get(`/api/courses?term=${termCode}&subject=${subjects[0]}`)
       .expect(200);
   });
   test('error with no parameters', async () => {
@@ -101,29 +104,29 @@ describe('GET /api/courses', () => {
     });
   });
   test('error with term parameter only', async () => {
-    await request.get('/api/courses?term=2222').expect((res) => {
+    await request.get(`/api/courses?term=${termCode}`).expect((res) => {
       expect(res.status).toBe(400);
     });
   });
   test('error with subject parameter only', async () => {
-    await request.get('/api/courses?subject=CSE').expect((res) => {
+    await request.get(`/api/courses?subject=${subjects[0]}`).expect((res) => {
       expect(res.status).toBe(400);
     });
   });
   test('error with invalid term arg', async () => {
-    await request.get('/api/courses?term=-1&subject=CSE').expect((res) => {
+    await request.get(`/api/courses?term=-1&subject=${subjects[0]}`).expect((res) => {
       expect(res.status).toBe(404);
     });
   });
   test('error with invalid subject arg', async () => {
-    await request.get('/api/courses?term=2222&subject=helloworld')
+    await request.get(`/api/courses?term=${termCode}&subject=helloworld`)
       .expect((res) => {
         expect(res.status).toBe(404);
       });
   });
-  test('responds with JSON', async () => {
+  test('responds with JSON, check structure', async () => {
     await request
-      .get('/api/courses?term=2222&subject=CSE')
+      .get(`/api/courses?term=${termCode}&subject=${subjects[0]}`)
       .expect('Content-Type', /json/)
       .expect((res) => {
         expect(res.body).toBeInstanceOf(Array);
@@ -144,22 +147,22 @@ describe('POST /schedule/{type}', () => {
   };
 
   const scheduleMultipleRequest = {
-    'termCode': 2222,
+    'termCode': termCode,
     'courseIDs': ids.slice(0, 2),
   };
 
   const scheduleImproperFormatRequest = {
-    'termCode': 2222,
+    'termCode': termCode,
     'courses': ids.slice(0, 1),
   };
 
-  test('responds with a 201 status code', async () => {
+  test('success 201, valid schedule request', async () => {
     await request
       .post('/api/schedule/json')
       .send(scheduleRequest)
       .expect(201);
   });
-  test('responds with JSON of courses', async () => {
+  test('responds with JSON', async () => {
     await request
       .post('/api/schedule/json')
       .send(scheduleRequest)
@@ -191,14 +194,14 @@ describe('POST /schedule/{type}', () => {
         }
       });
   });
-  test('responds with 404 error for invalid term', async () => {
+  test('404 error for invalid term', async () => {
     const badSchedReq = {...scheduleRequest, termCode: -1};
     await request
       .post('/api/schedule/json')
       .send(badSchedReq)
       .expect(404);
   });
-  test('responds with 404 error for invalid courseID', async () => {
+  test('404 error for invalid courseID', async () => {
     const badSchedReq = {
       ...scheduleRequest,
       courseIDs: ['hello,world!'],
@@ -208,11 +211,61 @@ describe('POST /schedule/{type}', () => {
       .send(badSchedReq)
       .expect(404);
   });
-  test('responds with 400 error for incorrect request', async () => {
+  test('400 error for incorrect request structure', async () => {
     await request
       .post('/api/schedule/json')
       .send(scheduleImproperFormatRequest)
       .expect(400);
+  });
+  test('400 error for invalid term type', async () => {
+    const badSchedReq = {...scheduleRequest, termCode: 'a'};
+    await request
+      .post('/api/schedule/json')
+      .send(badSchedReq)
+      .expect(400);
+  });
+  test('400 error for invalid courseID type', async () => {
+    const badSchedReq = {...scheduleRequest, courseIDs: [0]};
+    await request
+      .post('/api/schedule/json')
+      .send(badSchedReq)
+      .expect(400);
+  });
+});
+
+describe('GET /api/calendar/*', () => {
+  // calendar type is arbitrary
+  // tests middleware errors
+
+  test('error 400, missing term and courseIDs', async () => {
+    await request
+      .get(`/api/calendar/json`)
+      .expect(400);
+  });
+  test('error 400, missing term', async () => {
+    await request
+      .get(`/api/calendar/json?courseIDs=${ids[0]}`)
+      .expect(400);
+  });
+  test('error 400, missing courseIDs', async () => {
+    await request
+      .get(`/api/calendar/json?termCode=${termCode}`)
+      .expect(400);
+  });
+  test('error 404, incorrect term', async () => {
+    await request
+      .get(`/api/calendar/json?termCode=-1&courseIDs=${ids[0]}`)
+      .expect(404);
+  });
+  test('error 404, incorrect courseIDs', async () => {
+    await request
+      .get(`/api/calendar/json?termCode=${termCode}&courseIDs=-1`)
+      .expect(404);
+  });
+  test('error 404, incorrect term and courseIDs', async () => {
+    await request
+      .get(`/api/calendar/json?termCode=-1&courseIDs=-1`)
+      .expect(404);
   });
 });
 
@@ -222,7 +275,7 @@ describe('GET /api/calendar/json', () => {
   const JSONMultipleRequest = `/api/calendar/json?termCode=${termCode}&courseIDs=${ids[0]}&courseIDs=${ids[1]}`;
   const JSONRequest = `/api/calendar/json?termCode=${termCode}&courseIDs=${ids[0]}`;
 
-  test('Success responds with 200 status', async () => {
+  test('success 200, valid termCode and courseIDs query', async () => {
     await request
       .get(JSONRequest)
       .expect(200);
@@ -286,7 +339,6 @@ describe('GET /api/calendar/json', () => {
 
 describe('GET /api/calendar/ics', () => {
   const ICSRequestNoTimes = `/api/calendar/ics?termCode=${courseNoMeetings.termcode}&courseIDs=${courseNoMeetings.refnum}`;
-  const ICSImproperRequest = `/api/calendar/ics?termCode=hello&courseIDs=${ids[0]}`;
 
   // Must be hardcoded to test calendar output
   // Spring '22 Intro SWE class must exist in test data
@@ -311,12 +363,12 @@ END:VEVENT
 END:VCALENDAR
 `;
 
-  test('responds with a 200 status code', async () => {
+  test('200 success, valid termCode and courseIDs query', async () => {
     await request
       .get(ICSRequest)
       .expect(200);
   });
-  test('course has no meeting times (404)', async () => {
+  test('course has no meeting times', async () => {
     await request
       .get(ICSRequestNoTimes)
       .expect(200);
@@ -345,25 +397,5 @@ END:VCALENDAR
         expect(dtEnd.test(res.text)).toBe(true);
         expect(rrule.test(res.text)).toBe(true);
       });
-  });
-  test('responds with 404 error for invalid term', async () => {
-    const badCalReq = ICSRequest.replace(
-      /termCode=\d+/g,
-      'termCode=666',
-    );
-    await request
-      .get(badCalReq)
-      .expect(404);
-  });
-  test('responds with 404 error for invalid courseID', async () => {
-    const badCalReq = `${ICSRequest}&courseIDs=helloworld`;
-    await request
-      .get(badCalReq)
-      .expect(404);
-  });
-  test('responds with 400 error for incorrect request', async () => {
-    await request
-      .get(ICSImproperRequest)
-      .expect(400);
   });
 });
