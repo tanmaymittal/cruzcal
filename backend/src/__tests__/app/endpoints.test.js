@@ -124,6 +124,12 @@ describe('GET /api/courses', () => {
         expect(res.status).toBe(404);
       });
   });
+  test('error with invalid term arg type', async () => {
+    await request.get('/api/courses?term=a&subject=CSE')
+      .expect((res) => {
+        expect(res.status).toBe(400);
+      });
+  });
   test('responds with JSON, check structure', async () => {
     await request
       .get(`/api/courses?term=${termCode}&subject=${subjects[0]}`)
