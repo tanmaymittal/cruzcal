@@ -54,7 +54,7 @@ export const SelectList: FC<SelectListProps> = ({ selected, setSelected, listNam
                   const target = selected?.name === option.name;
                   return (
                     <>
-                      <span className={`block truncate ${target ? 'font-medium' : 'font-normal'}`}>
+                      <span className={`block truncate ${target ? 'font-bold' : 'font-normal'}`}>
                         {option.name}
                       </span>
                       {target && (

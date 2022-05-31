@@ -25,7 +25,7 @@ export const InformationPane = () => {
         aria-label="info-button"
         type="button"
         onClick={openModal}
-        className="rounded-md bg-opacity-20 text-2xl font-medium text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+        className="rounded-md bg-opacity-20 text-2xl text-white focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
       >
         <FontAwesomeIcon icon={faCircleQuestion} />
       </button>
@@ -55,17 +55,17 @@ export const InformationPane = () => {
                 leaveFrom="opacity-100 scale-100"
                 leaveTo="opacity-0 scale-95"
               >
-                <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
+                <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
                     as="h3"
-                    className="text-lg font-medium leading-6 text-gray-900"
+                    className="text-lg leading-6 text-gray-900"
                   >
                     How do I use this app?
                   </Dialog.Title>
                   <div className="mt-2">
                     <p>
                       You can login with your UCSC credentials to associate your
-                      account. To add classes to your schedule,
+                      account. To add courses to your schedule,
                     </p>
                     <ol className="ml-4 list-decimal text-gray-600">
                       <li>
