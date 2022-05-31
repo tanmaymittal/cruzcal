@@ -94,7 +94,7 @@ app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
   const error = {
     status: err.status || 500,
     message: err.message,

@@ -43,7 +43,7 @@ export const ImportLink = () => {
       // Reset import input
       inputLink.current.value = '';
     } catch (error) {
-      console.log(error.message);
+      // console.log(error.message);
     }
   }
 
