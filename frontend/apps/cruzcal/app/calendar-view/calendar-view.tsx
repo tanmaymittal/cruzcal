@@ -61,18 +61,7 @@ export function CalendarView(props: CalendarViewProps) {
     
     // Check if a term was saved in local storage
     if (selectedTerm != null) {
-      // Temporarily store the term's start date
-      let tempStartDate = moment(selectedTerm.date.start, 'YYYY-MM-DD')
-    
-      let startMonth = tempStartDate.month()
-
-      // Check if Summer term was selected and change the month back to June
-      console.log(selectedTerm.name)
-      if (startMonth == 6 && selectedTerm.name.includes("Summer")) {
-        tempStartDate.month(startMonth - 1)
-      }
-
-      startDate = tempStartDate.format('MMM YYYY')
+      startDate = moment(selectedTerm.date.start, 'YYYY-MM-DD').format('MMM YYYY')
       endDate = moment(selectedTerm.date.end, 'YYYY-MM-DD').format('MMM YYYY')
     }
     
