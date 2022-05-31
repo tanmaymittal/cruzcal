@@ -2,6 +2,7 @@ import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCircleQuestion } from '@fortawesome/free-solid-svg-icons';
+import Image from 'next/image';
 
 import InfoBox from '../info-box/info-box';
 
@@ -57,11 +58,21 @@ export const InformationPane = () => {
               >
                 <Dialog.Panel className="w-full max-w-2xl transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-xl transition-all">
                   <Dialog.Title
-                    as="h3"
-                    className="text-lg leading-6 text-gray-900"
+                    as="h2"
+                    className="text-xl leading-6 text-gray-900"
                   >
                     How do I use this app?
                   </Dialog.Title>
+                  <div className="mt-2">
+                    <h3>How do I add or remove courses to the Calendar</h3>
+                    <p>To add a course to the Calendar:</p>
+                    <ol className="ml-4 list-decimal text-gray-600">
+                      <li>Select a Term.</li>
+                      <li>Select a Subject.</li>
+                      <li>Select a Course.</li>
+                    </ol>
+                    <Image src="/assets/images/add-and-delete-classes-demo.gif" layout='responsive' width={800} height={494} />
+                  </div>
                   <div className="mt-2">
                     <p>
                       You can login with your UCSC credentials to associate your
