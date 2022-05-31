@@ -53,7 +53,7 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
         });
       return courses;
     } catch (error) {
-      console.log(await error.json());
+      // console.log(await error.json());
       return [];
     }
   },

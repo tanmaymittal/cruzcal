@@ -177,6 +177,7 @@ const exampleSelection: CourseSelector = {
   'course':   {
     'name': 'Intro Software Eng',
     'courseID': 50444,
+    'subject': 'CSE',
     'section': '01',
     'coursenum': '115A',
     'professor': [

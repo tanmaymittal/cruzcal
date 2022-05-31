@@ -38,7 +38,7 @@ export const courseSelectionsAtom = atom(
         history.pushState({search}, '', uri);
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   },
 );
