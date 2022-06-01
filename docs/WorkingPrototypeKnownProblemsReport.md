@@ -40,8 +40,14 @@ If following criteria are met on the frontend, submission fails silently
   - At least one partially complete or empty course row
   - No term selected
 
-![dom exception](/docs/dom_error.png)
+If a User attempts to export a calendar to Google calendar too many times in a short span of time, they might get the following error: **GaxiosError: Calendar usage limit exceeded**.
 
-  - Default tests for Desktop and Mobile components “pass”, but getting this particular error for multiple components that utilize states/atom (i.e. Calendar, CourseSelectionList, OnlineClassesDialog, etc.)
-    <!-- TODO:- Phrase this as a known potential issue if tests are written for the Mobile/Desktop components - Andrew Lim -->
-    - Getting an act(...) error if tests are written for Mobile/Desktop components
+Relevant Article: https://support.google.com/a/answer/2905486?hl=en
+
+When the schedule is exported to Google, the courses are removed from the Calendar and the List of Courses. When the page is refreshed, however, the Courses appear back in the Calendar and the List of Courses. 
+
+![Google Calendar Hang Demo](docs/gaxios-calendar-usage-limit-exceeded.gif)
+
+The “Google” export button does not work after it is clicked and a Syntax error is thrown to the console.
+
+![Console Error](docs/gaxios-console-errors.png)
