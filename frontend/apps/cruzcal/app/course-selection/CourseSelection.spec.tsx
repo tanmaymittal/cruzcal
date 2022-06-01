@@ -69,5 +69,4 @@ describe('CourseSelection', () => {
       expect(courseInput).not.toBeDisabled();
     });
   })
-  // To do: all selected, change subject should reset course
 })
