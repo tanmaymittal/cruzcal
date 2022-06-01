@@ -23,13 +23,12 @@ const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQuer
   try {
     const res = await fetch(url);
     if (res.status !== 200) throw res;
-    console.log('Successful event creation!');
     checkAuth({ type: 'refetch' });
 
     const schedule = (await res.text()).replace(/"/g, '');
     window.open(schedule, 'cruzcal-gcal');
   } catch (error) {
-    console.error(error);
+    // console.error(error);
     // Close window if error happens loading google calendar
     if (authWindow !== null)
       authWindow.close();
@@ -99,11 +98,11 @@ export const fetchCalendar = async (
   checkAuthenticated: Dispatch<AtomWithQueryAction>,
 ) => {
   if (schedule.term === null)
-    return console.error('No term provided');
+    return; // console.error('No term provided');
   if (schedule.courses.length === 0)
-    return console.error('No courses selected');
+    return; // console.error('No courses selected');
   if (schedule.courses.filter(({course}) => course === null).length > 0)
-    return console.error('Incomplete course selection');
+    return; // console.error('Incomplete course selection');
   
   // Must setup auth window outside of async fn for Safari
   if (calendarType === 'google' && !authenticated) {
@@ -124,5 +123,5 @@ export const fetchCalendar = async (
         break;
       }
     })
-    .catch(console.error);
+    // .catch(console.error);
 };

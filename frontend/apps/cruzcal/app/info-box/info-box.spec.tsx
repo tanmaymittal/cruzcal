@@ -7,7 +7,7 @@ describe('InfoBox', () => {
   // checks that the component actually renders
   it('should render successfully', async () => {
     render(<InfoBox />);
-    await screen.findByText('Warning: Term Selection');
+    await screen.findByText('Warning: Selecting a Different Term with Added Courses');
   });
 
   // checks that user can the select drop down

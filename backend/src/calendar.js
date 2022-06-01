@@ -1,18 +1,11 @@
 const ics = require('ics');
 const {google} = require('googleapis');
 
-const deleteCalendar = async (token, calendarId) => {
-  const oauth2Client = createOAuth2Client(token);
-  google.options({auth: oauth2Client});
-  const calendar = google.calendar('v3');
-  return calendar.calendars.delete({calendarId});
-};
-
 const generateIcsData = (termData, courseData) => {
   const {
     error,
     value,
-  } = ics.createEvents(coursesToEvents(termData, courseData));
+  } = ics.createEvents(coursesToEventsICSApi(termData, courseData));
   if (error) throw error;
   return value;
 };
@@ -63,7 +56,7 @@ const genNameForCalendarSummary = (termData, coursesData) => {
   return `${termData.name}: ${courseNameList}`;
 };
 
-const coursesToEvents = (termData, courseData) => {
+const coursesToEventsICSApi = (termData, courseData) => {
   const termDate = termData.date;
   const events = [];
   for (const course of courseData) {
@@ -224,6 +217,5 @@ module.exports = {
   generateIcsData,
   addGoogleCalApiEvents,
   genNameForCalendarSummary,
-  deleteCalendar,
   formatDateString: formatInitialDate,
 };

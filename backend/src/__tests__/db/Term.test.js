@@ -1,23 +1,30 @@
 require('dotenv').config();
 const {db, addTerm, getTermByCode, getAllTerms} = require('../test-db');
 const {terms} = require('../common');
+const {DatabaseError, UniqueConstraintError} = require('sequelize');
 
 beforeAll(async () => {
   // Reset database
   await db.sync({force: true});
-  // console.log(CourseInfo.getAttributes());
+
+  // Load terms
+  for (const term of terms) {
+    const row = await addTerm(term);
+    expect(row).toMatchObject(term);
+  }
 });
 
 afterAll(async () => {
   await db.close();
 });
 
-// Run before reads to load terms
-test('Load Term', async () => {
-  for (const term of terms) {
-    const row = await addTerm(term);
-    expect(row).toMatchObject(term);
-  }
+test('Insert duplicate key termcode', async () => {
+  await expect(addTerm(terms[0])).rejects.toThrow(UniqueConstraintError);
+});
+
+test('Insert term with incorrect attribute type', async () => {
+  const term = {...terms[0], code: 'string-code'};
+  await expect(addTerm(term)).rejects.toThrow(DatabaseError);
 });
 
 test('Select * Terms', async () => {

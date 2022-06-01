@@ -1,4 +1,4 @@
-import { queryByText, render, screen } from '@testing-library/react';
+import { findByRole, queryByText, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 
 import ComboboxSelect, { DefaultComboboxSelect, Subject } from './combobox-select';
@@ -6,6 +6,7 @@ import ComboboxSelect, { DefaultComboboxSelect, Subject } from './combobox-selec
 describe('ComboboxSelect', () => {
   const completeOption = {name: 'hello, world'};
   const partialOption = {name: 'hello'};
+  const incorrectOption = {name: 'incorrect'};
   const getDefaultProps = (selected: Subject) => ({
     listName: 'Example',
     options: [{name: 'hello, world'}, {name: 'hello, planet'}],
@@ -60,7 +61,7 @@ describe('ComboboxSelect', () => {
     // Selected option should be set after selecting from dropdown
     expect(props.selected).toStrictEqual(newSelection);
   });
-  it('Select from dropdown options', async () => {
+  it('Partial type, select from dropdown options', async () => {
     const user = userEvent.setup();
 
     const props = getDefaultProps(null);
@@ -86,5 +87,22 @@ describe('ComboboxSelect', () => {
     }
     // Selected option should be set after selecting from dropdown
     expect(props.selected).toStrictEqual(newSelection);
+  });
+  it('Type in incorrect input', async () => {
+    const user = userEvent.setup();
+
+    const props = getDefaultProps(null);
+    props.setSelected = (sel) => props.selected = sel;
+    const newSelection = incorrectOption;
+
+    render(<ComboboxSelect {...props} />);
+
+    const input = await screen.findByRole('combobox', {name: /combobox-input-example/i});
+
+    // Clear input and enter new selection text
+    await user.clear(input);
+    await user.type(input, newSelection.name);
+
+    await screen.findByText('Nothing found.');
   });
 });

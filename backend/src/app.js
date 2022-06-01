@@ -27,18 +27,13 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // used to serialize the user for the session
-passport.serializeUser(function(user, done) {
-  done(null, user);
-});
+passport.serializeUser((user, done) => done(null, user));
 
 // used to deserialize the user
-passport.deserializeUser(function(user, done) {
-  return done(null, user);
-});
+passport.deserializeUser((user, done) => done(null, user));
 
 // Setup API validation
 
-// const api = require(apiSpec);
 const apiSpec = path.join(__dirname, '../api/openapi.yaml');
 const api = yaml.load(fs.readFileSync(apiSpec, 'utf8'));
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(api));
@@ -95,7 +90,7 @@ app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
   const error = {
     status: err.status || 500,
     message: err.message,

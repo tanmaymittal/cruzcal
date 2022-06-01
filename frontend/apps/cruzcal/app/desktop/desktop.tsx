@@ -1,10 +1,10 @@
-import CourseSelectionList from '../app/course-selection/CourseSelectionList';
+import CourseSelectionList from '../course-selection/CourseSelectionList';
 import dynamic from 'next/dynamic'
 
 export interface DesktopProps {}
 
 const Calendar = dynamic(
-  () => import('../app/calendar-view/calendar-view'),
+  () => import('../calendar-view/calendar-view'),
   { ssr: false}
 )
 

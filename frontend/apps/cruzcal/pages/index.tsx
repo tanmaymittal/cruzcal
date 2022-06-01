@@ -6,8 +6,8 @@ import { versionAtom } from '../atoms/version';
 
 import Header from '../app/header/header';
 import Footer from '../app/footer/footer';
-import Mobile from './mobile';
-import Desktop from './desktop';
+import Mobile from '../app/mobile/mobile';
+import Desktop from '../app/desktop/desktop';
 
 export function Index() {
   const dispatchVersion = useUpdateAtom(versionAtom);

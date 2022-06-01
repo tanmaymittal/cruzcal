@@ -83,7 +83,7 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
                       <>
                         <span
                           className={`block truncate ${
-                            selected ? 'font-medium' : 'font-normal'
+                            selected ? 'font-bold' : 'font-normal'
                           }`}
                         >
                           {option.name}
