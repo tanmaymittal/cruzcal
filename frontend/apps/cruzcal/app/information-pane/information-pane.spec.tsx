@@ -25,6 +25,6 @@ describe('InformationPane', () => {
     await user.click(qButton);
     await screen.findByLabelText(/information-pane/i);
     await screen.findByText(/How do I use this app\?/);
-    await screen.findByText(/Warning: Term Selection/);
+    await screen.findByText(/Warning: Selecting a Different Term with Added Courses/);
   });
 });
