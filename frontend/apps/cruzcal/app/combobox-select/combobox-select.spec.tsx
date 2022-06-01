@@ -61,7 +61,7 @@ describe('ComboboxSelect', () => {
     // Selected option should be set after selecting from dropdown
     expect(props.selected).toStrictEqual(newSelection);
   });
-  it('Select from dropdown options', async () => {
+  it('Partial type, select from dropdown options', async () => {
     const user = userEvent.setup();
 
     const props = getDefaultProps(null);
@@ -88,7 +88,7 @@ describe('ComboboxSelect', () => {
     // Selected option should be set after selecting from dropdown
     expect(props.selected).toStrictEqual(newSelection);
   });
-  it('Type in full selection input', async () => {
+  it('Type in incorrect input', async () => {
     const user = userEvent.setup();
 
     const props = getDefaultProps(null);
