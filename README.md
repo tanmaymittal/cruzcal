@@ -151,4 +151,3 @@ After selecting course(s), if you change the **Term**, it will refresh all selec
 - Andrew Lim
 - Pablo Gaeta
 - Mario Reyes
-
