@@ -25,8 +25,8 @@ const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQuer
     if (res.status !== 200) throw res;
     checkAuth({ type: 'refetch' });
 
-    const schedule = (await res.text()).replace(/"/g, '');
-    window.open(schedule, 'cruzcal-gcal');
+    const google_event_uri = await res.text();
+    window.open(google_event_uri, 'cruzcal-gcal');
   } catch (error) {
     // console.error(error);
     // Close window if error happens loading google calendar
@@ -48,7 +48,7 @@ const submitGoogle = async (
     } else {
       const pollTimer = window.setInterval(function() { 
         try {
-          const redirectPath = `/api/loading`;
+          const redirectPath = `/api/loading/gcal`;
           const windowPath = authWindow.location.pathname;
           if (windowPath === undefined || windowPath === redirectPath) {
             window.clearInterval(pollTimer);

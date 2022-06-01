@@ -98,7 +98,7 @@ exports.genGoogleCalendar = async (req, res, next) => {
       throw new APIError('No Google Calendar events created', 400, []);
     }
 
-    res.status(200).json(createdEvents[0].data.htmlLink);
+    res.status(200).send(createdEvents[0].data.htmlLink);
   } catch (error) {
     next(error);
   }

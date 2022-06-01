@@ -47,7 +47,7 @@ app.use(
 
 // Routes
 
-process.env.API_VERSION = 0.2;
+process.env.API_VERSION = 0.3;
 app.get('/api/version/latest',
   (_, res) => res.type('text/plain').send(process.env.API_VERSION));
 
@@ -65,12 +65,13 @@ app.get('/api/auth/google/calendar',
   passport.authenticate(auth.googleCalendarStrategy));
 app.get('/api/auth/google/calendar/redirect',
   passport.authenticate(auth.googleCalendarStrategy, {
-    successRedirect: '/api/loading',
+    successRedirect: '/api/loading/gcal',
     failureRedirect: '/api/auth/google/calendar',
     failureMessage: true,
   }),
 );
-app.get('/api/loading', (req, res) => res.send('Loading...'));
+app.get('/api/loading/gcal',
+  (_, res) => res.send('Loading Google Calendar...'));
 
 // User management
 app.get('/api/user', auth.loggedIn, auth.getUser);
@@ -100,4 +101,3 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
-// http://localhost:4200/api/calendar/google?termCode=2222&courseIDs=50005
