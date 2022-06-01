@@ -21,8 +21,8 @@ afterEach(() => {
   container = null;
 });
 
-describe('WarningDialog', () => {
-  it('No conflicting classes', async () => {
+describe('OnlineClassesDialog', () => {
+  it('no asynchronous classes', async () => {
     const updatedCourses: CourseSelector[] = [
       // Course 1
       {
@@ -71,7 +71,7 @@ describe('WarningDialog', () => {
       );
     };
 
-    const { findByText, getByText } = render(
+    const { findByText } = render(
       <Provider>
         <OnlineClassesDialog />
         <Updater />
@@ -88,7 +88,6 @@ describe('WarningDialog', () => {
 
   it('one asynchronous class', async () => {
     const updatedCourses: CourseSelector[] = [
-      // Course 1
       {
         term: {
           code: 2224,
@@ -129,7 +128,7 @@ describe('WarningDialog', () => {
       );
     };
 
-    const { findByText, getByText } = render(
+    const { getByText } = render(
       <Provider>
         <OnlineClassesDialog />
         <Updater />
