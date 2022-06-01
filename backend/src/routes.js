@@ -1,4 +1,4 @@
-const {generateIcsData} = require('./calendar');
+const {generateIcsData, addGoogleCalApiEvents} = require('./calendar');
 const {
   createAndSendFile,
   generateScheduleURI,
@@ -7,7 +7,6 @@ const {
   formatTerm,
   formatCourse,
 } = require('./utils');
-
 const {
   getAllTerms,
   getUniqueSubjects,
@@ -81,14 +80,19 @@ exports.genICS = async (req, res, next) => {
   try {
     const {term, courses} = req.body;
     const downloadName = 'calendar.ics';
-    const icsData = generateIcsData(term, courses);
+    const icsData = generateIcsData(term, courses) || '';
     await createAndSendFile(res, downloadName, icsData);
   } catch (error) {
     next(error);
   }
 };
 
-exports.genGoogleCalendar = async (req, res) => {
-  const schedule = req.body;
-  res.status(200).json(schedule);
+exports.genGoogleCalendar = async (req, res, next) => {
+  try {
+    const {term, courses} = req.body;
+    addGoogleCalApiEvents(req.user.creds.token, term, courses);
+    return res.status(200).json({term, courses});
+  } catch (error) {
+    next(error);
+  }
 };

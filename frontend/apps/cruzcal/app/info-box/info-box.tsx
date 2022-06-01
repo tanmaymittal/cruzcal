@@ -11,15 +11,15 @@ export function InfoBox() {
         <Disclosure as="div" className="mt-2">
           {({ open }) => (
             <>
-              <Disclosure.Button className="flex w-full justify-between rounded-lg bg-rose-100 px-4 py-2 text-left text-sm font-medium text-rose-900 hover:bg-rose-200 focus:outline-none focus-visible:ring focus-visible:ring-rose-500 focus-visible:ring-opacity-75">
-                <span>Warning: Term Selection</span>
+              <Disclosure.Button aria-label="warning-button" className="flex w-full justify-between rounded-lg bg-rose-100 px-4 py-2 text-left text-sm font-bold text-rose-900 hover:bg-rose-200 focus:outline-none focus-visible:ring focus-visible:ring-rose-500 focus-visible:ring-opacity-75">
+                <span>Warning: Selecting a Different Term with Added Courses</span>
                 <ChevronUpIcon
                   className={`${
                     open ? 'rotate-180 transform' : ''
                   } h-5 w-5 text-rose-500`}
                 />
               </Disclosure.Button>
-              <Disclosure.Panel className="px-4 pt-4 pb-2 text-sm text-gray-500">
+              <Disclosure.Panel aria-label="warning-panel" className="px-4 pt-4 pb-2 text-sm text-gray-500">
                 After selecting course(s), if you change the <strong>TERM</strong> button it will refresh all selected courses as if it were a new session. Meaning any of the selected courses will be removed.
               </Disclosure.Panel>
             </>

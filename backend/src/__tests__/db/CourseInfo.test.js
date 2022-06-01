@@ -1,3 +1,4 @@
+require('dotenv').config();
 const {DatabaseError} = require('sequelize');
 const {
   db,

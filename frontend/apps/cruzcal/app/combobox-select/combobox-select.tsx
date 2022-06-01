@@ -42,7 +42,7 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
             <Combobox.Input
               aria-label={`combobox-input-${listName}`}
               className="w-full truncate border-none py-2 pl-3 pr-10 text-sm leading-5 text-gray-900 focus:ring-0"
-              displayValue={() => selected ? selected.name : `Select ${listName}...`}
+              displayValue={() => selected ? selected.name : `Select ${listName}`}
               onChange={(event) => setQuery(event.target.value)}
             />
             <Combobox.Button aria-label={`combobox-dropdown-${listName}`} className="absolute inset-y-0 right-0 flex items-center pr-2">
@@ -83,7 +83,7 @@ export const ComboboxSelect: FC<ComboboxSelectProps> = ({listName, options, disa
                       <>
                         <span
                           className={`block truncate ${
-                            selected ? 'font-medium' : 'font-normal'
+                            selected ? 'font-bold' : 'font-normal'
                           }`}
                         >
                           {option.name}

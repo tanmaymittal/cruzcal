@@ -470,6 +470,7 @@ components:
         - name
         - coursenum
         - section
+        - subject
         - courseID
         - lectures
         - professor
@@ -480,6 +481,8 @@ components:
           type: array
           items:
             type: string
+        subject:
+          type: string
         coursenum:
           type: string
         section:
@@ -491,7 +494,7 @@ components:
           items:
             "$ref": "#/components/schemas/LectureInfo"
     CalendarType:
-      enum: [json, ics, google]
+      enum: [json, ics, google, cruzcal]
     CalendarRequest:
       type: object
       additionalProperties: false

@@ -24,6 +24,7 @@ exports.APIError = class APIError extends Error {
 exports.formatCourse = (courseObj) => {
   const courseInfo = {
     name: courseObj.name,
+    subject: courseObj.subject,
     section: courseObj.section,
     coursenum: courseObj.coursenum,
     professor: courseObj.professor,
@@ -77,7 +78,6 @@ exports.generateScheduleURI = (type, term, courses) => {
 // data is either a string or a binary buffer
 exports.createAndSendFile = async (res, filename, data) => {
   const extension = path.extname(filename);
-
   return new Promise((resolve, reject) => {
     tmp.file({postfix: extension}, (createError, path, fd, cleanupCallback) => {
       const cleanup = (err) => {
@@ -99,3 +99,4 @@ exports.createAndSendFile = async (res, filename, data) => {
     });
   });
 };
+

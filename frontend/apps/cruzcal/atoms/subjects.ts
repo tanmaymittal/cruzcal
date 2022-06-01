@@ -31,7 +31,7 @@ export const subjectsQueryAtom = atomWithQuery((get) => ({
         .sort((a: string, b: string) => a.localeCompare(b))
         .map((name: string) => ({name}));
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       return [];
     }
   },

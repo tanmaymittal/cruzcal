@@ -11,6 +11,7 @@ export type Weekday = 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'
 
 export interface CourseInfo {
   name:	string,
+  subject: string,
   professor: string[],
   coursenum: string,
   section: string,
@@ -52,7 +53,7 @@ export const coursesQueryAtom = atomWithQuery((get) => ({
         });
       return courses;
     } catch (error) {
-      console.log(await error.json());
+      // console.log(await error.json());
       return [];
     }
   },

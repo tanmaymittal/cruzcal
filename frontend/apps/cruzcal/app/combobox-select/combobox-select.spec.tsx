@@ -28,7 +28,7 @@ describe('ComboboxSelect', () => {
 
     const input = await screen.findByRole('combobox', {name: /combobox-input-example/i});
 
-    expect(input).toHaveDisplayValue(`Select ${props.listName}...`);
+    expect(input).toHaveDisplayValue(`Select ${props.listName}`);
   });
   it('Example selection', async () => {
     const props = getDefaultProps(completeOption);

@@ -1,3 +1,4 @@
+require('dotenv').config();
 const {db, addTerm, getTermByCode, getAllTerms} = require('../test-db');
 const {terms} = require('../common');
 

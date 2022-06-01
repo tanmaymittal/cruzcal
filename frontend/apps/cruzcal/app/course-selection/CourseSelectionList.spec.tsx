@@ -82,7 +82,7 @@ describe('CourseSelectionList', () => {
       expect(courseInput).toBeDisabled();
     })
 
-    // Click dropdown button
+    // get term input button
     const termInput = await screen.findByRole('combobox', {name: /combobox-input-term/i});
 
     // Type in full term name

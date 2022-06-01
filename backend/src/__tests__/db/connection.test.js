@@ -1,3 +1,4 @@
+require('dotenv').config();
 const {db, getAllCourses} = require('../test-db');
 
 beforeAll(async () => {

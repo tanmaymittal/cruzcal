@@ -52,7 +52,7 @@ app.use(
 
 // Routes
 
-process.env.API_VERSION = 0.1;
+process.env.API_VERSION = 0.2;
 app.get('/api/version/latest',
   (_, res) => res.type('text/plain').send(process.env.API_VERSION));
 
@@ -94,7 +94,7 @@ app.get('/api/calendar/google', auth.check, routes.genGoogleCalendar);
 
 // Error handler
 app.use((err, req, res, next) => {
-  console.log(err);
+  // console.log(err);
   const error = {
     status: err.status || 500,
     message: err.message,
@@ -104,3 +104,4 @@ app.use((err, req, res, next) => {
 });
 
 module.exports = app;
+// http://localhost:4200/api/calendar/google?termCode=2222&courseIDs=50005
