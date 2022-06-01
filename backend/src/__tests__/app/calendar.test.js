@@ -19,13 +19,13 @@ const termData = {
   },
 };
 
-describe('Calendar functions properly generate events along helper functions', () => {
+describe('Calendar utilities', () => {
   const calendarSummary = genNameForCalendarSummary(
     termData,
     coursesData,
   );
 
-  test('Function genNameForCalendarSummary creates unique name for calendar', () => {
+  test('Generate unique name for calendar', () => {
     expect(calendarSummary).toBe('1234 Test Quarter: Math Methods II, SOE Calculus III');
   });
   // Removed live test creating google calendar event

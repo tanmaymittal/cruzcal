@@ -9,10 +9,14 @@ module.exports = function(sequelize) {
     code: {
       primaryKey: true,
       type: DataTypes.INTEGER,
+      validator: {
+        min: 0,
+      },
     },
     name: {
       allowNull: false,
       type: DataTypes.STRING,
+      unique: true,
     },
     start: {
       allowNull: false,
