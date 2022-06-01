@@ -1,11 +1,11 @@
 # Working Prototype Known Problems Report
 
-**Product name**: CruzCal
-**Team Name**: CruzCal Developers
-**Team Members**: Tanmay Mittal, Kitana Toft, Mario Reyes, Pablo Gaeta, Andrew Lim
-**Release Name**: 1.0
-**Release Date**: Monday, May 23, 2022
-**Revision Number**: 0.1
+**Product name**: CruzCal<br>
+**Team Name**: CruzCal Developers<br>
+**Team Members**: Tanmay Mittal, Kitana Toft, Mario Reyes, Pablo Gaeta, Andrew Lim<br>
+**Release Name**: 1.0<br>
+**Release Date**: Monday, May 23, 2022<br>
+**Revision Number**: 0.1<br>
 **Revision Date**: Tuesday, May 31, 2022
 
 **Description**: Known problems listed by domain:
