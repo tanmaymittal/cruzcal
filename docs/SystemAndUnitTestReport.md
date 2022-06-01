@@ -8,39 +8,6 @@
 **Revision Number**: 0.3
 **Revision Date**: Tuesday, May 31, 2022
 
-## Building and Running Tests
-
-Our application may be easily built, tested and executed using the following instructions.
-
-### Prerequisites
-- [psql](https://www.postgresql.org/): PostgreSQL interactive terminal [(Download)](https://www.postgresql.org/download/)
-- [Node.js](https://nodejs.org/en/) package manager (yarn preferred)
-
----
-
-#### Clone Repo
-```
-git clone https://github.com/tanmaymittal/cruzcal.git
-```
-
-#### Install dependencies and build database
-```
-cd cruzcal
-yarn
-```
-
-#### Run automated backend and frontend unit tests
-```
-yarn test
-```
-
-#### Begin development environment
-```
-yarn start
-```
-
----
-
 ## Back End System Tests
 ### Application Build
 - [Express](https://expressjs.com/en/4x/api.html) (Minimal framework for defining HTTP endpoints and inserting middleware)
