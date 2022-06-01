@@ -2,7 +2,7 @@
 
 Check out the [Figma](https://www.figma.com/file/nP5Z4Ugc0p9pnBaqNrtMS4/CruzCal?node-id=96%3A26 ) for the designs
 
-Check out the [how-to guide](https://github.com/tanmaymittal/cruzcal/blob/main/HOW-TO-GUIDE.md) on the site's features
+Check out the [how-to guide](HOW-TO-GUIDE.md) on the site's features
 
 ## What is CruzCal?
 
