@@ -35,23 +35,19 @@ We were hoping to build our own scraper, so for the future we would be making th
 
 ## Backend issues
 
+None
+
 ---
 
 ## Frontend issues
 
-If following criteria are met on the frontend, submission fails silently
-
-- At least one partially complete or empty course row
-- No term selected
-
-If a User attempts to export a calendar to Google calendar too many times in a short span of time, they might get the following error: **GaxiosError: Calendar usage limit exceeded**.
-
-Relevant Article: https://support.google.com/a/answer/2905486?hl=en
-
-When the schedule is exported to Google, the courses are removed from the Calendar and the List of Courses. When the page is refreshed, however, the Courses appear back in the Calendar and the List of Courses.
-
+1. If following criteria are met on the frontend, submission fails silently
+    1. At least one partially complete or empty course row
+    2. No term selected
+2. If a User attempts to export a calendar to Google calendar too many times in a short span of time, they might get the following error: **GaxiosError: Calendar usage limit exceeded**.
+    1. Relevant Article: https://support.google.com/a/answer/2905486?hl=en
+    2. When the schedule is exported to Google, the courses are removed from the Calendar and the List of Courses. When the page is refreshed, however, the Courses appear back in the Calendar and the List of Courses.
 ![Google Calendar Hang Demo](./gaxios-calendar-usage-limit-exceeded.gif)
-
-The “Google” export button does not work after it is clicked and a Syntax error is thrown to the console.
-
+    3. The “Google” export button does not work after it is clicked and a Syntax error is thrown to the console.
 ![Console Error](./gaxios-console-errors.png)
+3. The CalendarView tests occasionally fail, likely due to a timeout when the userEvent does not click on a Subject, which causes the Course to load multiple options instead of a single one. A potential future fix would be breaking down these tests into small tests until they consistently pass.
