@@ -37,6 +37,31 @@ We scrape the information from SlugSurvival and build our database of classes wi
 > yarn
 ```
 
+## Define backend environment variables
+
+The following environment variables must be defined in `backend/`...
+
+Postgres Sequelize DB:
+
+- POSTGRES_DB
+- POSTGRES_USER
+- POSTGRES_PASSWORD
+- POSTGRES_HOST
+
+Google Calendar API (with userinfo.email, userinfo.profile, and calendar scopes):
+
+- GOOGLE_CLIENT_ID
+- GOOGLE_CLIENT_SECRET
+
+Path variables:
+
+- GOOGLE_AUTH_REDIRECT="/api/auth/google/redirect"
+- GOOGLE_AUTH_URL="/api/auth/gooogle"
+
+A session secret for encrypted cookies:
+
+- SESSION_SECRET
+
 ### Run automated backend and frontend unit tests
 
 ```bash
@@ -49,7 +74,7 @@ We scrape the information from SlugSurvival and build our database of classes wi
 > yarn start
 ```
 
-## Roadmap (User Story Backlog)
+## Product Backlog
 
 - [ ] As a user, I want to search for a class using a search bar that automatically queries classes based on subject, class name, or both
 - [ ] As a user, I want to store and retrieve multiple schedules within CruzCal
