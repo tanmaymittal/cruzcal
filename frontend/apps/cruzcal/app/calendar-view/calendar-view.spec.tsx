@@ -181,9 +181,15 @@ describe('CalendarView', () => {
     await user.clear(courseInput);
     await user.type(courseInput, exampleSelection.course.coursenum);
 
-    // Should only be a single course
-    const courseOption = await screen.findByRole('option', {
-      name: /combobox-option-course/i,
+    let courseOption: HTMLElement;
+    // Wait until only one course option
+    // more reliable for disappearance check
+    await waitFor(() => {
+      const courseOptions = screen.getAllByRole('option', {
+        name: /combobox-option-course/i,
+      });
+      expect(courseOptions).toHaveLength(1);
+      courseOption = courseOptions[0];
     });
 
     // Select the course
