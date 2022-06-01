@@ -16,7 +16,7 @@ const submitJSON = async (url) => window.open(url);
 export let authWindow: Window = null;
 export const setAuthWindow = (win: Window) => authWindow = win;
 export const setupGoogleAuth = () => {
-  authWindow = window.open(`${server}/api/auth/google/calendar`, 'cruzcal-gcal-auth', 'width=800, height=600');
+  authWindow = window.open(`${server}/api/auth/google/calendar`, 'cruzcal-gcal');
 }
 
 const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQueryAction>) => {
@@ -25,10 +25,13 @@ const fetchGoogleCalendar = async (url: string, checkAuth: Dispatch<AtomWithQuer
     if (res.status !== 200) throw res;
     checkAuth({ type: 'refetch' });
 
-    const schedule = await res.json();
-    // console.log(schedule);
+    const google_event_uri = await res.text();
+    window.open(google_event_uri, 'cruzcal-gcal');
   } catch (error) {
     // console.error(error);
+    // Close window if error happens loading google calendar
+    if (authWindow !== null)
+      authWindow.close();
   }
 }
 
@@ -45,11 +48,10 @@ const submitGoogle = async (
     } else {
       const pollTimer = window.setInterval(function() { 
         try {
-          const redirectPath = `/`;
+          const redirectPath = `/api/loading/gcal`;
           const windowPath = authWindow.location.pathname;
           if (windowPath === undefined || windowPath === redirectPath) {
             window.clearInterval(pollTimer);
-            authWindow.close();
             fetchGoogleCalendar(url, checkAuth);
           }
         } catch(e) {}

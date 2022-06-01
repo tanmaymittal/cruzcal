@@ -43,21 +43,18 @@ paths:
       parameters:
         - in: query
           description: Random state string to protect against attacks such as CSRF.
-          required: true
           name: state
           allowReserved: true
           schema:
             type: string
         - in: query
           description: Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.
-          required: true
           name: code
           allowReserved: true
           schema:
             type: string
         - in: query
           description: Scopes for authenticated user
-          required: true
           allowReserved: true
           name: scope
           schema:
@@ -77,6 +74,11 @@ paths:
           name: prompt
           schema:
             type: string
+        - in: query
+          description: Authorization failed
+          name: error
+          schema:
+            type: string
       responses:
         '302':
           description: Successful authorization. Redirecting to landing page
@@ -94,21 +96,18 @@ paths:
       parameters:
         - in: query
           description: Random state string to protect against attacks such as CSRF.
-          required: true
           name: state
           allowReserved: true
           schema:
             type: string
         - in: query
           description: Launches a Basic authorization code flow, requiring a POST to the token endpoint to obtain the tokens.
-          required: true
           name: code
           allowReserved: true
           schema:
             type: string
         - in: query
           description: Scopes for authenticated user
-          required: true
           allowReserved: true
           name: scope
           schema:
@@ -335,15 +334,32 @@ paths:
         '200':
           description: Successfully returned location and schedule information.
           content:
-            application/json:
+            text/plain:
               schema:
-                "$ref": "#/components/schemas/JSONCalendar"
+                type: string
         default:
           description: Error Response
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/Error"
+  "/api/loading/gcal":
+    get:
+      description: Temporary loading page during redirects
+      responses:
+        '200':
+          description: Successful redirect
+          content:
+            text/plain:
+              schema:
+                type: string
+        default:
+          description: Error Response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/Error"
+
 
 security:
   - GoogleAuth: []
