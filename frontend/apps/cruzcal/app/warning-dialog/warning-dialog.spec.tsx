@@ -44,6 +44,7 @@ describe('WarningDialog', () => {
           "professor": [
             "Evans,D.N."
           ],
+          "subject": "ANTH",
           "section": "01",
           "coursenum": "2",
           "courseID": 70299,
@@ -83,6 +84,7 @@ describe('WarningDialog', () => {
           "professor": [
             "Katznelson,J.R."
           ],
+          "subject": "AM",
           "section": "01",
           "coursenum": "10",
           "courseID": 70299,
@@ -153,6 +155,7 @@ describe('WarningDialog', () => {
           "professor": [
             "Evans,D.N."
           ],
+          "subject": "ANTH",
           "section": "01",
           "coursenum": "2",
           "courseID": 70299,
@@ -192,6 +195,7 @@ describe('WarningDialog', () => {
           "professor": [
             "Lu,L.K."
           ],
+          "subject": "AM",
           "section": "01",
           "coursenum": "20",
           "courseID": 70299,
