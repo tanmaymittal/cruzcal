@@ -1,5 +1,5 @@
 require('dotenv').config();
-const {DatabaseError} = require('sequelize');
+const {DatabaseError, UniqueConstraintError} = require('sequelize');
 const {
   db,
   getAllCourses,
@@ -17,32 +17,34 @@ beforeAll(async () => {
   for (const term of terms) {
     await addTerm(term);
   }
-});
 
-afterAll(async () => {
-  await db.close();
-});
-
-// Run before any reads to load courses
-test('Load CourseInfo', async () => {
+  // Load courses
   for (const course of courses) {
     const row = await addCourse(course);
     expect(row).toMatchObject(course);
   }
 });
 
+afterAll(async () => {
+  await db.close();
+});
+
 // Assumption: negative termcode is invalid
-test('Insertion invalid termcode fk', async () => {
+test('Insert invalid termcode fk', async () => {
   const invalidRecord = {...courses[0]};
   invalidRecord.termcode = -1;
   await expect(addCourse(invalidRecord)).rejects.toThrow(DatabaseError);
 });
 
-test('Insertion validation error (missing refnum)', async () => {
+test('Insert validation error (missing refnum)', async () => {
   const invalidRecord = {...courses[0]};
   delete invalidRecord.refnum;
 
   await expect(addCourse(invalidRecord)).rejects.toThrow(DatabaseError);
+});
+
+test('Insert duplicate key refnum,termcode', async () => {
+  await expect(addCourse(courses[0])).rejects.toThrow(UniqueConstraintError);
 });
 
 test('Select *', async () => {
@@ -56,6 +58,16 @@ test('Select by CRN and term', async () => {
   expect(course).toMatchObject(firstCourse);
 });
 
-test('Select invalid CRN and term', async () => {
+test('Select invalid CRN, valid term', async () => {
+  const firstCourse = courses[0];
+  expect(await getCourseByID(firstCourse.termcode, 'not a course')).toBeNull();
+});
+
+test('Select valid CRN, invalid term', async () => {
+  const firstCourse = courses[0];
+  expect(await getCourseByID(0, firstCourse.refnum)).toBeNull();
+});
+
+test('Select invalid CRN, invalid term', async () => {
   expect(await getCourseByID(0, 'not a course')).toBeNull();
 });
