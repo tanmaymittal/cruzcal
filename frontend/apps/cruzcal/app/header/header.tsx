@@ -16,9 +16,9 @@ export function Header(props: HeaderProps) {
           <div className='self-end'>
             <InformationPane />
           </div>
-          <div className='mt-auto'>
+          {/* <div className='mt-auto'>
             <UserHeader />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

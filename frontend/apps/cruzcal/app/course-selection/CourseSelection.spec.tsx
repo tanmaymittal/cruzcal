@@ -1,10 +1,11 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { atom } from 'jotai';
 
 import CourseSelection from './CourseSelection';
 import { defaultCourseSelection } from '../../atoms/course-selector';
 
-import {exampleSelection} from '../../mocks/data';
+import {exampleSelection, terms} from '../../mocks/data';
 
 describe('CourseSelection', () => {
   it('no term, subject course selection', async () => {
@@ -68,6 +69,25 @@ describe('CourseSelection', () => {
       expect(subjectInput).not.toBeDisabled();
       expect(courseInput).not.toBeDisabled();
     });
-  })
-  // To do: all selected, change subject should reset course
+  });
+  it('Change subject', async () => {
+    const user = userEvent.setup();
+    const courseSelection = atom(exampleSelection);
+
+    render(<CourseSelection courseAtom={courseSelection} remove={() => {}}/>);
+
+    const subjectInput = await screen.findByRole('combobox', {name: /combobox-input-subject/i});
+    const courseInput = await screen.findByRole('combobox', {name: /combobox-input-course/i});
+
+    await user.clear(subjectInput);
+    await user.type(subjectInput, 'AM');
+
+    const option = await screen.findByRole('option', {name: /combobox-option-subject/i});
+
+    await user.click(option);
+
+    await waitFor(() => {
+      expect(courseInput).toHaveDisplayValue(/Select Course/i);
+    });
+  });
 })
