@@ -2,8 +2,6 @@
 
 Check out the [Figma](https://www.figma.com/file/nP5Z4Ugc0p9pnBaqNrtMS4/CruzCal?node-id=96%3A26 ) for the designs
 
-Check out the [how-to guide](HOW-TO-GUIDE.md) on the site's features
-
 ## What is CruzCal?
 
 A productivity tool for UC Santa Cruz students. CruzCal lets users select their Class and produce calendar files based on the class events they can import to their preferred calendar. Users will also be able to import this Calendar to Calendar apps (built-in OAuth Consent).
