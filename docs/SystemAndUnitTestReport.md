@@ -337,159 +337,144 @@ Components
 
 ---
 
-Sprint 1 System Tests
-User stories (verify completed):
-As a student, I want to search for available courses during the term I’m interested in
-As a student, I want to see course information for classes that I enter.
-Scenario (at end of sprint 1, we can probably modify to show completion with our final product)
-start CruzCal app; visit the /api/docs endpoint (i.e. https://cruzcal.com/api/docs )
-Expand the /api/terms section
-Click “Try it out”; Click “Execute”
-The request sent is displayed and the available terms that CruzCal is tracking are returned
-Choose the 2022 Summer Quarter, which has term code 2224
-expand the /api/courses section
-Click “Try it out”; Enter the term code from 1.a.iii, 2224; Click “Execute”
-The available courses for the term are returned, including information about lecture meetings times
-Browse for courses that seem interesting
-record the courseIDs for courses of interest;
-Expand the /api/schedule section
-Click “Try it out”
-Replace the default term code with the selected term
-Replace the array items with courseIDs
-courseIDs are entered one per line line, followed by a comma
-Click “Execute”
+## Sprint 1 System Tests
+**User stories** (verify completed):
+  - As a student, I want to search for available courses during the term I’m interested in
+  - As a student, I want to see course information for classes that I enter.
+
+**Scenario** (at end of sprint 1, we can probably modify to show completion with our final product)
+1. start `CruzCal app`; visit the `/api/docs` endpoint (i.e. [https://cruzcal.com/api/docs](https://cruzcal.com/api/docs) )
+    1. Expand the `/api/terms` section
+        1. Click “*Try it out*”; Click “*Execute*”
+        1. The request sent is displayed and the available terms that CruzCal is tracking are returned
+        1. Choose the 2022 Summer Quarter, which has term code 2224
+    1. expand the /api/courses section
+        1. Click “*Try it out*”; Enter the term code from **1.3**, 2224; Click “*Execute*”
+        1. The available courses for the term are returned, including information about lecture meetings times
+    1. Browse for courses that seem interesting
+1. record the courseIDs for courses of interest;
+    1. Expand the /api/schedule section
+        1. Click “Try it out”
+        1. Replace the default term code with the selected term
+        1. Replace the array items with courseIDs
+        1. courseIDs are entered one per line line, followed by a comma
+        1. Click “Execute”
+
+---
+
+## Sprint 2 System Tests
+**User stories** (verify completed):
+  - As a student, I want to dynamically add and remove courses from my schedule
+  - As a student, I want to generate a calendar resource scheduling all of my courses so I don’t have to manually create them every quarter
+
+**Scenario**:
+1. start `CruzCal app`; visit the / endpoint (i.e. [https://cruzcal.com/](https://cruzcal.com/) );
+1. Find the `Select Schedule` section (In the `Add Course` tab on mobile)
+    1. select `Select Term`; type or click on chevron arrow (^) to expand term options.
+        1. **i.e.**: type or select 2022 Summer Quarter
+    1. select first subject  `Select Subject`; type or click on chevron arrow (^) to expand subject options.
+        1. **i.e.**: type or select AM
+    1. select first course `Select Course`; type or click on chevron arrow (^) to expand course options.
+        1. **i.e.**: type or select 20 - 01: Math Methods II
+    1. click on the plus sign (+) button to select a new course
+    1. select second subject, CSE
+    1. select second course, 115A - 01: Intro Software Eng
+    1. User decides they don’t want to take a math class and clicks the trash icon on the right of the first row to remove AM 20 - 01 : Math Methods II
+1. Find the `Export Calendar` section below the course scheduler
+    1. Click the `JSON` button
+    1. A new browser window pops up with the selected term and course data
+    1. The URL provides a deep link to the JSON resource and can be re-downloaded by entering the URL in a browser or programmatically by fetching the resource
+
+---
+
+## Sprint 3 System Tests
+**User stories** (verify completed):
+  - As a student, I want to be able to save multiple calendars for current and future quarters
+  - As a student, I want to see a calendar preview so I can visualize my schedule as I add courses to CruzCal
+  - *NEW*: As a student, I want to have multiple options for download formats depending on my preference
+  - *NEW*: As a student, I want to be able to see if any of my selected courses have time conflicts
+
+**Scenario**:
+1. start CruzCal app; visit the / endpoint (i.e. [https://cruzcal.com/](https://cruzcal.com/))
+1. Find the `Select Schedule` section (In the `Add Course` tab on mobile)
+    1. select `Select Term`; type or click on chevron arrow (^) to expand term options.
+        1. i.e: type or select 2022 Spring Quarter
+      1. select first subject  `Select Subject`; type or click on chevron arrow (^) to expand subject options.
+        1. i.e: type or select CSE
+    1. select first course  `Select Course`; type or click on chevron arrow (^) to expand course options.
+        1. i.e: type or select 115A - 01 : Intro Software Eng
+1. Find the calendar preview display (In the `Calendar` tab on mobile)
+    1. The user’s CSE 115A class should appear on the calendar at the correct time
+    1. Other classes added to the course schedule will also appear on this preview
+1. Find the “Export Calendar” section below the course scheduler
+    1. The user prefers to have their course schedule synced with their other Google Calendar events, so they decide to use the “Google” option over JSON and .ics
+    1. Click the `Google` button
+    1. If this is the first time adding a calendar to Google Calendar
+        1. a popup appears requesting authorization to the user’s public Google profile and Calendar
+        1. Click the checkbox requesting edit access to the user’s Google Calendar;
+        1. Click “Continue”; The popup window will automatically close
+    1. The requested schedule is named base of the term and courses and added to the user’s Google Calendar
+    1. Once all events in the user’s Google Calendar have been created, the first created event is opened in a new window
+1. Now that the calendar has been added to the user’s Google Calendar, the user may proceed making a new course schedule for the same term or a previous/future term
 
 
+**Scenario** (conflict):
+1. start CruzCal app
+    1. select term 2022 Summer Quarter
+    1. select first subject AM
+    1. select first course 20 - 01: Math Methods II
+    1. click on the plus sign (+) button to select a new course
+    1. select second subject ANTH
+    1. select second course 2 - 01: Intr Culturl Anthro
+1. User should see the two classes wrapped in red circles and a red button labeled “See schedule conflicts” because these two courses have a scheduling conflict
+1. click on the red button labeled “See schedule conflicts”
+1. User should see a dialog render with a list of the classes that have scheduling conflicts.
+1. User can click on the red button labeled “Got it, thanks!” to close the dialog.
+1. User can then decide to either remove a class with the time conflict using the trash can icon.
 
+---
 
-Sprint 2 System Tests
-User stories (verify completed):
-As a student, I want to dynamically add and remove courses from my schedule
-As a student, I want to generate a calendar resource scheduling all of my courses so I don’t have to manually create them every quarter
-Scenario:
-start CruzCal app; visit the / endpoint (i.e. https://cruzcal.com/ );
-Find the “Select Schedule” section (In the “Add Course” tab on mobile)
-select ‘Select Term’; type or click on chevron arrow (^) to expand term options.
-i.e: type or select 2022 Summer Quarter
-select first subject  ‘Select Subject’; type or click on chevron arrow (^) to expand subject options.
-i.e: type or select AM
-select first course  ‘Select Course’; type or click on chevron arrow (^) to expand course options.
-i.e: type or select 20 - 01: Math Methods II
-click on the plus sign (+) button to select a new course
-select second subject, CSE
-select second course, 115A - 01: Intro Software Eng
-User decides they don’t want to take a math class and clicks the trash icon on the right of the first row to remove AM 20 - 01 : Math Methods II
-Find the “Export Calendar” section below the course scheduler
-Click the “JSON” button
-A new browser window pops up with the selected term and course data
-The URL provides a deep link to the JSON resource and can be re-downloaded by entering the URL in a browser or programmatically by fetching the resource
+## Sprint 4:
+**User stories** (verify completed):
+- As a user, I want help on the basic usage of the site
+- *NEW*: As a student, I want to be informed when a class I’ve selected doesn’t have scheduled meeting times, since this means they won’t appear on my calendar
+- As a student, I want to be able to search for class via the class name rather than having to rely on what the CRN (class registration number)
+- Replacement suggestion: As a student, I want to be provided with suggestions to speed up my course searches
+- As a student, I want to be able to view my friends’ schedules and compare them with my own (similar to when2meet)
+- Replacement suggestion: As a student, I want to be able to share and view my friends’ schedules easily
+- As a user, I want to be able to undo/redo my course selection changes in case I make a mistake
 
+**Scenario** (informational pane for basic usage):
+1. start CruzCal app
+1. click on the question mark (?) icon
+1. User should see the information-pane dialog appear; click on label “Warning” to see more.
 
-Sprint 3 System Tests
-User stories (verify completed):
-As a student, I want to be able to save multiple calendars for current and future quarters
-As a student, I want to see a calendar preview so I can visualize my schedule as I add courses to CruzCal
-NEW: As a student, I want to have multiple options for download formats depending on my preference
-NEW: As a student, I want to be able to see if any of my selected courses have time conflicts
-Scenario:
-start CruzCal app; visit the / endpoint (i.e. https://cruzcal.com/ );
-Find the “Select Schedule” section (In the “Add Course” tab on mobile)
-select ‘Select Term’; type or click on chevron arrow (^) to expand term options.
-i.e: type or select 2022 Spring Quarter
-select first subject  ‘Select Subject’; type or click on chevron arrow (^) to expand subject options.
-i.e: type or select CSE
-select first course  ‘Select Course’; type or click on chevron arrow (^) to expand course options.
-i.e: type or select 115A - 01 : Intro Software Eng
-Find the calendar preview display (In the “Calendar” tab on mobile)
-The user’s CSE 115A class should appear on the calendar at the correct time
-Other classes added to the course schedule will also appear on this preview
-Find the “Export Calendar” section below the course scheduler
-The user prefers to have their course schedule synced with their other Google Calendar events, so they decide to use the “Google” option over JSON and .ics
-Click the “Google” button
-If this is the first time adding a calendar to Google Calendar
-a popup appears requesting authorization to the user’s public Google profile and Calendar
-Click the checkbox requesting edit access to the user’s Google Calendar;
-Click “Continue”; The popup window will automatically close
-The requested schedule is named base of the term and courses and added to the user’s Google Calendar
-Once all events in the user’s Google Calendar have been created, the first created event is opened in a new window
-Now that the calendar has been added to the user’s Google Calendar, the user may proceed making a new course schedule for the same term or a previous/future term
-
-Scenario (conflict):
-start CruzCal app
-select term 2022 Summer Quarter
-select first subject AM
-select first course 20 - 01: Math Methods II
-click on the plus sign (+) button to select a new course
-select second subject ANTH
-select second course 2 - 01: Intr Culturl Anthro
-User should see the two classes wrapped in red circles and a red button labeled “See schedule conflicts” because these two courses have a scheduling conflict
-
-Fig: Warning Dialog appears due to conflict
-
-click on the red button labeled “See schedule conflicts”
-User should see a dialog render with a list of the classes that have scheduling conflicts.
-
-Fig: User clicks on “See schedule conflicts” button
-User can click on the red button labeled “Got it, thanks!” to close the dialog.
-User can then decide to either remove a class with the time conflict using the trash can icon.
-
-Fig: Removed ANTH and added another course – No conflicts
-
-Sprint 4:
-User stories (verify completed):
-As a user, I want help on the basic usage of the site
-NEW: As a student, I want to be informed when a class I’ve selected doesn’t have scheduled meeting times, since this means they won’t appear on my calendar
-As a student, I want to be able to search for class via the class name rather than having to rely on what the CRN (class registration number)
-Replacement suggestion: As a student, I want to be provided with suggestions to speed up my course searches
-As a student, I want to be able to view my friends’ schedules and compare them with my own (similar to when2meet)
-Replacement suggestion: As a student, I want to be able to share and view my friends’ schedules easily
-As a user, I want to be able to undo/redo my course selection changes in case I make a mistake
-
-Scenario (informational pane for basic usage):
-start CruzCal app
-
-Fig: CruzCal app
-click on the question mark (?) icon
-User should see the information-pane dialog appear; click on label “Warning” to see more.
-
-Fig: User information pane with expanded warning disclosure
-
-Scenario (create schedule with asynchronous class and share):
-start CruzCal app
-select ‘Select Term’; type or click on chevron arrow (^) to expand term options.
-i.e: type or select 2022 Summer Quarter
-select first subject  ‘Select Subject’; type or click on chevron arrow (^) to expand subject options.
-i.e: type or select ANTH
-select first course  ‘Select Course’; type or click on chevron arrow (^) to expand course options.
-i.e: type or select 1 - 01: Intro Biolog Anth
-User should see a warning yellow button labeled “Asynchronous Classes” render.
-This happened because in Summer 2022, 1 - 01: Intr Culturl Anthro is an Asynchronous online course
-
-Fig: Asynchronous Classes button appears due to no meeting times
-
-click on the yellow button labeled “Asynchronous Classes”
-User should see a dialog render with a list of the classes that don’t have scheduled meeting times.
-
-Fig: User clicks on “See schedule conflicts” button
-User can click on the yellow button labeled “Got it, thanks!” to close the dialog.
-Now that the user is aware these courses won’t appear on their calendar, they can continue making their course schedule
-The user knows they are enrolled in another lower-level ANTH course on Cultural Anthropology, but can’t remember the exact name, so they
-click on the plus sign (+) button to select a new course
-select the subject ANTH
-start typing “cultur…” in the Course combobox
-User should now see suggestions of possible courses to choose from
-
-Fig: Suggestions for possible courses to choose
-User remembers they want Intr Culturl Anthro and click on this option
-The course is now selected and should appear on the calendar preview
-The user wants to branch out and try a programming course, so they test out adding CSE 30 - 01: Prog Abs Python
-After adding the class, a conflict appears so they will be unable to add this course
-To undo this selection, they may press their browser’s back button
-
-After clicking the back button, the course is removed from their selection list
-Now the user has decided they are satisfied with their final schedule
-User wants to share their schedule with a friend who is building their schedule on CruzCal; Find the “Export Calendar” section (in the “Add Course” tab on mobile)
-Click the “Copy” button to the right of the link to automatically copy the share link text to the system clipboard
-
-Fig: User clicks “Copy” button to save share link to clipboard
-User sends this link to their friend and opening the link in a browser will render the same schedule.
+**Scenario** (create schedule with asynchronous class and share):
+1. start CruzCal app
+    1. select ‘Select Term’; type or click on chevron arrow (^) to expand term options.
+        1. i.e: type or select 2022 Summer Quarter
+    1. select first subject  ‘Select Subject’; type or click on chevron arrow (^) to expand subject options.
+        1. i.e: type or select ANTH
+    1. select first course  ‘Select Course’; type or click on chevron arrow (^) to expand course options.
+        1. i.e: type or select 1 - 01: Intro Biolog Anth
+    1. User should see a warning yellow button labeled “Asynchronous Classes” render.
+    1. This happened because in Summer 2022, 1 - 01: Intr Culturl Anthro is an Asynchronous online course
+1. click on the yellow button labeled “Asynchronous Classes”
+    1. User should see a dialog render with a list of the classes that don’t have scheduled meeting times.
+    1. User can click on the yellow button labeled “Got it, thanks!” to close the dialog.
+1. Now that the user is aware these courses won’t appear on their calendar, they can continue making their course schedule
+1. The user knows they are enrolled in another lower-level ANTH course on Cultural Anthropology, but can’t remember the exact name, so they
+    1. click on the plus sign (+) button to select a new course
+    1. select the subject ANTH
+    1. start typing “cultur…” in the Course combobox
+    1. User should now see suggestions of possible courses to choose from
+    1. User remembers they want Intr Culturl Anthro and click on this option
+    1. The course is now selected and should appear on the calendar preview
+1. The user wants to branch out and try a programming course, so they test out adding CSE 30 - 01: Prog Abs Python
+    1. After adding the class, a conflict appears so they will be unable to add this course
+    1. To undo this selection, they may press their browser’s back button
+    1. After clicking the back button, the course is removed from their selection list
+1. Now the user has decided they are satisfied with their final schedule
+1. User wants to share their schedule with a friend who is building their schedule on CruzCal; Find the “Export Calendar” section (in the “Add Course” tab on mobile)
+    1. Click the “Copy” button to the right of the link to automatically copy the share link text to the system clipboard
+1. User sends this link to their friend and opening the link in a browser will render the same schedule.

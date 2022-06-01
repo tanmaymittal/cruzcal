@@ -40,7 +40,7 @@ If following criteria are met on the frontend, submission fails silently
   - At least one partially complete or empty course row
   - No term selected
 
-![dom exception](/docs/imgages/dom_exception.png)
+![dom exception](/docs/dom_error.png)
 
   - Default tests for Desktop and Mobile components “pass”, but getting this particular error for multiple components that utilize states/atom (i.e. Calendar, CourseSelectionList, OnlineClassesDialog, etc.)
     <!-- TODO:- Phrase this as a known potential issue if tests are written for the Mobile/Desktop components - Andrew Lim -->
